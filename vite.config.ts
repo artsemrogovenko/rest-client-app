@@ -1,13 +1,13 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import autoprefixer from 'autoprefixer';
-import path from 'path';
+import { reactRouter } from '@react-router/dev/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import autoprefixer from 'autoprefixer';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
   server: {
     open: '/',
     hmr: true,
@@ -15,24 +15,25 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
   },
-  resolve: {
-    preserveSymlinks: true,
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+  base: './',
+  css: {
+    postcss: {
+      plugins: [autoprefixer],
     },
   },
-  base: './',
+  optimizeDeps: {
+    exclude: ['@react-router/dev', 'app/routes/home.tsx'],
+  },
   test: {
     exclude: ['node_modules'],
     coverage: {
       provider: 'v8',
-      include: ['src/**/*.{js,jsx,ts,tsx}'],
+      include: ['app/**/*.{js,jsx,ts,tsx}'],
       exclude: [
-        'src/**/*.test.{js,jsx,ts,tsx}',
-        'src/**/*.spec.{js,jsx,ts,tsx}',
-        'src/index.{js,jsx,ts,tsx}',
-        'src/setupTests.{js,ts}',
-        'src/**/*.d.ts',
+        'app/**/*.spec.{js,jsx,ts,tsx}',
+        'app/index.{js,jsx,ts,tsx}',
+        'app/setupTests.{js,ts}',
+        'app/**/*.d.ts',
       ],
       thresholds: {
         statements: 80,
@@ -43,10 +44,5 @@ export default defineConfig({
     },
     environment: 'jsdom',
     globals: true,
-  },
-  css: {
-    postcss: {
-      plugins: [autoprefixer],
-    },
   },
 });
