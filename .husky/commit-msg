@@ -1,0 +1,1 @@
+node scripts/commit-validator.js "$1"
