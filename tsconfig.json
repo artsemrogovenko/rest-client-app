@@ -6,7 +6,7 @@
     ".react-router/types/**/*",
     "vite.config.ts",
     "commitlint.config.js",
-    "scripts/commit-validator.js"
+    "scripts/**/*"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
