@@ -66,7 +66,7 @@ export function RestfulClient() {
         </div>
       </div>
       <article className="flex flex-col gap-2 rounded-lg border md:-mx-1 p-5">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-between">
           <h4>Headers</h4>
           <Button onClick={addHeader}>Add Header</Button>
         </div>
