@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import autoprefixer from 'autoprefixer';
+import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -34,6 +35,7 @@ export default defineConfig({
         'app/index.{js,jsx,ts,tsx}',
         'app/setupTests.{js,ts}',
         'app/**/*.d.ts',
+        'app/components/ui',
       ],
       thresholds: {
         statements: 80,
@@ -44,5 +46,10 @@ export default defineConfig({
     },
     environment: 'jsdom',
     globals: true,
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './app'),
+    },
   },
 });
