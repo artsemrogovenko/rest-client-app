@@ -4,7 +4,9 @@
     "**/.server/**/*",
     "**/.client/**/*",
     ".react-router/types/**/*",
-    "vite.config.ts"
+    "vite.config.ts",
+    "commitlint.config.js",
+    "scripts/commit-validator.js"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
