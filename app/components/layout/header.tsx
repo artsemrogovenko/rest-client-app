@@ -9,10 +9,10 @@ const isAuthenticated = () => {
     return (
       <>
         <Button size="sm">
-          <Link to="/auth/signin">Sign In</Link>
+          <Link to="/login">Sign In</Link>
         </Button>
         <Button size="sm" variant="secondary">
-          <Link to="/auth/signup">Sign Up</Link>
+          <Link to="/register">Sign Up</Link>
         </Button>
       </>
     );
