@@ -15,7 +15,7 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
   },
-  base: './',
+  base: '/',
   css: {
     postcss: {
       plugins: [autoprefixer],
