@@ -2,7 +2,8 @@ import type { DynamicListProps } from '~/restful-client/types';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { X } from 'lucide-react';
-import { Controller, useFieldArray } from 'react-hook-form';
+import { useFieldArray } from 'react-hook-form';
+import { FormControl, FormField } from '~/components/ui/form';
 
 export default function DynamicList({ role, control }: DynamicListProps) {
   const { fields, append, remove } = useFieldArray({
@@ -25,26 +26,30 @@ export default function DynamicList({ role, control }: DynamicListProps) {
       <ul className="flex flex-col w-[320px] gap-2">
         {fields.map((line, index) => (
           <li className="flex gap-2" key={line.id}>
-            <Controller
+            <FormField
               name={`${role}.${index}.name`}
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="name"
-                  id={`${role}-${index}-name`}
-                />
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="name"
+                    id={`${role}-${index}-name`}
+                  />
+                </FormControl>
               )}
             />
-            <Controller
+            <FormField
               name={`${role}.${index}.value`}
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="value"
-                  id={`${role}-${index}-value`}
-                />
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="value"
+                    id={`${role}-${index}-value`}
+                  />
+                </FormControl>
               )}
             />
             <Button

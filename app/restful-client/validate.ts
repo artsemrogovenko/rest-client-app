@@ -1,22 +1,31 @@
 import { z } from 'zod';
+import {
+  languageCode,
+  payloadTypes,
+  queryMethods,
+} from '~/restful-client/constants';
 
-export const listSchema = z.record(
-  z.string().min(1),
-  z.array(
-    z.object({
-      name: z.string().min(1),
-      value: z.string().min(1),
-    })
-  )
-);
+export const listSchema = z
+  .object({
+    name: z.string().min(1),
+    value: z.string().min(1),
+  })
+  .required();
 export type TListSchema = z.infer<typeof listSchema>;
 
 export const clientSchema = z
   .object({
-    method: z.string().min(3),
-    endpoint: z.string().min(1),
+    method: z.enum(queryMethods),
+    endpoint: z
+      .string()
+      .min(1, 'Endpoint is required')
+      .refine((value) => value.includes(':'), {
+        message: "Must include ':'",
+      }),
     header: z.array(listSchema),
     variable: z.array(listSchema),
+    type: z.enum(payloadTypes),
+    language: z.enum(languageCode),
     body: z.string().min(1),
   })
   .partial();

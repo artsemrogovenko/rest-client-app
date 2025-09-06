@@ -30,6 +30,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 export function RestfulClient() {
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
+    defaultValues: {
+      endpoint: '',
+      method: queryMethods[0],
+    },
   });
   const submitForm = (e: TRestfulSchema) => {
     console.log(e);
@@ -45,13 +49,14 @@ export function RestfulClient() {
               <FormField
                 control={form.control}
                 name="method"
+                defaultValue={queryMethods[0]}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel htmlFor={field.name}>Query method</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={queryMethods[0]}
+                        defaultValue={field.value}
                       >
                         <SelectTrigger id={field.name} className="w-[100px]">
                           <SelectValue placeholder="Method" />
@@ -88,6 +93,7 @@ export function RestfulClient() {
             </Button>
           </div>
           <FormField
+            control={form.control}
             name="header"
             render={() => (
               <FormItem>
@@ -100,18 +106,16 @@ export function RestfulClient() {
               <h3>Body</h3>
               <div>
                 <FormField
+                  control={form.control}
                   name="type"
+                  defaultValue={payloadTypes[0]}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel htmlFor={field.name}>Type payload</FormLabel>
                       <FormControl>
-                        <Select defaultValue={payloadTypes[0]}>
-                          <SelectTrigger className="w-[100px]">
-                            <SelectValue
-                              id={field.name}
-                              {...field}
-                              placeholder="Payload"
-                            />
+                        <Select value={field.value}>
+                          <SelectTrigger id={field.name} className="w-[100px]">
+                            <SelectValue placeholder="Payload" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value={payloadTypes[0]}>
@@ -134,7 +138,6 @@ export function RestfulClient() {
               name="body"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor={field.name}>Body</FormLabel>
                   <FormControl>
                     <Textarea id={field.name} {...field} />
                   </FormControl>
@@ -148,15 +151,20 @@ export function RestfulClient() {
               <h3>Generated code</h3>
               <div>
                 <FormField
+                  control={form.control}
                   name="language"
+                  defaultValue={languageCode[0]}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel htmlFor={field.name}>
                         Select language
                       </FormLabel>
                       <FormControl>
-                        <Select defaultValue={languageCode[0]}>
-                          <SelectTrigger className="w-[120px]">
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger id={field.name} className="w-[120px]">
                             <SelectValue placeholder="Language" />
                           </SelectTrigger>
                           <SelectContent>
