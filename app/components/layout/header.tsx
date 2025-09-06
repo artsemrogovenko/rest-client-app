@@ -18,7 +18,7 @@ const Header = () => {
           <Button variant="outline" className='cursor-pointer' size="sm">
             EN/RU
           </Button>
-          {!user ? (
+          {!user && (
             <>
               <Button size="sm">
                 <Link to="/login">Sign In</Link>
@@ -27,7 +27,8 @@ const Header = () => {
                 <Link to="/register">Sign Up</Link>
               </Button>
             </>
-          ) : (
+          )}
+          {user && (
             <>
               <SignOut />
             </>
