@@ -13,6 +13,8 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { signUpFormSchema } from "./validationSchema";
+import { auth } from "~/firebase/firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 
 
@@ -32,10 +34,12 @@ export default function SignUp() {
 
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     try {
+      await createUserWithEmailAndPassword(auth, values.email, values.password)
       console.log(values);
       navigate('/dashboard')
     } catch (error) {
-      setError('Failed to Sign Up. Please try again');
+      const typedError = error as Error;
+      setError(typedError.message);
       console.error('Sign Up Error', error);
     } 
       
@@ -87,7 +91,7 @@ export default function SignUp() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full  cursor-pointer">
             Create Account
           </Button>
         </form>

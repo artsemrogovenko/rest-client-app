@@ -13,6 +13,8 @@ import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { Link, useNavigate } from 'react-router';
 import { signInFormSchema } from './validationSchema';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "~/firebase/firebaseConfig";
 import { useState } from 'react';
 
 export default function SignIn() {
@@ -29,10 +31,11 @@ export default function SignIn() {
 
   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
     try {
-      console.log(values)
+      await signInWithEmailAndPassword(auth, values.email, values.password);
       navigate('/dashboard');
     } catch (error) {
-      setError('Failed to Sign In. Please try again');
+      const typedError = error as Error;
+      setError(typedError.message);
       console.error('Sign In Error', error);
     }
   }
@@ -70,7 +73,7 @@ export default function SignIn() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full cursor-pointer">
             Sign In
           </Button>
         </form>

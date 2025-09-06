@@ -1,33 +1,10 @@
 import { Link } from 'react-router';
 import { Button } from '../ui/button';
-
-const isAuthenticated = () => {
-
-  /* тут по идее должна быть */
-  const res = true;
-  if (res) {
-    return (
-      <>
-        <Button size="sm">
-          <Link to="/login">Sign In</Link>
-        </Button>
-        <Button size="sm" variant="secondary">
-          <Link to="/register">Sign Up</Link>
-        </Button>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Button size="sm">
-          <Link to="/"> Sign Out</Link>
-        </Button>
-      </>
-    );
-  }
-};
+import useAuth from '~/contexts/auth/useAuth';
+import SignOut from '~/routes/auth/sign-out';
 
 const Header = () => {
+  const { user } = useAuth();
   return (
     <header>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
@@ -36,13 +13,25 @@ const Header = () => {
             H&H
           </Link>
         </div>
-        
+
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" className='cursor-pointer' size="sm">
             EN/RU
           </Button>
-
-          {isAuthenticated()}
+          {!user ? (
+            <>
+              <Button size="sm">
+                <Link to="/login">Sign In</Link>
+              </Button>
+              <Button size="sm">
+                <Link to="/register">Sign Up</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <SignOut />
+            </>
+          )}
         </div>
       </div>
     </header>
