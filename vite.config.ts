@@ -34,6 +34,7 @@ export default defineConfig({
         'app/index.{js,jsx,ts,tsx}',
         'app/setupTests.{js,ts}',
         'app/**/*.d.ts',
+        'app/components/ui',
       ],
       thresholds: {
         statements: 80,
