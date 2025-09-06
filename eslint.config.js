@@ -7,9 +7,10 @@ import { globalIgnores } from 'eslint/config';
 import react from 'eslint-plugin-react';
 import reactCompiler from 'eslint-plugin-react-compiler';
 import prettierEslint from 'eslint-plugin-prettier';
+import unusedImports from 'eslint-plugin-unused-imports';
 
 export default tseslint.config([
-  globalIgnores(['dist', '.react-router']),
+  globalIgnores(['dist', '.react-router', 'app/components/ui']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -26,6 +27,7 @@ export default tseslint.config([
       react,
       'react-compiler': reactCompiler,
       prettier: prettierEslint,
+      'unused-imports': unusedImports,
     },
     ignores: ['node_modules', 'dist', 'vite.config.js', 'eslint.config.mjs'],
     rules: {
@@ -37,6 +39,17 @@ export default tseslint.config([
       'react-compiler/react-compiler': 'error',
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
+      'unused-imports/no-unused-imports': 'error',
+      'no-unused-vars': 'off',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_',
+        },
+      ],
     },
     settings: {
       react: {

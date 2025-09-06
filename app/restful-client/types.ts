@@ -1,4 +1,4 @@
-export type HeaderLine = {
+export type PairFields = {
   name: string;
   value: string;
 };
