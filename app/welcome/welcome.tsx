@@ -1,6 +1,6 @@
-import { RestfulClient } from '~/restful-client/restful-client';
+import { RestfulClient } from '~/restful-client/RestfulClient';
 import ResponseComponent from '~/restful-client/Response';
-import Variables from '~/restful-client/Variables';
+import Variables from '~/restful-client/variables/Variables';
 
 export function Welcome() {
   return (
