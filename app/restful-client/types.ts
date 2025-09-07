@@ -13,3 +13,5 @@ export type DynamicListProps = {
   values: PairFields[];
   control: Control<TRestfulSchema | TVariablesSchema>;
 };
+
+export type LocalVariables = Record<string, string>;

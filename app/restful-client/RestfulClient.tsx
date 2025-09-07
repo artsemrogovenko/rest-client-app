@@ -22,12 +22,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { clientSchema, type TRestfulSchema } from '~/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useVariablesValidator } from '~/restful-client/hooks';
 
 export function RestfulClient() {
+  const { validateFormWithVariables } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -35,8 +38,18 @@ export function RestfulClient() {
       method: queryMethods[0],
     },
   });
-  const submitForm = (e: TRestfulSchema) => {
-    console.log(e);
+  const submitForm = (data: TRestfulSchema) => {
+    console.log(data);
+    const variablesValidation = validateFormWithVariables(data);
+
+    if (!variablesValidation.isValid) {
+      Object.entries(variablesValidation.errors).forEach(([path, message]) => {
+        form.setError(path as keyof TRestfulSchema, { message });
+      });
+      return;
+    }
+
+    console.log('passed');
   };
 
   return (
@@ -81,6 +94,7 @@ export function RestfulClient() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel htmlFor={field.name}>Endpoint</FormLabel>
+                    <FormMessage />
                     <FormControl>
                       <Input id={field.name} {...field} />
                     </FormControl>

@@ -5,10 +5,12 @@ import {
   queryMethods,
 } from '~/restful-client/constants';
 
+
+
 export const listSchema = z
   .object({
-    name: z.string().min(1),
-    value: z.string().min(1),
+    name: z.string().min(1, 'fill it'),
+    value: z.string().min(1, 'fill it'),
   })
   .required();
 export type TListSchema = z.infer<typeof listSchema>;
@@ -33,3 +35,5 @@ export const clientSchema = z
 export const variablesSchema = clientSchema.pick({ variable: true });
 export type TRestfulSchema = z.infer<typeof clientSchema>;
 export type TVariablesSchema = z.infer<typeof variablesSchema>;
+
+export const storageVariablesSchema = z.record(z.string(), z.string());

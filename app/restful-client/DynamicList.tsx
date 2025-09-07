@@ -4,7 +4,12 @@ import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { X } from 'lucide-react';
 import { useFieldArray } from 'react-hook-form';
-import { FormControl, FormField } from '~/components/ui/form';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '~/components/ui/form';
 
 export default function DynamicList({ role, control }: DynamicListProps) {
   const { fields, append, remove } = useFieldArray({
@@ -26,31 +31,37 @@ export default function DynamicList({ role, control }: DynamicListProps) {
 
       <ul className="flex flex-col w-[320px] gap-2">
         {fields.map((line, index) => (
-          <li className="flex gap-2" key={line.id}>
+          <li className="flex gap-2 items-end  " key={line.id}>
             <FormField
               name={`${role}.${index}.name`}
               control={control}
               render={({ field }) => (
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="name"
-                    id={`${role}-${index}-name`}
-                  />
-                </FormControl>
+                <FormItem>
+                  <FormMessage className="relative top-2 left-1 " />
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="name"
+                      id={`${role}-${index}-name`}
+                    />
+                  </FormControl>
+                </FormItem>
               )}
             />
             <FormField
               name={`${role}.${index}.value`}
               control={control}
               render={({ field }) => (
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="value"
-                    id={`${role}-${index}-value`}
-                  />
-                </FormControl>
+                <FormItem>
+                  <FormMessage className="relative top-2 left-1" />
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="value"
+                      id={`${role}-${index}-value`}
+                    />
+                  </FormControl>
+                </FormItem>
               )}
             />
             <Button

@@ -14,6 +14,8 @@ import { useLocalStorage } from '~/restful-client/hooks';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/components/ui/skeleton';
 import type { PairFields } from '~/restful-client/types';
+import { LOCAL_STORAGE_KEY } from '~/restful-client/constants';
+import { deleteBrackets } from '~/restful-client/utils';
 
 export default function Variables() {
   const { setStorageValue, getStorageValue } = useLocalStorage();
@@ -30,11 +32,11 @@ export default function Variables() {
     setIsClient(true);
     if (typeof window !== 'undefined') {
       const localVariables = JSON.parse(
-        getStorageValue('variables') || '{}'
+        getStorageValue(LOCAL_STORAGE_KEY) || '{}'
       ) as Record<string, string>;
       const values = Array.from(
         Object.entries(localVariables).map(([k, v]) => {
-          return { name: k, value: v.replace(/[{}]/g, '') };
+          return { value: k, name: deleteBrackets(v) };
         })
       );
       setInitValues(values);
@@ -50,12 +52,12 @@ export default function Variables() {
   const submitForm = (e: TRestfulSchema) => {
     const variables = e.variable?.reduce(
       (acc, line) => {
-        acc[line.name] = `{{${line.value}}}`;
+        acc[line.value] = `{{${line.name}}}`;
         return acc;
       },
       {} as Record<string, string>
     );
-    setStorageValue('variables', JSON.stringify(variables));
+    setStorageValue(LOCAL_STORAGE_KEY, JSON.stringify(variables));
   };
 
   if (!isClient) return <Skeleton className="h-[86px] w-[354px]" />;

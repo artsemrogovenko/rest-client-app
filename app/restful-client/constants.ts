@@ -8,4 +8,5 @@ export const queryMethods = [
   'OPTIONS',
   'HEAD',
 ];
-export const languageCode = ['curl', 'Python', 'Java', 'Go'];
+export const languageCode = ['cURL', 'Python', 'Java', 'Go'];
+export const LOCAL_STORAGE_KEY = 'variables';
