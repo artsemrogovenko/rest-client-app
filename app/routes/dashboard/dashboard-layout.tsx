@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router'
+import React, { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router';
 import { auth } from '~/firebase/firebaseConfig';
 
-export default function DashboardLayout({children}: {children: React.ReactNode}) {
-    const navigate = useNavigate();
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (!user) {
-        navigate("/");
+        navigate('/');
       }
     });
 
@@ -21,5 +25,5 @@ export default function DashboardLayout({children}: {children: React.ReactNode})
       </div>
       {children}
     </>
-  )
+  );
 }

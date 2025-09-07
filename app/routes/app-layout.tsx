@@ -13,7 +13,7 @@ const AppLayout = () => {
       if (!user) {
         navigate('/');
       } else {
-        navigate('/dashboard')
+        navigate('/dashboard');
       }
     });
 

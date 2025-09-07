@@ -6,7 +6,7 @@ import SignOut from '~/routes/auth/sign-out';
 const Header = () => {
   const { user } = useAuth();
   return (
-    <header>
+    <header className="sticky top-0 z-50 bg-white">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <div className="h-10 w-10 bg-black flex items-center justify-center rounded-sm">
           <Link to="/" className="font-semibold text-white">
@@ -15,7 +15,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" className='cursor-pointer' size="sm">
+          <Button variant="outline" className="cursor-pointer" size="sm">
             EN/RU
           </Button>
           {!user && (

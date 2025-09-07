@@ -13,8 +13,8 @@ import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { Link, useNavigate } from 'react-router';
 import { signInFormSchema } from './validationSchema';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "~/firebase/firebaseConfig";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '~/firebase/firebaseConfig';
 import { useState } from 'react';
 
 export default function SignIn() {

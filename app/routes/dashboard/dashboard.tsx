@@ -1,5 +1,5 @@
-import React from 'react'
-import { Outlet } from 'react-router'
+import React from 'react';
+import { Outlet } from 'react-router';
 import useAuth from '~/contexts/auth/useAuth';
 
 export default function Dashboard() {
@@ -16,5 +16,5 @@ export default function Dashboard() {
         <div>Welcome back, {user.email}!</div>
       </div>
     </div>
-  )
+  );
 }
