@@ -11,23 +11,41 @@ import {
 } from '~/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '~/restful-client/hooks';
+import { useEffect, useState } from 'react';
+import { Skeleton } from '~/components/ui/skeleton';
+import type { PairFields } from '~/restful-client/types';
 
 export default function Variables() {
   const { setStorageValue, getStorageValue } = useLocalStorage();
-  const localVariables = JSON.parse(
-    getStorageValue('variables') || '{}'
-  ) as Record<string, string>;
-  const initValues = Array.from(
-    Object.entries(localVariables).map(([k, v]) => {
-      return { name: k, value: v.replace(/[{}]/g, '') };
-    })
-  );
+  const [isClient, setIsClient] = useState(false);
+  const [initValues, setInitValues] = useState<PairFields[]>([]);
 
   const form = useForm<TVariablesSchema>({
     defaultValues: { variable: initValues },
     mode: 'onSubmit',
     resolver: zodResolver(variablesSchema),
   });
+
+  useEffect(() => {
+    setIsClient(true);
+    if (typeof window !== 'undefined') {
+      const localVariables = JSON.parse(
+        getStorageValue('variables') || '{}'
+      ) as Record<string, string>;
+      const values = Array.from(
+        Object.entries(localVariables).map(([k, v]) => {
+          return { name: k, value: v.replace(/[{}]/g, '') };
+        })
+      );
+      setInitValues(values);
+    }
+  }, [getStorageValue]);
+
+  useEffect(() => {
+    if (initValues.length > 0) {
+      form.reset({ variable: initValues });
+    }
+  }, [initValues, form]);
 
   const submitForm = (e: TRestfulSchema) => {
     const variables = e.variable?.reduce(
@@ -39,6 +57,8 @@ export default function Variables() {
     );
     setStorageValue('variables', JSON.stringify(variables));
   };
+
+  if (!isClient) return <Skeleton className="h-[86px] w-[354px]" />;
 
   return (
     <Form {...form}>

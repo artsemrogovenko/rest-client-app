@@ -1,3 +1,4 @@
+'use client';
 import type { DynamicListProps } from '~/restful-client/types';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
