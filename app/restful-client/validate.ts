@@ -5,8 +5,6 @@ import {
   queryMethods,
 } from '~/restful-client/constants';
 
-
-
 export const listSchema = z
   .object({
     name: z.string().min(1, 'fill it'),

@@ -17,6 +17,9 @@ export function findValue(variableName: string, object: LocalVariables) {
 }
 
 export function collectVariablesNames(input: string): string[] {
+  if (!isValidBrackets(input)) {
+    return [];
+  }
   const regex = /\{\{([^}]+)}}/g;
   const matches = input.match(regex);
   if (!matches) return [];
@@ -55,31 +58,28 @@ export function isNotMissedVariables(
 }
 
 export function isValidBrackets(input: string) {
-  const singleBracketRegex = /[{}]/g;
-  const brackets = input.match(singleBracketRegex);
-
-  if (!brackets) return true;
-
   const stack: string[] = [];
-  for (const char of brackets) {
-    if (char === '{') {
-      stack.push(char);
-    } else if (char === '}') {
-      if (stack.length === 0) return false;
+  const exampleName = 'sample';
+  for (let i = 0; i < input.length; i++) {
+    if (input[i] === '{' && input[i + 1] === '{') {
+      stack.push(exampleName);
+      i++;
+      continue;
+    }
+
+    if (input[i] === '}' && input[i + 1] === '}') {
+      if (stack.length === 0 || stack[stack.length - 1] !== exampleName) {
+        return false;
+      }
       stack.pop();
+      i++;
+      continue;
+    }
+
+    if (input[i] === '{' || input[i] === '}') {
+      return false;
     }
   }
 
   return stack.length === 0;
-}
-
-export function isCorrectVariableSyntax(input: string) {
-  const invalidPatterns = [
-    /\{[^{}]+}/,
-    /\{\{[^{}]+}[^}]/,
-    /[^{]\{[^{}]+}}/,
-    /\{\{[^{}]*\{[^{}]*}}/,
-  ];
-
-  return !invalidPatterns.some((pattern) => pattern.test(input));
 }

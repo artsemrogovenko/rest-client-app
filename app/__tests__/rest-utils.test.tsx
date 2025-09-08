@@ -6,45 +6,102 @@ import {
   isValidBrackets,
 } from '~/restful-client/utils';
 
-test('Extract variable from string', () => {
+const storageList = {
+  '1': '{{pseudo2}}',
+  '2': '{{pseudo}}',
+};
+
+const storageList2 = { sample: 'header' };
+
+test('Get value on variable name', () => {
+  const wrongCase = findValue('pse', storageList);
+  const validCase = findValue('pseudo', storageList);
+
+  expect(wrongCase).toBe(undefined);
+  expect(validCase).toBe('2');
+});
+
+const badStrings = [
+  'a{{pseudo',
+  'pseudo}}',
+  '{pseudo}',
+  '{pseudo}}',
+  '}}pseudo}}',
+  '}{pseudo}',
+  '}}{pseudo}}{{',
+  'a{{pseudo}',
+  '{{{pseudo}}a}',
+  'a{{pseudo}}}',
+];
+const validStrings = [
+  '{{pseudo}}',
+  'abc{{pseudo}}abc',
+  'abc{{pseudo}}',
+  '{{pseudo}}abc',
+  '{{pseudo}}abc{{pseudo}}',
+  'abc{{pseudo}}abc{{pseudo}}',
+];
+
+test('Collect variables from string', () => {
   const pattern = '{{abc}}1';
   const count = 3;
   const input = pattern.repeat(count);
   const result = collectVariablesNames(input);
   expect(result.length).toBe(count);
   expect(result.every((value) => value === 'abc')).toBe(true);
+
+  expect(
+    validStrings.every((string) => collectVariablesNames(string).length > 0)
+  ).toBe(true);
 });
 
-test('No extracted variable from string', () => {
+test('No collect variables from string', () => {
   const pattern = '{abc}1';
   const count = 3;
   const input = pattern.repeat(count);
   const result = collectVariablesNames(input);
   expect(result.length).toBe(0);
+
+  expect(
+    badStrings.every((string) => collectVariablesNames(string).length === 0)
+  ).toBe(true);
 });
 
-test('Get value on variable name', () => {
-  const list = {
-    '1': '{{pseudo2}}',
-    '2': '{{pseudo}}',
-  };
-  const wrongCase = findValue('pse', list);
-  const validCase = findValue('pseudo', list);
-
-  expect(wrongCase).toBe(undefined);
-  expect(validCase).toBe('2');
+test('Check contain variables in input', () => {
+  expect(
+    badStrings.every(
+      (variant) => isNotMissedVariables(variant, storageList).isValid
+    )
+  ).toBe(false);
+  expect(
+    validStrings.every(
+      (variant) => isNotMissedVariables(variant, storageList).isValid
+    )
+  ).toBe(true);
 });
 
-test('Check contain variables in str', () => {
-  const list = {
-    '1': '{{pseudo2}}',
-    '2': '{{pseudo}}',
-  };
-  const wrongCase = isNotMissedVariables('{{pse}}', list);
-  const validCase = isNotMissedVariables('{{pseudo2}}', list);
+test('No missing variables if storage contain name', () => {
+  expect(
+    badStrings.every(
+      (variant) =>
+        isNotMissedVariables(variant, storageList).notFoundVars.length === 0
+    )
+  ).toBe(true);
+  expect(
+    validStrings.every(
+      (variant) =>
+        isNotMissedVariables(variant, storageList).notFoundVars.length === 0
+    )
+  ).toBe(true);
+});
 
-  expect(wrongCase.isValid).toBe(false);
-  expect(validCase.isValid).toBe(true);
+test('Has missing variables if storage not contain name', () => {
+  expect(
+    validStrings.every(
+      (variant) =>
+        isNotMissedVariables(variant, storageList2).notFoundVars.length > 0
+    )
+  ).toBe(true);
 });
 
 test('Not found if empty list', () => {
@@ -55,15 +112,12 @@ test('Not found if empty list', () => {
 });
 
 test('Check syntax', () => {
-  const list = [
-    '{{pseudo',
-    'pseudo}}',
-    '{pseudo}',
-    '{pseudo}}',
-    '{{pseudo}',
-    '{{{pseudo}}}',
-    '{{pseudo}}}',
-  ];
-  expect(list.every((value) => isValidBrackets(value))).toBe(false);
-  expect(isValidBrackets('{{pseudo}}')).toBe(true);
+  expect(badStrings.every((value) => isValidBrackets(value))).toBe(false);
+  expect(validStrings.every((value) => isValidBrackets(value))).toBe(true);
+
+  expect(
+    badStrings.every(
+      (variant) => isNotMissedVariables(variant, storageList2).isInvalidSyntax
+    )
+  ).toBe(true);
 });

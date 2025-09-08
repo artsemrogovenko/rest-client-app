@@ -152,6 +152,7 @@ export function RestfulClient() {
               name="body"
               render={({ field }) => (
                 <FormItem>
+                  <FormMessage />
                   <FormControl>
                     <Textarea id={field.name} {...field} />
                   </FormControl>
