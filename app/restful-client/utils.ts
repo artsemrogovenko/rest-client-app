@@ -16,15 +16,18 @@ export function findValue(variableName: string, object: LocalVariables) {
   })?.[0];
 }
 
-export function collectVariablesNames(input: string): string[] {
+export function collectVariables(input: string): string[] {
   if (!isValidBrackets(input)) {
     return [];
   }
   const regex = /\{\{([^}]+)}}/g;
   const matches = input.match(regex);
   if (!matches) return [];
+  return matches;
+}
 
-  return matches
+export function collectVariablesNames(input: string): string[] {
+  return collectVariables(input)
     .map((match) => deleteBrackets(match).trim())
     .filter((name) => name.length > 0);
 }

@@ -5,7 +5,6 @@ import { Form, FormField, FormItem } from '~/components/ui/form';
 import DynamicList from '~/restful-client/DynamicList';
 import { Button } from '~/components/ui/button';
 import {
-  type TRestfulSchema,
   type TVariablesSchema,
   variablesSchema,
 } from '~/restful-client/validate';
@@ -13,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '~/restful-client/hooks';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/components/ui/skeleton';
-import type { PairFields } from '~/restful-client/types';
+import type { LocalVariables, PairFields } from '~/restful-client/types';
 import { LOCAL_STORAGE_KEY } from '~/restful-client/constants';
 import { deleteBrackets } from '~/restful-client/utils';
 
@@ -36,7 +35,7 @@ export default function Variables() {
       ) as Record<string, string>;
       const values = Array.from(
         Object.entries(localVariables).map(([k, v]) => {
-          return { value: k, name: deleteBrackets(v) };
+          return { name: deleteBrackets(k), value: v };
         })
       );
       setInitValues(values);
@@ -49,14 +48,11 @@ export default function Variables() {
     }
   }, [initValues, form]);
 
-  const submitForm = (e: TRestfulSchema) => {
-    const variables = e.variable?.reduce(
-      (acc, line) => {
-        acc[line.value] = `{{${line.name}}}`;
-        return acc;
-      },
-      {} as Record<string, string>
-    );
+  const submitForm = (e: TVariablesSchema) => {
+    const variables = e.variable?.reduce((acc, line) => {
+      acc[`{{${line.name}}}`] = line.value;
+      return acc;
+    }, {} as LocalVariables);
     setStorageValue(LOCAL_STORAGE_KEY, JSON.stringify(variables));
   };
 

@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest';
 import {
   collectVariablesNames,
+  collectVariables,
   findValue,
   isNotMissedVariables,
   isValidBrackets,
@@ -43,6 +44,18 @@ const validStrings = [
 ];
 
 test('Collect variables from string', () => {
+  const string = 'a{{abc}}a';
+  const count = 3;
+  const input = string.repeat(count);
+  const result = collectVariables(input);
+  expect(result).toStrictEqual(['{{abc}}', '{{abc}}', '{{abc}}']);
+
+  expect(
+    validStrings.every((string) => collectVariables(string).length > 0)
+  ).toBe(true);
+});
+
+test('Collect variables names from string', () => {
   const pattern = '{{abc}}1';
   const count = 3;
   const input = pattern.repeat(count);
@@ -55,7 +68,7 @@ test('Collect variables from string', () => {
   ).toBe(true);
 });
 
-test('No collect variables from string', () => {
+test('No collect variables names from string', () => {
   const pattern = '{abc}1';
   const count = 3;
   const input = pattern.repeat(count);
