@@ -84,9 +84,17 @@ export function useVariablesValidator() {
       if (message) errors.endpoint = message;
     }
 
-    data.header?.forEach((header, index) => {
+    data.header?.forEach((header, index, array) => {
       const message = hasErrors(header.value, variables);
       if (message) errors[`header.${index}.value`] = message;
+
+      if (
+        array
+          .filter((object) => object !== header)
+          .some((object) => object.name === header.name)
+      ) {
+        errors[`header.${index}.name`] = 'Header duplicate';
+      }
     });
 
     return {

@@ -30,7 +30,23 @@ export const clientSchema = z
   })
   .partial();
 
-export const variablesSchema = clientSchema.pick({ variable: true });
+export const variablesSchema = clientSchema
+  .pick({ variable: true })
+  .superRefine((variables, ctx) => {
+    const names = new Set<string>();
+
+    variables.variable?.forEach((value, index) => {
+      if (names.has(value.name)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Name already exists',
+          path: [`variable`, index, 'name'],
+        });
+      } else {
+        names.add(value.name);
+      }
+    });
+  });
 export type TRestfulSchema = z.infer<typeof clientSchema>;
 export type TVariablesSchema = z.infer<typeof variablesSchema>;
 

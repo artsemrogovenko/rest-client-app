@@ -24,7 +24,7 @@ export default function Variables() {
 
   const form = useForm<TVariablesSchema>({
     defaultValues: { variable: initValues },
-    mode: 'onSubmit',
+    mode: 'onChange',
     resolver: zodResolver(variablesSchema),
   });
 
