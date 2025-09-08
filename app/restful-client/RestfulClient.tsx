@@ -28,18 +28,19 @@ import { useForm } from 'react-hook-form';
 import { clientSchema, type TRestfulSchema } from '~/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useVariablesValidator } from '~/restful-client/hooks';
+import { convertValues } from '~/restful-client/utils';
 
 export function RestfulClient() {
-  const { validateFormWithVariables } = useVariablesValidator();
+  const { validateFormWithVariables, variables } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
       endpoint: '',
       method: queryMethods[0],
+      header: [],
     },
   });
   const submitForm = (data: TRestfulSchema) => {
-    console.log(data);
     const variablesValidation = validateFormWithVariables(data);
 
     if (!variablesValidation.isValid) {
@@ -49,7 +50,9 @@ export function RestfulClient() {
       return;
     }
 
-    console.log('passed');
+    const newValues = convertValues(data, variables);
+    const updatedHeaders = newValues.header?.map((item) => ({ ...item })) || [];
+    form.reset({ ...newValues, header: updatedHeaders });
   };
 
   return (

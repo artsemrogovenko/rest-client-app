@@ -1,4 +1,7 @@
-import { storageVariablesSchema } from '~/restful-client/validate';
+import {
+  storageVariablesSchema,
+  type TRestfulSchema,
+} from '~/restful-client/validate';
 import type { LocalVariables } from '~/restful-client/types';
 
 export function deleteBrackets(value: string) {
@@ -11,8 +14,8 @@ export function isContainValues(value: object): value is LocalVariables {
 }
 
 export function findValue(variableName: string, object: LocalVariables) {
-  return Object.entries(object).find(([, v]) => {
-    return deleteBrackets(v) === variableName;
+  return Object.entries(object).find(([k]) => {
+    return deleteBrackets(k) === variableName;
   })?.[0];
 }
 
@@ -85,4 +88,28 @@ export function isValidBrackets(input: string) {
   }
 
   return stack.length === 0;
+}
+
+export function ejectVariables(
+  input: string,
+  variables: LocalVariables
+): string {
+  let result = input;
+  const collection = collectVariables(input);
+  collection.forEach((name) => {
+    result = result.replaceAll(name, variables[name]);
+  });
+  return result;
+}
+
+export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
+  const cloned = JSON.parse(JSON.stringify(data)) as TRestfulSchema;
+  cloned.endpoint = ejectVariables(cloned.endpoint, variables);
+  if (cloned.body) cloned.body = ejectVariables(cloned.body, variables);
+  if (cloned.header) {
+    cloned.header = cloned.header.map((line) => {
+      return { name: line.name, value: ejectVariables(line.value, variables) };
+    });
+  }
+  return cloned;
 }

@@ -5,21 +5,23 @@ import {
   findValue,
   isNotMissedVariables,
   isValidBrackets,
+  ejectVariables,
+  convertValues,
 } from '~/restful-client/utils';
 
 const storageList = {
-  '1': '{{pseudo2}}',
-  '2': '{{pseudo}}',
+  '{{pseudo2}}': '1',
+  '{{pseudo}}': '2',
 };
 
 const storageList2 = { sample: 'header' };
 
-test('Get value on variable name', () => {
+test('Get variable in list', () => {
   const wrongCase = findValue('pse', storageList);
   const validCase = findValue('pseudo', storageList);
 
   expect(wrongCase).toBe(undefined);
-  expect(validCase).toBe('2');
+  expect(validCase).toBe('{{pseudo}}');
 });
 
 const badStrings = [
@@ -133,4 +135,42 @@ test('Check syntax', () => {
       (variant) => isNotMissedVariables(variant, storageList2).isInvalidSyntax
     )
   ).toBe(true);
+});
+
+test('Replace variable name to value', () => {
+  const testString = Object.keys(storageList)[0].repeat(3);
+  const resultString = Object.values(storageList)[0].repeat(3);
+  expect(ejectVariables(testString, storageList)).toBe(resultString);
+});
+
+test('Convert all variables in form data', () => {
+  const name = Object.keys(storageList)[0];
+  const value = Object.values(storageList)[0];
+  const input = {
+    method: 'GET',
+    endpoint: `foo:${name}123${name}123`,
+    header: [
+      {
+        name: '12321',
+        value: `${name}`,
+      },
+    ],
+    type: 'application/json',
+    language: 'cURL',
+    body: `${name}${name}${name}`,
+  };
+  const output = {
+    method: 'GET',
+    endpoint: `foo:${value}123${value}123`,
+    header: [
+      {
+        name: '12321',
+        value: `${value}`,
+      },
+    ],
+    type: 'application/json',
+    language: 'cURL',
+    body: `${value}${value}${value}`,
+  };
+  expect(convertValues(input, storageList)).toStrictEqual(output);
 });
