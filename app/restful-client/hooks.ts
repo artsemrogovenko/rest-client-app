@@ -97,6 +97,11 @@ export function useVariablesValidator() {
       }
     });
 
+    if (data.body) {
+      const message = hasErrors(data.body, variables);
+      if (message) errors.body = message;
+    }
+
     return {
       isValid: Object.keys(errors).length === 0,
       errors,

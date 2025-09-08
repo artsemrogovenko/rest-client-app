@@ -7,8 +7,8 @@ import {
 
 export const listSchema = z
   .object({
-    name: z.string().min(1, 'fill it'),
-    value: z.string().min(1, 'fill it'),
+    name: z.string().min(1, 'Fill it'),
+    value: z.string().min(1, 'Fill it'),
   })
   .required();
 export type TListSchema = z.infer<typeof listSchema>;
@@ -26,7 +26,7 @@ export const clientSchema = z
     variable: z.array(listSchema),
     type: z.enum(payloadTypes),
     language: z.enum(languageCode),
-    body: z.string().min(1),
+    body: z.string(),
   })
   .partial();
 

@@ -157,7 +157,7 @@ export function RestfulClient() {
                 <FormItem>
                   <FormMessage />
                   <FormControl>
-                    <Textarea id={field.name} {...field} />
+                    <Textarea id={field.name} {...field} value={field.value} />
                   </FormControl>
                 </FormItem>
               )}
