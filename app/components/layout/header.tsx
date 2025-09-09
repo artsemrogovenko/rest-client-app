@@ -15,7 +15,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" className='cursor-pointer' size="sm">
+          <Button variant="outline" className="cursor-pointer" size="sm">
             EN/RU
           </Button>
           {!user && (

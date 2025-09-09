@@ -1,7 +1,6 @@
-import { Outlet, useNavigate } from 'react-router'
-import React, { useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router';
+import React, { useEffect } from 'react';
 import { auth } from '~/firebase/firebaseConfig';
-
 
 export default function AuthLayout() {
   const navigate = useNavigate();
@@ -9,7 +8,7 @@ export default function AuthLayout() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigate("/dashboard");
+        navigate('/dashboard');
       }
     });
 
@@ -19,5 +18,5 @@ export default function AuthLayout() {
     <div>
       <Outlet />
     </div>
-  )
+  );
 }

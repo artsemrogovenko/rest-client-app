@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -8,25 +8,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { Link, useNavigate } from "react-router";
-import { signUpFormSchema } from "./validationSchema";
-import { auth } from "~/firebase/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
-
-
+} from '~/components/ui/form';
+import { Input } from '~/components/ui/input';
+import { Button } from '~/components/ui/button';
+import { Link, useNavigate } from 'react-router';
+import { signUpFormSchema } from './validationSchema';
+import { auth } from '~/firebase/firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
 
 export default function SignUp() {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
   const navigate = useNavigate();
@@ -34,15 +32,14 @@ export default function SignUp() {
 
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password)
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
       console.log(values);
-      navigate('/dashboard')
+      navigate('/dashboard');
     } catch (error) {
       const typedError = error as Error;
       setError(typedError.message);
       console.error('Sign Up Error', error);
-    } 
-      
+    }
   }
 
   return (
@@ -85,7 +82,11 @@ export default function SignUp() {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="confirm password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="confirm password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
