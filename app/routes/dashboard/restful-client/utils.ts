@@ -1,13 +1,8 @@
-import { storageVariablesSchema, type TRestfulSchema } from './validate';
+import { type TRestfulSchema } from './validate';
 import type { LocalVariables } from './types';
 
 export function deleteBrackets(value: string) {
   return value.replace(/\{\{|}}/g, '');
-}
-
-export function isContainValues(value: object): value is LocalVariables {
-  const result = storageVariablesSchema.safeParse(value);
-  return result.success;
 }
 
 export function findValue(variableName: string, object: LocalVariables) {

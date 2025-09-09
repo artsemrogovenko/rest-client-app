@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { LocalVariables } from '~/restful-client/types';
-import { LOCAL_STORAGE_KEY } from '~/restful-client/constants';
-import { isNotMissedVariables } from '~/restful-client/utils';
-import { type TRestfulSchema } from '~/restful-client/validate';
+import type { LocalVariables } from './types';
+import { LOCAL_STORAGE_KEY } from './constants';
+import { isNotMissedVariables } from './utils';
+import { type TRestfulSchema } from './validate';
 
 export function useLocalStorage() {
   const getStorageValue = useCallback((key: string) => {

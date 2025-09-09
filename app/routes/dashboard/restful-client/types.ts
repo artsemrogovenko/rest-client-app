@@ -1,8 +1,5 @@
 import type { Control } from 'react-hook-form';
-import type {
-  TRestfulSchema,
-  TVariablesSchema,
-} from '~/restful-client/validate';
+import type { TRestfulSchema, TVariablesSchema } from './validate';
 
 export type PairFields = {
   name: string;

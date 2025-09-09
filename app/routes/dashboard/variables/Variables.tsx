@@ -2,19 +2,22 @@
 
 import { useForm } from 'react-hook-form';
 import { Form, FormField, FormItem } from '~/components/ui/form';
-import DynamicList from '~/restful-client/DynamicList';
+import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Button } from '~/components/ui/button';
 import {
   type TVariablesSchema,
   variablesSchema,
-} from '~/restful-client/validate';
+} from '~/routes/dashboard/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocalStorage } from '~/restful-client/hooks';
+import { useLocalStorage } from '~/routes/dashboard/restful-client/hooks';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '~/components/ui/skeleton';
-import type { LocalVariables, PairFields } from '~/restful-client/types';
-import { LOCAL_STORAGE_KEY } from '~/restful-client/constants';
-import { deleteBrackets } from '~/restful-client/utils';
+import type {
+  LocalVariables,
+  PairFields,
+} from '~/routes/dashboard/restful-client/types';
+import { LOCAL_STORAGE_KEY } from '~/routes/dashboard/restful-client/constants';
+import { deleteBrackets } from '~/routes/dashboard/restful-client/utils';
 
 export default function Variables() {
   const { setStorageValue, getStorageValue } = useLocalStorage();

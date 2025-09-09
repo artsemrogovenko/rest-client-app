@@ -25,6 +25,7 @@ import { clientSchema, type TRestfulSchema } from './validate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useVariablesValidator } from './hooks';
 import { convertValues } from './utils';
+import type { LocalVariables } from './types';
 
 export function RestfulClient() {
   const { validateFormWithVariables, variables } = useVariablesValidator();
@@ -46,7 +47,7 @@ export function RestfulClient() {
       return;
     }
 
-    const newValues = convertValues(data, variables);
+    const newValues = convertValues(data, variables as LocalVariables);
     const updatedHeaders = newValues.header?.map((item) => ({ ...item })) || [];
     form.reset({ ...newValues, header: updatedHeaders });
   };
