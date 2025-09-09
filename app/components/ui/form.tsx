@@ -5,12 +5,12 @@ import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import {
   Controller,
-  type ControllerProps,
-  type FieldPath,
-  type FieldValues,
   FormProvider,
   useFormContext,
   useFormState,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
 } from 'react-hook-form';
 
 import { cn } from '~/lib/utils';

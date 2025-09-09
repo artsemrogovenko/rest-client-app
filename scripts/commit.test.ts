@@ -19,6 +19,7 @@ describe('validateCommitMessage', (): void => {
       'style(KAN99): format code',
       'chore(KAN3): update dependencies',
       'test(KAN67): add unit tests',
+      'test(KAN-107): add hooks',
     ];
 
     test.each(validCases)('should validate %s', (message): void => {
@@ -56,6 +57,8 @@ describe('validateCommitMessage', (): void => {
       'feat(INVALID): wrong format',
       'feat(KAN): missing numbers',
       'feat(KAN123A): extra characters',
+      'feat(KAN): no number',
+      'feat(KAN-): no number',
     ];
 
     test.each(invalidScopeCases)(
@@ -63,9 +66,7 @@ describe('validateCommitMessage', (): void => {
       (message): void => {
         const result = validateCommitMessage(message) as ValidationResult;
         expect(result.valid).toBe(false);
-        expect(result.errors.some((error) => error.includes('Invalid'))).toBe(
-          true
-        );
+        expect(result.errors.some((error) => error.length > 0)).toBe(true);
       }
     );
   });

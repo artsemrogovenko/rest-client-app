@@ -1,8 +1,5 @@
-import {
-  storageVariablesSchema,
-  type TRestfulSchema,
-} from '~/restful-client/validate';
-import type { LocalVariables } from '~/restful-client/types';
+import { storageVariablesSchema, type TRestfulSchema } from './validate';
+import type { LocalVariables } from './types';
 
 export function deleteBrackets(value: string) {
   return value.replace(/\{\{|}}/g, '');
@@ -104,7 +101,7 @@ export function ejectVariables(
 
 export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
   const cloned = JSON.parse(JSON.stringify(data)) as TRestfulSchema;
-  cloned.endpoint = ejectVariables(cloned.endpoint, variables);
+  cloned.endpoint = ejectVariables(String(cloned.endpoint), variables);
   if (cloned.body) cloned.body = ejectVariables(cloned.body, variables);
   if (cloned.header) {
     cloned.header = cloned.header.map((line) => {

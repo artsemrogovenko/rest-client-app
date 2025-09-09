@@ -1,9 +1,5 @@
 import { z } from 'zod';
-import {
-  languageCode,
-  payloadTypes,
-  queryMethods,
-} from '~/restful-client/constants';
+import { languageCode, payloadTypes, queryMethods } from './constants';
 
 export const listSchema = z
   .object({

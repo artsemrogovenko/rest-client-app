@@ -9,7 +9,7 @@ const commitSchema = z.object({
   }),
   scope: z
     .string()
-    .regex(/^KAN\d+$/)
+    .regex(/^KAN-?\d+$/)
     .refine((scope) => scope === scope.toUpperCase()),
   subject: z
     .string()
@@ -24,7 +24,7 @@ export function validateCommitMessage(message) {
     errors: [],
   };
 
-  const formatRegex = /^(\w+)\(([^)]+)\):\s(.+)$/;
+  const formatRegex = /^(\w+)\(([\w-]+)\):\s(.+)$/;
   const match = message.match(formatRegex);
 
   if (!match) {

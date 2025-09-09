@@ -16,14 +16,14 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
   },
-  base: './',
+  base: '/',
   css: {
     postcss: {
       plugins: [autoprefixer],
     },
   },
   optimizeDeps: {
-    exclude: ['@react-router/dev', 'app/routes/home.tsx'],
+    exclude: ['@react-router/dev', 'app/routes/home.tsx', 'app/components/ui'],
   },
   test: {
     exclude: ['node_modules'],
@@ -50,6 +50,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app'),
+      '~': path.resolve(__dirname, './app'),
     },
   },
 });

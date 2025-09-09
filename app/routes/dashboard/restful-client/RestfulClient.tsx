@@ -10,12 +10,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  languageCode,
-  payloadTypes,
-  queryMethods,
-} from '~/restful-client/constants';
-import DynamicList from '~/restful-client/DynamicList';
+import { languageCode, payloadTypes, queryMethods } from './constants';
+import DynamicList from './DynamicList';
 import {
   Form,
   FormControl,
@@ -25,10 +21,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { clientSchema, type TRestfulSchema } from '~/restful-client/validate';
+import { clientSchema, type TRestfulSchema } from './validate';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useVariablesValidator } from '~/restful-client/hooks';
-import { convertValues } from '~/restful-client/utils';
+import { useVariablesValidator } from './hooks';
+import { convertValues } from './utils';
 
 export function RestfulClient() {
   const { validateFormWithVariables, variables } = useVariablesValidator();

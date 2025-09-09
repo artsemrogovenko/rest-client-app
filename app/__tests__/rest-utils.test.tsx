@@ -7,7 +7,7 @@ import {
   isValidBrackets,
   ejectVariables,
   convertValues,
-} from '~/restful-client/utils';
+} from '~/routes/dashboard/restful-client/utils';
 
 const storageList = {
   '{{pseudo2}}': '1',
