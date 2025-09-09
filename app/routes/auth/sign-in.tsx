@@ -33,10 +33,8 @@ export default function SignIn() {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       navigate('/dashboard');
-    } catch (error) {
-      const typedError = error as Error;
-      setError(typedError.message);
-      console.error('Sign In Error', error);
+    } catch {
+      setError('Email or password is incorrect');
     }
   }
 

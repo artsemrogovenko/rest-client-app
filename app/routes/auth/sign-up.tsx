@@ -16,6 +16,8 @@ import { signUpFormSchema } from './validationSchema';
 import { auth } from '~/firebase/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
+import { FirebaseError } from 'firebase/app';
+import getErrorMessage from '~/firebase/firebase-error-messages';
 
 export default function SignUp() {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
@@ -36,9 +38,10 @@ export default function SignUp() {
       console.log(values);
       navigate('/dashboard');
     } catch (error) {
-      const typedError = error as Error;
-      setError(typedError.message);
-      console.error('Sign Up Error', error);
+      if (error instanceof FirebaseError) {
+        const msg = getErrorMessage(error.code);
+        setError(msg);
+      }
     }
   }
 

@@ -29,9 +29,7 @@ const Header = () => {
             </>
           )}
           {user && (
-            <>
-              <SignOut />
-            </>
+            <SignOut />
           )}
         </div>
       </div>

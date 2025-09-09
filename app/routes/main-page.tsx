@@ -1,24 +1,40 @@
-import { Link } from 'react-router';
-import { Button } from '~/components/ui/button';
+import { useContext } from "react";
+import AuthContext from "~/contexts/auth/AuthContext";
+import { Link } from "react-router";
+import { Button } from "~/components/ui/button";
+import Dashboard from "./dashboard/dashboard";
 
 const MainPage = () => {
+  const auth = useContext(AuthContext);
+
+  if (!auth) return null;
+
+  const { user } = auth;
+
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
-        <div className="m-auto max-w-[300px] w-full space-y-6 px-4">
-          <h1 className="text-center font-bold text-3xl">Welcome!</h1>
-          <div className="flex justify-center items-center gap-10 rounded-3xl border border-gray-200 p-6 dark:border-gray-700">
-            <Button>
-              <Link to={'/login'}>Sign In</Link>
-            </Button>
-            <Button>
-              <Link to={'/register'}>Sign Up</Link>
-            </Button>
-          </div>
-        </div>
+    <>
+      <div className="flex flex-col items-center gap-8 w-[90%] max-w-xl flex-1 text-center">
+        {!user ? (
+          <>
+            <h1 className="text-center font-bold text-3xl">Welcome!</h1>
+            <div className="flex gap-4">
+              <Button asChild><Link to="/login">Sign In</Link></Button>
+              <Button asChild><Link to="/register">Sign Up</Link></Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <Dashboard />
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button asChild variant="outline"><Link to="/dashboard">REST Client</Link></Button>
+              <Button asChild variant="outline"><Link to="/history">History</Link></Button>
+              <Button asChild variant="outline"><Link to="/variables">Variables</Link></Button>
+            </div>
+          </>
+        )}
       </div>
-    </main>
+    </>
   );
-};
+}
 
 export default MainPage;

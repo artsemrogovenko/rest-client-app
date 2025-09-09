@@ -1,35 +1,24 @@
 import Header from '~/components/layout/header';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet } from 'react-router';
 import Footer from '~/components/layout/footer';
 import AuthProvider from '~/contexts/auth/authProvider';
-import { useEffect } from 'react';
-import { auth } from '~/firebase/firebaseConfig';
+import { Toaster } from '~/components/ui/sonner';
 
 const AppLayout = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        navigate('/');
-      } else {
-        navigate('/dashboard');
-      }
-    });
-
-    return () => unsubscribe();
-  }, [navigate]);
 
   return (
-    <AuthProvider>
-      <div className="min-h-dvh flex flex-col">
-        <Header />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
-    </AuthProvider>
+    <>
+      <AuthProvider>
+        <div className="min-h-dvh flex flex-col">
+          <Header />
+          <main className="flex-1 flex flex-col items-center justify-center gap-12 px-4 py-8 text-center">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
+      </AuthProvider>
+      <Toaster position="bottom-right" offset={80} richColors />
+    </>
   );
 };
 

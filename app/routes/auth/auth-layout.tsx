@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { auth } from '~/firebase/firebaseConfig';
 
 export default function AuthLayout() {
