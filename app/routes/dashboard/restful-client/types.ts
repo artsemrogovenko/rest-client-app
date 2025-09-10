@@ -12,3 +12,19 @@ export type DynamicListProps = {
 };
 
 export type LocalVariables = Record<string, string>;
+
+export type ClientFormProps = {
+  initialData: TRestfulSchema;
+  onSubmit: (data: TRestfulSchema) => void;
+  isLoading: boolean;
+  error: string | null;
+};
+
+export type ResponseComponentProps = ReturnResponse & {
+  isLoading: boolean;
+};
+
+export type ReturnResponse = {
+  response: Response | null;
+  error: string | null;
+};

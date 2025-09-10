@@ -11,7 +11,10 @@ import {
   queryMethods,
 } from '~/routes/dashboard/restful-client/constants';
 import { convertValues } from '~/routes/dashboard/restful-client/utils';
-import type { LocalVariables } from '~/routes/dashboard/restful-client/types';
+import type {
+  ClientFormProps,
+  LocalVariables,
+} from '~/routes/dashboard/restful-client/types';
 import {
   Form,
   FormControl,
@@ -33,7 +36,7 @@ import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
 import { Copy } from 'lucide-react';
 
-export default function ClientForm() {
+export default function ClientForm(props: ClientFormProps) {
   const { validateFormWithVariables, variables } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
@@ -55,7 +58,8 @@ export default function ClientForm() {
 
     const newValues = convertValues(data, variables as LocalVariables);
     const updatedHeaders = newValues.header?.map((item) => ({ ...item })) || [];
-    form.reset({ ...newValues, header: updatedHeaders });
+    props.onSubmit({ ...newValues, header: updatedHeaders });
+    // form.reset({ ...newValues, header: updatedHeaders });
   };
 
   return (
@@ -110,7 +114,11 @@ export default function ClientForm() {
                 )}
               />
             </div>
-            <Button type="submit" className="uppercase">
+            <Button
+              type="submit"
+              className="uppercase"
+              disabled={props.isLoading}
+            >
               send
             </Button>
           </div>

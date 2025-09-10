@@ -105,3 +105,29 @@ export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
   }
   return cloned;
 }
+
+export default function convertRequestToUrl(data: TRestfulSchema): string {
+  const method = data.method;
+  const body = data.body ? toBase64(data.body) : '';
+  let headers = '';
+  if (data.header) {
+    headers = data.header?.reduce((acc, value, index, array) => {
+      acc += `${value.name}=${toBase64(value.value)}`;
+      if (index !== array.length - 1) acc += '&';
+      return acc;
+    }, '?');
+  }
+  return `${method}/${body}${headers}`;
+}
+
+export function toBase64(str: string) {
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+export function fromBase64(str: string) {
+  try {
+    return atob(str.replace(/-/g, '+').replace(/_/g, '/'));
+  } catch {
+    return '';
+  }
+}
