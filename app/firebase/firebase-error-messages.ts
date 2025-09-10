@@ -1,9 +1,9 @@
 const getErrorMessage = (code: string): string => {
   switch(code) {
     case "auth/email-already-in-use":
-      return "Этот email уже используется.";
+      return "This email is already in use.";
     default:
-      return "Не удалось создать аккаунт. Попробуйте позже.";
+      return "Failed to create account. Try again later.";
   }
 }
 

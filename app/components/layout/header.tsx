@@ -2,13 +2,26 @@ import { Link } from 'react-router';
 import { Button } from '../ui/button';
 import useAuth from '~/contexts/auth/useAuth';
 import SignOut from '~/routes/auth/sign-out';
+import { useEffect, useState } from 'react';
+import { SCROLL_THRESHOLD, EVENT_SCROLL } from './constant';
 
 const Header = () => {
   const { user } = useAuth();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(()=>{
+    const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
+   
+    window.addEventListener(EVENT_SCROLL, onScroll);
+    return () => window.removeEventListener(EVENT_SCROLL, onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-gray-600 py-2 shadow-md" : "bg-transparent py-4"
+      }`}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <div className="h-10 w-10 bg-black flex items-center justify-center rounded-sm">
+        <div className="h-10 w-10 bg-black bg-col flex items-center justify-center rounded-sm">
           <Link to="/" className="font-semibold text-white">
             H&H
           </Link>
@@ -29,7 +42,12 @@ const Header = () => {
             </>
           )}
           {user && (
-            <SignOut />
+            <>
+              <Button size="sm">
+                <Link to="/">Main Page</Link>
+              </Button>
+              <SignOut />
+            </>
           )}
         </div>
       </div>
