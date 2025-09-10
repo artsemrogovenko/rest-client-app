@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import autoprefixer from 'autoprefixer';
+import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -22,7 +23,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['@react-router/dev', 'app/routes/home.tsx'],
+    exclude: ['@react-router/dev', 'app/routes/home.tsx', 'app/components/ui'],
   },
   test: {
     exclude: ['node_modules'],
@@ -45,5 +46,11 @@ export default defineConfig({
     },
     environment: 'jsdom',
     globals: true,
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './app'),
+      '~': path.resolve(__dirname, './app'),
+    },
   },
 });

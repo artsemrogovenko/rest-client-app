@@ -14,9 +14,5 @@ export default function AuthLayout() {
 
     return () => unsubscribe();
   }, [navigate]);
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }

@@ -26,7 +26,7 @@ const MainPage = () => {
           <>
             <Dashboard />
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild variant="outline"><Link to="/dashboard">REST Client</Link></Button>
+              <Button asChild variant="outline"><Link to="/client">REST Client</Link></Button>
               <Button asChild variant="outline"><Link to="/history">History</Link></Button>
               <Button asChild variant="outline"><Link to="/variables">Variables</Link></Button>
             </div>

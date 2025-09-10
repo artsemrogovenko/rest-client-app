@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { z } from 'zod';
+import { fileURLToPath } from 'url';
 
 const commitSchema = z.object({
   fullMessage: z.string(),
@@ -8,7 +9,7 @@ const commitSchema = z.object({
   }),
   scope: z
     .string()
-    .regex(/^KAN\d+$/)
+    .regex(/^KAN-?\d+$/)
     .refine((scope) => scope === scope.toUpperCase()),
   subject: z
     .string()
@@ -17,13 +18,13 @@ const commitSchema = z.object({
     .refine((val) => val === val.toLowerCase()),
 });
 
-function validateCommitMessage(message) {
+export function validateCommitMessage(message) {
   const result = {
     valid: false,
     errors: [],
   };
 
-  const formatRegex = /^(\w+)\(([^)]+)\):\s(.+)$/;
+  const formatRegex = /^(\w+)\(([\w-]+)\):\s(.+)$/;
   const match = message.match(formatRegex);
 
   if (!match) {
@@ -44,28 +45,38 @@ function validateCommitMessage(message) {
     result.valid = true;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      result.errors = error.errors.map((err) => `🚫 ${err.message}`);
+      result.errors = error.issues
+        ? error.issues.map((issue) => `🚫 ${issue.message}`)
+        : ['🚫 Ошибка проверки'];
     } else {
-      result.errors.push('Неизвестная ошибка');
+      result.errors.push('🚫 Неизвестная ошибка');
     }
   }
 
   return result;
 }
 
-const commitFilePath = process.argv[2];
-const commitMessage = fs.readFileSync(commitFilePath, 'utf-8').trim();
+export function runCLI(filePath) {
+  const commitMessage = fs.readFileSync(filePath, 'utf-8').trim();
+  const validation = validateCommitMessage(commitMessage);
 
-const validation = validateCommitMessage(commitMessage);
+  if (!validation.valid) {
+    console.error('❌ Ошибка сообщения: ', commitMessage);
+    console.log('\n📋 Примеры:');
+    console.log(
+      '   feat(KAN1): add user authentication\n' +
+        '   fix(KAN42): resolve login issue'
+    );
+    process.exit(1);
+  }
 
-if (!validation.valid) {
-  console.error('❌ Ошибка сообщения: ', commitMessage);
-  console.log('\n📋 Примеры:');
-  console.log(
-    '   feat(KAN1): add user authentication\n' +
-      '   fix(KAN42): resolve login issue'
-  );
-  process.exit(1);
+  process.exit(0);
 }
 
-process.exit(0);
+const isMainModule =
+  process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+
+if (isMainModule) {
+  const commitFilePath = process.argv[2];
+  runCLI(commitFilePath);
+}

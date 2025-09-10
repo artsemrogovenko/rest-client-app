@@ -7,18 +7,14 @@ import { Toaster } from '~/components/ui/sonner';
 const AppLayout = () => {
 
   return (
-    <>
-      <AuthProvider>
-        <div className="min-h-dvh flex flex-col">
-          <Header />
-          <main className="flex-1 flex flex-col items-center justify-center gap-12 px-4 py-8 text-center">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
-      </AuthProvider>
+    <AuthProvider>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
       <Toaster position="bottom-right" offset={80} richColors />
-    </>
+    </AuthProvider>
   );
 };
 
