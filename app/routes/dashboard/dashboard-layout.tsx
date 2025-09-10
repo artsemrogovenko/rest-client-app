@@ -2,11 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { auth } from '~/firebase/firebaseConfig';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,12 +14,6 @@ export default function DashboardLayout({
 
     return () => unsubscribe();
   }, [navigate]);
-  return (
-    <>
-      <div>
-        <Outlet />
-      </div>
-      {children}
-    </>
-  );
+
+  return <Outlet />;
 }

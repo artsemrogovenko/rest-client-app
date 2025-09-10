@@ -29,20 +29,21 @@ export default function DynamicList({ role, control }: DynamicListProps) {
         </Button>
       </div>
 
-      <ul className="flex flex-col w-[320px] gap-2">
+      <ul className="flex flex-col gap-2">
         {fields.map((line, index) => (
-          <li className="flex gap-2 items-end  " key={line.id}>
+          <li className="flex gap-2 items-end " key={line.id}>
             <FormField
               name={`${role}.${index}.name`}
               control={control}
               render={({ field }) => (
-                <FormItem>
-                  <FormMessage className="relative top-2 left-1 " />
+                <FormItem className="flex-1">
+                  <FormMessage className="relative top-2 left-1" />
                   <FormControl>
                     <Input
                       {...field}
                       placeholder="name"
                       id={`${role}-${index}-name`}
+                      className=" w-full"
                     />
                   </FormControl>
                 </FormItem>
@@ -52,13 +53,14 @@ export default function DynamicList({ role, control }: DynamicListProps) {
               name={`${role}.${index}.value`}
               control={control}
               render={({ field }) => (
-                <FormItem>
-                  <FormMessage className="relative top-2 left-1" />
+                <FormItem className="flex-2">
+                  <FormMessage className="relative top-2 left-1 " />
                   <FormControl>
                     <Input
                       {...field}
                       placeholder="value"
                       id={`${role}-${index}-value`}
+                      className=" w-full"
                     />
                   </FormControl>
                 </FormItem>

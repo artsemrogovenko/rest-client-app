@@ -10,11 +10,7 @@ const AppLayout = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        navigate('/');
-      } else {
-        navigate('/dashboard');
-      }
+      if (!user) navigate('/');
     });
 
     return () => unsubscribe();
@@ -22,13 +18,11 @@ const AppLayout = () => {
 
   return (
     <AuthProvider>
-      <div className="min-h-dvh flex flex-col">
-        <Header />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
     </AuthProvider>
   );
 };
