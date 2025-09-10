@@ -19,7 +19,7 @@ import type {
 import { LOCAL_STORAGE_KEY } from '~/routes/dashboard/restful-client/constants';
 import { deleteBrackets } from '~/routes/dashboard/restful-client/utils';
 
-export default function Variables() {
+export function VariablesForm() {
   const { setStorageValue, getStorageValue } = useLocalStorage();
   const [isClient, setIsClient] = useState(false);
   const [initValues, setInitValues] = useState<PairFields[]>([]);
@@ -65,7 +65,7 @@ export default function Variables() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submitForm)}
-        className="flex flex-col gap-2 "
+        className="flex flex-col gap-2"
       >
         <FormField
           control={form.control}
@@ -86,5 +86,13 @@ export default function Variables() {
         </Button>
       </form>
     </Form>
+  );
+}
+
+export default function Variables() {
+  return (
+    <section className="size-full p-10 max w-[1280px]">
+      <VariablesForm />
+    </section>
   );
 }
