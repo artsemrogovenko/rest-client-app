@@ -10,11 +10,7 @@ const AppLayout = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        navigate('/');
-        // } else {
-        //   navigate('/dashboard');
-      }
+      if (!user) navigate('/');
     });
 
     return () => unsubscribe();
