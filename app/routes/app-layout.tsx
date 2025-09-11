@@ -7,14 +7,16 @@ import { Toaster } from '~/components/ui/sonner';
 const AppLayout = () => {
 
   return (
-    <AuthProvider>
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
-      <Toaster position="bottom-right" offset={80} richColors />
-    </AuthProvider>
+    <div className="wrapper">
+      <AuthProvider>
+        <Header />
+        <main className="main">
+          <Outlet />
+        </main>
+        <Footer />
+        <Toaster position="bottom-right" offset={80} richColors />
+      </AuthProvider>
+    </div>
   );
 };
 

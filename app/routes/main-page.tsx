@@ -3,6 +3,7 @@ import AuthContext from "~/contexts/auth/AuthContext";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import Dashboard from "./dashboard/dashboard";
+import { toast } from "sonner";
 
 const MainPage = () => {
   const auth = useContext(AuthContext);
@@ -19,7 +20,7 @@ const MainPage = () => {
             <h1 className="text-center font-bold text-3xl">Welcome!</h1>
             <div className="flex gap-4">
               <Button asChild><Link to="/login">Sign In</Link></Button>
-              <Button asChild><Link to="/register">Sign Up</Link></Button>
+              <Button asChild ><Link to="/register">Sign Up</Link></Button>
             </div>
           </>
         ) : (
