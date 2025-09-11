@@ -1,12 +1,14 @@
 import { expect, test } from 'vitest';
 import {
-  collectVariablesNames,
   collectVariables,
+  collectVariablesNames,
+  convertValues,
+  ejectVariables,
   findValue,
+  fromBase64,
   isNotMissedVariables,
   isValidBrackets,
-  ejectVariables,
-  convertValues,
+  toBase64,
 } from '~/routes/dashboard/restful-client/utils';
 
 const storageList = {
@@ -173,4 +175,20 @@ test('Convert all variables in form data', () => {
     body: `${value}${value}${value}`,
   };
   expect(convertValues(input, storageList)).toStrictEqual(output);
+});
+
+describe('Tests decode & encode base64', () => {
+  test('Encode', () => {
+    const testString = 'http://localhost:5173/client';
+    const encoded = toBase64(testString);
+    expect(encoded).not.toBe(testString);
+    expect(encoded.length).greaterThan(0);
+  });
+
+  test('Decoded result equivalent input', () => {
+    const testString = 'http://localhost:5173/client';
+    const encoded = toBase64(testString);
+    expect(encoded).not.toBe(testString);
+    expect(fromBase64(encoded)).toBe(testString);
+  });
 });

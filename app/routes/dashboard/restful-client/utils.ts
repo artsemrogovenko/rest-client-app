@@ -108,16 +108,17 @@ export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
 
 export default function convertRequestToUrl(data: TRestfulSchema): string {
   const method = data.method;
-  const body = data.body ? toBase64(data.body) : '';
+  const endpoint = toBase64(String(data.endpoint));
+  const body = data.body ? `/${toBase64(data.body)}` : '';
   let headers = '';
-  if (data.header) {
+  if (data.header?.length) {
     headers = data.header?.reduce((acc, value, index, array) => {
-      acc += `${value.name}=${toBase64(value.value)}`;
+      acc += `${toBase64(value.name)}=${toBase64(value.value)}`;
       if (index !== array.length - 1) acc += '&';
       return acc;
-    }, '?');
+    }, '=?');
   }
-  return `${method}/${body}${headers}`;
+  return `${method}/${endpoint}${body}${headers}`;
 }
 
 export function toBase64(str: string) {

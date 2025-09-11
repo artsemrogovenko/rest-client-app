@@ -1,8 +1,8 @@
 import {
-  type RouteConfig,
-  route,
   index,
   layout,
+  route,
+  type RouteConfig,
 } from '@react-router/dev/routes';
 
 export default [
@@ -16,11 +16,11 @@ export default [
 
     layout('./routes/dashboard/dashboard-layout.tsx', [
       route('dashboard', 'routes/dashboard/dashboard.tsx'),
-      route('client', 'routes/dashboard/restful-client/RestfulClient.tsx'),
       route(
-        '/:method/:data',
+        'client/:method?/:encodedUrl?/:encodedData?',
         'routes/dashboard/restful-client/RestfulClient.tsx'
       ),
+      route('api/request', '.server/request.ts'),
     ]),
   ]),
 ] satisfies RouteConfig;

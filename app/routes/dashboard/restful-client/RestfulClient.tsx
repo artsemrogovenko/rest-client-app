@@ -1,14 +1,14 @@
 'use client';
 import ClientForm from '~/routes/dashboard/restful-client/ClientForm';
 import ResponseComponent from '~/routes/dashboard/restful-client/Response';
-import makeRequest from '~/.server/request';
 import { useEffect, useState } from 'react';
 import type { TRestfulSchema } from '~/routes/dashboard/restful-client/validate';
 import {
-  useNavigate,
-  useSearchParams,
-  useParams,
   type Params,
+  useNavigate,
+  useFetcher,
+  useParams,
+  useSearchParams,
 } from 'react-router';
 import convertRequestToUrl from '~/routes/dashboard/restful-client/utils';
 import type { ReturnResponse } from '~/routes/dashboard/restful-client/types';
@@ -23,14 +23,36 @@ export default function RestfulClient() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fetcher = useFetcher();
 
   useEffect(() => {
-    if (params.method && params.data) {
-      executeRequest(params, searchParams);
+    if (params.method && params.encodedUrl) {
+      sendRequest(params, searchParams);
     }
-  }, [params.method, params.data]);
+  }, [params.method, params.encodedUrl]);
 
-  const executeRequest = async (
+  useEffect(() => {
+    if (fetcher.state === 'loading') {
+      setLoading(true);
+      setError(null);
+    } else if (fetcher.state === 'idle') {
+      setLoading(false);
+
+      if (fetcher.data) {
+        if (fetcher.data.error) {
+          setError(fetcher.data.error);
+          setApiResponse({
+            error: fetcher.data.error,
+            response: null,
+          });
+        } else {
+          setApiResponse(fetcher.data);
+        }
+      }
+    }
+  }, [params.method, params.encodedUrl, params.encodedData]);
+
+  const sendRequest = async (
     params: Readonly<Params<string>>,
     searchParams: URLSearchParams
   ) => {
@@ -38,18 +60,28 @@ export default function RestfulClient() {
     setError(null);
 
     try {
-      const result = await makeRequest(params, searchParams);
-      // setApiResponse(result);
+      await fetcher.submit(
+        {
+          data: JSON.stringify({
+            params: params,
+            headers: searchParams.entries(),
+          }),
+        },
+        {
+          method: 'post',
+          action: '/api/request',
+        }
+      );
     } catch {
       setError('error');
     } finally {
       setLoading(false);
     }
   };
-
   const handleFormSubmit = (data: TRestfulSchema) => {
     const newUrl = convertRequestToUrl(data);
-    navigate(newUrl, { replace: true });
+    console.log(newUrl);
+    navigate(newUrl, { replace: true, relative: 'route' });
   };
 
   return (

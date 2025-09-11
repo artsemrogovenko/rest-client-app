@@ -10,3 +10,12 @@ export const queryMethods = [
 ];
 export const languageCode = ['cURL', 'Python', 'Java', 'Go'];
 export const LOCAL_STORAGE_KEY = 'variables';
+
+export const mockResponse = new Response('Hello World!', {
+  status: 200,
+  statusText: 'OK',
+  headers: {
+    'Content-Type': 'text/plain',
+    'X-Custom-Header': 'value',
+  },
+});
