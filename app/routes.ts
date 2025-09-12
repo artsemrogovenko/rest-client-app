@@ -19,5 +19,7 @@ export default [
       route('client', 'routes/dashboard/restful-client/RestfulClient.tsx'),
       route('variables', 'routes/dashboard/variables/Variables.tsx'),
     ]),
+
+    route('*', 'routes/not-found.tsx'),
   ]),
 ] satisfies RouteConfig;
