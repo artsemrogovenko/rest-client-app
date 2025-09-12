@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router';
 import { Button } from '~/components/ui/button';
 import { auth } from '~/firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
+import { toast } from 'sonner';
+
 
 export default function SignOut() {
   const navigate = useNavigate();
@@ -10,8 +12,8 @@ export default function SignOut() {
     try {
       await signOut(auth);
       navigate('/');
-    } catch (error) {
-      console.error('Error logging out:', error);
+    } catch {
+      toast.error('Failed to sign out. Please try again');
     }
   }
 

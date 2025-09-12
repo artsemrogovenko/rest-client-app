@@ -4,9 +4,9 @@ import ResponseComponent from '~/routes/dashboard/restful-client/Response';
 
 export default function RestfulClient() {
   return (
-    <section className="flex flex-col size-full overflow-y-scroll">
+    <section className="flex flex-col size-full overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <h2>Restful Client</h2>
-      <div className="flex align-center size-full gap-2 items-stretch content-start justify-center p-10 ">
+      <div className="flex align-center size-full gap-5 items-stretch content-start justify-center">
         <ClientForm />
         <ResponseComponent />
       </div>

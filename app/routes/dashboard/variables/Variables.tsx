@@ -65,7 +65,7 @@ export default function Variables() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submitForm)}
-        className="flex flex-col gap-2 "
+        className="flex flex-col h-full w-1/2 gap-3 rounded-lg border p-5"
       >
         <FormField
           control={form.control}

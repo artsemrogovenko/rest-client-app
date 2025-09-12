@@ -17,6 +17,9 @@ export default [
     layout('./routes/dashboard/dashboard-layout.tsx', [
       route('dashboard', 'routes/dashboard/dashboard.tsx'),
       route('client', 'routes/dashboard/restful-client/RestfulClient.tsx'),
+      route('variables', 'routes/dashboard/variables/Variables.tsx'),
     ]),
+
+    route('*', 'routes/not-found.tsx'),
   ]),
 ] satisfies RouteConfig;

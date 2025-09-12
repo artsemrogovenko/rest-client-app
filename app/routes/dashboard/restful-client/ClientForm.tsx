@@ -64,37 +64,36 @@ export default function ClientForm() {
         onSubmit={form.handleSubmit(submitForm)}
         className="min-w-[450px] w-1/2 flex-1 h-full"
       >
-        <section className="flex flex-col gap-2 rounded-lg border md:-mx-1 p-10">
+        <section className="flex flex-col gap-2 rounded-lg border p-5">
           <div className="flex gap-2 w-full items-end">
-            <div>
-              <FormField
-                control={form.control}
-                name="method"
-                defaultValue={queryMethods[0]}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={field.name}>Query method</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger id={field.name} className="w-[100px]">
-                          <SelectValue placeholder="Method" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {queryMethods.map((method) => (
-                            <SelectItem value={method} key={method}>
-                              {method}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
+
+            <FormField
+              control={form.control}
+              name="method"
+              defaultValue={queryMethods[0]}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Query method</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger id={field.name} className="w-[100px]">
+                        <SelectValue placeholder="Method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {queryMethods.map((method) => (
+                          <SelectItem value={method} key={method}>
+                            {method}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
             <div className="w-full">
               <FormField
                 control={form.control}
@@ -123,10 +122,10 @@ export default function ClientForm() {
               </FormItem>
             )}
           />
-          <article className="flex flex-col gap-2 rounded-lg border md:-mx-1 p-5">
+          <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="inline-flex items-end justify-between">
               <h3>Body</h3>
-              <div>
+              
                 <FormField
                   control={form.control}
                   name="type"
@@ -152,7 +151,7 @@ export default function ClientForm() {
                     </FormItem>
                   )}
                 />
-              </div>
+              
             </div>
 
             <FormField
@@ -169,10 +168,10 @@ export default function ClientForm() {
             />
           </article>
 
-          <article>
+          <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="flex items-end justify-between gap-y-2">
               <h3>Generated code</h3>
-              <div>
+              
                 <FormField
                   control={form.control}
                   name="language"
@@ -202,7 +201,6 @@ export default function ClientForm() {
                     </FormItem>
                   )}
                 />
-              </div>
             </div>
 
             <div className="flex flex-col w-full gap-2 rounded-lg border p-2">

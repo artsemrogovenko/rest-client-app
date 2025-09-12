@@ -16,6 +16,7 @@ import { signInFormSchema } from './validationSchema';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '~/firebase/firebaseConfig';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function SignIn() {
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -33,10 +34,9 @@ export default function SignIn() {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       navigate('/dashboard');
-    } catch (error) {
-      const typedError = error as Error;
-      setError(typedError.message);
-      console.error('Sign In Error', error);
+    } catch {
+      setError('Email or password is incorrect');
+      toast.error('Email or password is incorrect');
     }
   }
 
