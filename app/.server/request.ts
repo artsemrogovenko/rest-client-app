@@ -27,16 +27,9 @@ export async function action({
 }: ActionFunctionArgs): Promise<ReturnResponse> {
   console.log(request, params);
   return await fetchRickAndMortyCharacters()
-    .then((data) => {
+    .then((data: Response) => {
       return {
-        response: new Response(data.results, {
-          status: 200,
-          statusText: 'OK',
-          headers: {
-            'Content-Type': 'text/plain',
-            'X-Custom-Header': 'value',
-          },
-        }),
+        response: data.clone(),
         error: null,
       };
     })
@@ -83,7 +76,6 @@ async function fetchRickAndMortyCharacters() {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error('Error fetching characters:', error);

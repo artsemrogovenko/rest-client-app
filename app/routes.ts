@@ -4,6 +4,7 @@ import {
   route,
   type RouteConfig,
 } from '@react-router/dev/routes';
+import { RESTFUL_CLIENT_PATH } from './routes/dashboard/restful-client/constants';
 
 export default [
   layout('./routes/app-layout.tsx', [
@@ -17,7 +18,7 @@ export default [
     layout('./routes/dashboard/dashboard-layout.tsx', [
       route('dashboard', 'routes/dashboard/dashboard.tsx'),
       route(
-        'client/:method?/:encodedUrl?/:encodedData?',
+        `${RESTFUL_CLIENT_PATH}:method?/:encodedUrl?/:encodedData?`,
         'routes/dashboard/restful-client/RestfulClient.tsx'
       ),
       route('api/request', '.server/request.ts'),

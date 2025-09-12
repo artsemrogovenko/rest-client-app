@@ -10,6 +10,7 @@ export const queryMethods = [
 ];
 export const languageCode = ['cURL', 'Python', 'Java', 'Go'];
 export const LOCAL_STORAGE_KEY = 'variables';
+export const RESTFUL_CLIENT_PATH = '/client/';
 
 export const mockResponse = new Response('Hello World!', {
   status: 200,

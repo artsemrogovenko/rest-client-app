@@ -11,6 +11,7 @@ export default function ResponseComponent({
       return JSON.stringify(body);
     }
     return response.statusText;
+    console.log(response, isLoading);
   };
 
   return (
@@ -21,7 +22,7 @@ export default function ResponseComponent({
           Status: {response?.status}
         </span>
         <h4>Body</h4>
-        <p className="break-all">{isLoading && 'loading'}</p>
+        <p className="break-all">{resultBody()}</p>
       </div>
     </aside>
   );

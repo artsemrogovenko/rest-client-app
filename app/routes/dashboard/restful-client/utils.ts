@@ -1,5 +1,6 @@
 import { type TRestfulSchema } from './validate';
 import type { LocalVariables } from './types';
+import { RESTFUL_CLIENT_PATH } from '~/routes/dashboard/restful-client/constants';
 
 export function deleteBrackets(value: string) {
   return value.replace(/\{\{|}}/g, '');
@@ -107,7 +108,7 @@ export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
 }
 
 export default function convertRequestToUrl(data: TRestfulSchema): string {
-  const method = data.method;
+  const method = RESTFUL_CLIENT_PATH + data.method;
   const endpoint = toBase64(String(data.endpoint));
   const body = data.body ? `/${toBase64(data.body)}` : '';
   let headers = '';

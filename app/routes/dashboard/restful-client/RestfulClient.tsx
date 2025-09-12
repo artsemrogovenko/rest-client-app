@@ -80,7 +80,6 @@ export default function RestfulClient() {
   };
   const handleFormSubmit = (data: TRestfulSchema) => {
     const newUrl = convertRequestToUrl(data);
-    console.log(newUrl);
     navigate(newUrl, { replace: true, relative: 'route' });
   };
 
@@ -95,7 +94,7 @@ export default function RestfulClient() {
           error={error}
         />
         <ResponseComponent
-          error={error}
+          error={apiResponse.error}
           response={apiResponse.response}
           isLoading={loading}
         />
