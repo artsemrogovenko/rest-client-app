@@ -65,7 +65,6 @@ export default function ClientForm(props: ClientFormProps) {
   return (
     <Form {...form}>
       <form
-        id="client-form"
         onSubmit={form.handleSubmit(submitForm)}
         className="min-w-[450px] w-1/2 flex-1 h-full"
       >

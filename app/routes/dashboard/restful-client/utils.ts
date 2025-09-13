@@ -107,7 +107,7 @@ export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
   return cloned;
 }
 
-export default function convertRequestToUrl(data: TRestfulSchema): string {
+export default function convertFormToUrl(data: TRestfulSchema): string {
   const method = RESTFUL_CLIENT_PATH + data.method;
   const endpoint = toBase64(String(data.endpoint));
   const body = data.body ? `/${toBase64(data.body)}` : '';

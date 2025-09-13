@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import useAuth from '~/contexts/auth/useAuth';
 import SignOut from '~/routes/auth/sign-out';
 import { useEffect, useState } from 'react';
-import { SCROLL_THRESHOLD, EVENT_SCROLL } from './constant';
+import { EVENT_SCROLL, SCROLL_THRESHOLD } from './constant';
 
 const Header = () => {
   const { user } = useAuth();

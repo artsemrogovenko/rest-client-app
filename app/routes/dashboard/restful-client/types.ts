@@ -34,3 +34,13 @@ export type ResponseResult = {
   statusText: string;
   body: string | object;
 };
+
+export type RequestType = {
+  params: {
+    method: string;
+    encodedUrl: string;
+    encodedData: string | undefined;
+  };
+  headers: Record<string, string> | undefined;
+  content_type: string;
+};

@@ -1,8 +1,8 @@
 import {
-  type RouteConfig,
-  route,
   index,
   layout,
+  route,
+  type RouteConfig,
 } from '@react-router/dev/routes';
 import { RESTFUL_CLIENT_PATH } from './routes/dashboard/restful-client/constants';
 

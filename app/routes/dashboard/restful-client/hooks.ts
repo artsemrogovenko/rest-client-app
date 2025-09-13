@@ -98,8 +98,12 @@ export function useVariablesValidator() {
     });
 
     if (data.body) {
-      const message = hasErrors(data.body, variables);
-      if (message) errors.body = message;
+      if (data.method === 'GET' || data.method === 'HEAD') {
+        errors.body = 'GET or HEAD request cannot have a body';
+      } else {
+        const message = hasErrors(data.body, variables);
+        if (message) errors.body = message;
+      }
     }
 
     return {

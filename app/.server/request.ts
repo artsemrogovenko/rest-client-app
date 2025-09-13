@@ -1,80 +1,73 @@
+import type { ActionFunctionArgs } from 'react-router';
 import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  Params,
-} from 'react-router';
-import type { ReturnResponse } from '~/routes/dashboard/restful-client/types';
-import { mockResponse } from '~/routes/dashboard/restful-client/constants';
+  RequestType,
+  ReturnResponse,
+} from '~/routes/dashboard/restful-client/types';
+import { fromBase64 } from '~/routes/dashboard/restful-client/utils';
 
-export default async function makeRequest(
-  params: Readonly<Params<string>>,
-  searchParams: URLSearchParams
-): Promise<ReturnResponse> {
-  console.log(params, searchParams);
-  return { error: null, response: mockResponse };
+async function makeRequest(request: RequestType) {
+  const { method, encodedUrl, encodedData } = request.params;
+  const headers = new Headers(request.headers);
+  headers.append('Content-Type', request.content_type);
+
+  let options = {
+    method: method,
+    headers: headers,
+    mode: 'cors' as RequestMode,
+    cache: 'default' as RequestCache,
+  };
+
+  if (encodedData) {
+    options = Object.assign(options, { body: encodedData });
+  }
+
+  return await fetch(encodedUrl, options).then(async (data) => {
+    const copied = data.clone();
+    const body = await copied.json();
+
+    const result = {
+      status: copied.status,
+      statusText: copied.statusText,
+      body: body,
+    };
+    return {
+      response: result,
+      error: null,
+    };
+  });
 }
 
+/*
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const method = url.searchParams.get('method') || '';
   const encodedUrl = url.searchParams.get('encodedUrl') || '';
   return await makeRequest({ method, encodedUrl }, params);
 }
+*/
 
 export async function action({
   request,
-  params,
 }: ActionFunctionArgs): Promise<ReturnResponse> {
-  console.log(request, params);
-  return await fetchRickAndMortyCharacters()
-    .then(async (data) => {
-      const copied = data.clone();
-      const body = await copied.json();
-
-      const result = {
-        status: copied.status,
-        statusText: copied.statusText,
-        body: body,
-      };
-      return {
-        response: result,
-        error: null,
-      };
-    })
-    .catch((error) => {
-      return {
-        response: null,
-        error: error.toString(),
-      };
-    });
-  // try {
-  //   const formData = await request.formData();
-  //   const method = formData.get('method');
-  //   const encodedUrl = formData.get('encodedUrl');
-  //   const encodedData = formData.get('encodedData');
-  //
-  //   if(!method && !encodedUrl)        throw new Error();
-  //   const targetUrl =fromBase64  (String(encodedUrl  ))
-  //   const requestData =fromBase64(String( encodedData))
-  //
-  //
-  //   const result = await makeRequest(
-  //     {
-  //       method: method ,
-  //       url: targetUrl,
-  //     },
-  //     params
-  //   );
-  //
-  //   return result;
-  // } catch {
-  //   return {
-  //     response: null,
-  //     error: 'Failed to make request',
-  //   };
-  // }
-}
-
-async function fetchRickAndMortyCharacters() {
-  return await fetch('https://rickandmortyapi.com/api/character');
+  const formData = await request.formData();
+  const parsed = JSON.parse(String(formData.get('data'))) as RequestType;
+  const decodedRequest: RequestType = {
+    params: {
+      method: parsed.params.method,
+      encodedUrl: fromBase64(parsed.params.encodedUrl),
+      encodedData: parsed.params.encodedData
+        ? fromBase64(parsed.params.encodedData)
+        : undefined,
+    },
+    headers: parsed.headers
+      ? Object.fromEntries(
+          Object.entries(parsed.headers).map(([k, v]) => [
+            fromBase64(k),
+            fromBase64(v),
+          ])
+        )
+      : undefined,
+    content_type: parsed.content_type,
+  };
+  return await makeRequest(decodedRequest);
 }

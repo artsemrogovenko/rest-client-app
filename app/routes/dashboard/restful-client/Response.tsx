@@ -23,7 +23,7 @@ export default function ResponseComponent({
         {isLoading ? (
           <ResponseSkeleton />
         ) : (
-          <pre className="text-sm font-mono overflow-y-scroll h-full">
+          <pre className="text-sm font-mono overflow-y-scroll">
             <code style={{ whiteSpace: 'pre-wrap' }}>{resultBody()}</code>
           </pre>
         )}

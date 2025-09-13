@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import type { TRestfulSchema } from '~/routes/dashboard/restful-client/validate';
 import {
   type Params,
-  useNavigate,
   useFetcher,
+  useNavigate,
   useParams,
   useSearchParams,
 } from 'react-router';
-import convertRequestToUrl from '~/routes/dashboard/restful-client/utils';
+import convertFormToUrl from '~/routes/dashboard/restful-client/utils';
 import type { ReturnResponse } from '~/routes/dashboard/restful-client/types';
 
 export default function RestfulClient() {
@@ -64,7 +64,7 @@ export default function RestfulClient() {
         {
           data: JSON.stringify({
             params: params,
-            headers: searchParams.entries(),
+            headers: Object.fromEntries(searchParams.entries()),
           }),
         },
         {
@@ -79,7 +79,7 @@ export default function RestfulClient() {
     }
   };
   const handleFormSubmit = (data: TRestfulSchema) => {
-    const newUrl = convertRequestToUrl(data);
+    const newUrl = convertFormToUrl(data);
     navigate(newUrl, { replace: true, relative: 'route' });
   };
 
