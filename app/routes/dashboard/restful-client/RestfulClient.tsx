@@ -21,7 +21,7 @@ export default function RestfulClient() {
     error: null,
     response: null,
   });
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fetcher = useFetcher();
 
@@ -29,14 +29,14 @@ export default function RestfulClient() {
     if (params.method && params.encodedUrl) {
       sendRequest(params, searchParams);
     }
-  }, [params.method, params.encodedUrl]);
+  }, [params.method, params.encodedUrl, params.encodedData]);
 
   useEffect(() => {
     if (fetcher.state === 'loading') {
-      setLoading(true);
+      setIsLoading(true);
       setError(null);
     } else if (fetcher.state === 'idle') {
-      setLoading(false);
+      setIsLoading(false);
 
       if (fetcher.data) {
         if (fetcher.data.error) {
@@ -50,13 +50,13 @@ export default function RestfulClient() {
         }
       }
     }
-  }, [params.method, params.encodedUrl, params.encodedData]);
+  }, [fetcher.data, fetcher.state]);
 
   const sendRequest = async (
     params: Readonly<Params<string>>,
     searchParams: URLSearchParams
   ) => {
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
 
     try {
@@ -75,7 +75,7 @@ export default function RestfulClient() {
     } catch {
       setError('error');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
   const handleFormSubmit = (data: TRestfulSchema) => {
@@ -84,19 +84,19 @@ export default function RestfulClient() {
   };
 
   return (
-    <section className="flex flex-col size-full overflow-y-scroll">
+    <section className="flex flex-col size-full overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <h2>Restful Client</h2>
-      <div className="flex align-center size-full gap-2 items-stretch content-start justify-center p-10 ">
+      <div className="flex align-center size-full gap-5 items-stretch content-start justify-center">
         <ClientForm
           initialData={{} as TRestfulSchema}
           onSubmit={handleFormSubmit}
-          isLoading={loading}
+          isLoading={isLoading}
           error={error}
         />
         <ResponseComponent
           error={apiResponse.error}
           response={apiResponse.response}
-          isLoading={loading}
+          isLoading={isLoading}
         />
       </div>
     </section>

@@ -27,9 +27,17 @@ export async function action({
 }: ActionFunctionArgs): Promise<ReturnResponse> {
   console.log(request, params);
   return await fetchRickAndMortyCharacters()
-    .then((data: Response) => {
+    .then(async (data) => {
+      const copied = data.clone();
+      const body = await copied.json();
+
+      const result = {
+        status: copied.status,
+        statusText: copied.statusText,
+        body: body,
+      };
       return {
-        response: data.clone(),
+        response: result,
         error: null,
       };
     })
@@ -68,17 +76,5 @@ export async function action({
 }
 
 async function fetchRickAndMortyCharacters() {
-  try {
-    const response = await fetch('https://rickandmortyapi.com/api/character');
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching characters:', error);
-    throw error;
-  }
+  return await fetch('https://rickandmortyapi.com/api/character');
 }

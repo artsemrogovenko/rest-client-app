@@ -1,8 +1,8 @@
 import {
+  type RouteConfig,
+  route,
   index,
   layout,
-  route,
-  type RouteConfig,
 } from '@react-router/dev/routes';
 import { RESTFUL_CLIENT_PATH } from './routes/dashboard/restful-client/constants';
 
@@ -21,7 +21,10 @@ export default [
         `${RESTFUL_CLIENT_PATH}:method?/:encodedUrl?/:encodedData?`,
         'routes/dashboard/restful-client/RestfulClient.tsx'
       ),
+      route('variables', 'routes/dashboard/variables/Variables.tsx'),
       route('api/request', '.server/request.ts'),
     ]),
+
+    route('*', 'routes/not-found.tsx'),
   ]),
 ] satisfies RouteConfig;

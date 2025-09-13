@@ -25,6 +25,12 @@ export type ResponseComponentProps = ReturnResponse & {
 };
 
 export type ReturnResponse = {
-  response: Response | null;
+  response: ResponseResult | null;
   error: string | null;
+};
+
+export type ResponseResult = {
+  status: number;
+  statusText: string;
+  body: string | object;
 };
