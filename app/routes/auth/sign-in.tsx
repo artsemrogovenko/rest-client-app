@@ -33,7 +33,7 @@ export default function SignIn() {
   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
-      navigate('/dashboard');
+      navigate('/');
     } catch {
       setError('Email or password is incorrect');
       toast.error('Email or password is incorrect');
