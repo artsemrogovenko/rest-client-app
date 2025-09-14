@@ -43,7 +43,7 @@ export default function RestfulClient() {
           setError(fetcher.data.error);
           setApiResponse({
             error: fetcher.data.error,
-            response: null,
+            response: fetcher.data || null,
           });
         } else {
           setApiResponse(fetcher.data);
@@ -78,9 +78,10 @@ export default function RestfulClient() {
       setIsLoading(false);
     }
   };
+
   const handleFormSubmit = (data: TRestfulSchema) => {
     const newUrl = convertFormToUrl(data);
-    navigate(newUrl, { replace: true, relative: 'route' });
+    navigate(newUrl, { replace: true });
   };
 
   return (

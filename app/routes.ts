@@ -1,4 +1,3 @@
-'use server';
 import {
   index,
   layout,
@@ -24,6 +23,7 @@ export default [
       ),
       route('variables', 'routes/dashboard/variables/Variables.tsx'),
       route('api/request', 'server/request.ts'),
+      route('history', 'routes/dashboard/history/History.tsx'),
     ]),
 
     route('*', 'routes/not-found.tsx'),

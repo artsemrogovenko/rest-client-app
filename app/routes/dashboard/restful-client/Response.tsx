@@ -6,7 +6,6 @@ export default function ResponseComponent({
   isLoading,
   response,
 }: ResponseComponentProps) {
-  console.log(response);
   const resultBody = (): string => {
     if (!response) return '';
     const body = response.body;

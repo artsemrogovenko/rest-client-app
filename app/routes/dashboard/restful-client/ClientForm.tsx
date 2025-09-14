@@ -141,7 +141,10 @@ export default function ClientForm(props: ClientFormProps) {
                   <FormItem>
                     <FormLabel htmlFor={field.name}>Type payload</FormLabel>
                     <FormControl>
-                      <Select value={field.value}>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
                         <SelectTrigger id={field.name} className="w-[100px]">
                           <SelectValue placeholder="Payload" />
                         </SelectTrigger>

@@ -3,6 +3,7 @@ import type { LocalVariables } from './types';
 import { LOCAL_STORAGE_KEY } from './constants';
 import { isNotMissedVariables } from './utils';
 import { type TRestfulSchema } from './validate';
+import z from 'zod';
 
 export function useLocalStorage() {
   const getStorageValue = useCallback((key: string) => {
@@ -103,6 +104,25 @@ export function useVariablesValidator() {
       } else {
         const message = hasErrors(data.body, variables);
         if (message) errors.body = message;
+      }
+
+      if (data.type === 'application/json') {
+        try {
+          z.json().parse(data.body);
+        } catch (error) {
+          if (error instanceof z.ZodError) {
+            errors.body += 'body type is not json';
+          }
+        }
+      }
+      if (data.type === 'text/plain; charset=utf-8') {
+        try {
+          z.string().parse(data.body);
+        } catch (error) {
+          if (error instanceof z.ZodError) {
+            errors.body += 'body type is not text';
+          }
+        }
       }
     }
 
