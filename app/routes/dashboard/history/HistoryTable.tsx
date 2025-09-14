@@ -1,7 +1,11 @@
+"use server"
+
 import React, { useEffect, useState } from 'react';
 import { db } from '~/firebase/firebaseConfig';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { type RequestLog } from './types';
+import { Button } from '~/components/ui/button';
+import { Link } from 'react-router';
 
 export default function HistoryTable() {
   const [logs, setLogs] = useState<RequestLog[]>([]);
@@ -10,9 +14,6 @@ export default function HistoryTable() {
     const fetchLogs = async () => {
       const q = query(collection(db, 'logs'), orderBy('timestamp', 'desc'));
       const snapshot = await getDocs(q);
-
-      console.log(snapshot)
-
       const data = snapshot.docs.map(
         (doc) => ({ id: doc.id, ...doc.data() }) as RequestLog
       );
@@ -24,9 +25,13 @@ export default function HistoryTable() {
 
   if (logs.length === 0) {
     return (
+      <div className='flex flex-col justify-center items-center'>
       <p className="text-gray-600">
         You haven&apos;t executed any requests yet
       </p>
+      <p className="text-gray-600 mb-10">It&apos;s empty here. Try: </p>
+      <Button asChild variant="outline"><Link to="/client">REST Client</Link></Button>
+      </div>
     );
   }
 
