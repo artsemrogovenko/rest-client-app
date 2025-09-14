@@ -12,11 +12,11 @@ export const languageCode = ['cURL', 'Python', 'Java', 'Go'];
 export const LOCAL_STORAGE_KEY = 'variables';
 export const RESTFUL_CLIENT_PATH = '/client/';
 
-export const mockResponse = new Response('Hello World!', {
-  status: 200,
-  statusText: 'OK',
-  headers: {
-    'Content-Type': 'text/plain',
-    'X-Custom-Header': 'value',
+export const mockResponse = {
+  response: {
+    status: 0,
+    statusText: 'Oops',
+    body: 'something went wrong, please try again',
   },
-});
+  error: 'error',
+};

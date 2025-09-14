@@ -4,6 +4,7 @@ import type {
   ReturnResponse,
 } from '~/routes/dashboard/restful-client/types';
 import { fromBase64 } from '~/routes/dashboard/restful-client/utils';
+import { mockResponse } from '~/routes/dashboard/restful-client/constants';
 
 async function makeRequest(request: RequestType) {
   const { method, encodedUrl, encodedData } = request.params;
@@ -21,20 +22,34 @@ async function makeRequest(request: RequestType) {
     options = Object.assign(options, { body: encodedData });
   }
 
-  return await fetch(encodedUrl, options).then(async (data) => {
-    const copied = data.clone();
-    const body = await copied.json();
+  return await fetch(encodedUrl, options)
+    .then(async (data) => {
+      const copied = data.clone();
+      const body = await copied.json();
 
-    const result = {
-      status: copied.status,
-      statusText: copied.statusText,
-      body: body,
-    };
-    return {
-      response: result,
-      error: null,
-    };
-  });
+      const result = {
+        status: copied.status,
+        statusText: copied.statusText,
+        body: body,
+      };
+      return {
+        response: result,
+        error: null,
+      };
+    })
+    .catch((error) => {
+      if (error instanceof Error) {
+        return {
+          response: {
+            status: 500,
+            statusText: error.message,
+            body: `${error.cause} : ${encodedUrl} ${JSON.stringify(options)}`,
+          },
+          error: error.message,
+        };
+      }
+      return mockResponse;
+    });
 }
 
 /*

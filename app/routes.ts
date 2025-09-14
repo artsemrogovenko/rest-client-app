@@ -1,3 +1,4 @@
+'use server';
 import {
   index,
   layout,
@@ -22,7 +23,7 @@ export default [
         'routes/dashboard/restful-client/RestfulClient.tsx'
       ),
       route('variables', 'routes/dashboard/variables/Variables.tsx'),
-      route('api/request', '.server/request.ts'),
+      route('api/request', 'server/request.ts'),
     ]),
 
     route('*', 'routes/not-found.tsx'),
