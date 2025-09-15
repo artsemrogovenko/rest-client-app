@@ -1,6 +1,6 @@
 import type { ResponseComponentProps } from '~/routes/dashboard/restful-client/types';
-import { StatusIndicator } from '~/routes/dashboard/restful-client/ResponseIndicator';
-import ResponseSkeleton from '~/routes/dashboard/restful-client/ResponseSkeleton';
+import { StatusIndicator } from '~/routes/dashboard/restful-client/response/ResponseIndicator';
+import ResponseSkeleton from '~/routes/dashboard/restful-client/response/ResponseSkeleton';
 
 export default function ResponseComponent({
   isLoading,

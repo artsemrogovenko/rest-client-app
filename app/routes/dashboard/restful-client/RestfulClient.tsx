@@ -1,7 +1,7 @@
 'use client';
 import ClientForm from '~/routes/dashboard/restful-client/ClientForm';
-import ResponseComponent from '~/routes/dashboard/restful-client/Response';
-import { useEffect, useState } from 'react';
+import ResponseComponent from '~/routes/dashboard/restful-client/response/Response';
+import { useEffect, useRef, useState } from 'react';
 import type { TRestfulSchema } from '~/routes/dashboard/restful-client/validate';
 import {
   type Params,
@@ -24,6 +24,7 @@ export default function RestfulClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fetcher = useFetcher();
+  const codeVariant = useRef<string>('');
 
   useEffect(() => {
     if (params.method && params.encodedUrl) {
@@ -32,7 +33,7 @@ export default function RestfulClient() {
   }, [params.method, params.encodedUrl, params.encodedData]);
 
   useEffect(() => {
-    if (fetcher.state === 'loading') {
+    if (fetcher.state === 'submitting') {
       setIsLoading(true);
       setError(null);
     } else if (fetcher.state === 'idle') {
@@ -65,6 +66,7 @@ export default function RestfulClient() {
           data: JSON.stringify({
             params: params,
             headers: Object.fromEntries(searchParams.entries()),
+            code: codeVariant.current,
           }),
         },
         {
@@ -81,6 +83,7 @@ export default function RestfulClient() {
 
   const handleFormSubmit = (data: TRestfulSchema) => {
     const newUrl = convertFormToUrl(data);
+    codeVariant.current = String(data.language);
     navigate(newUrl, { replace: true });
   };
 
@@ -93,6 +96,7 @@ export default function RestfulClient() {
           onSubmit={handleFormSubmit}
           isLoading={isLoading}
           error={error}
+          isSubmiting={fetcher.state === 'submitting'}
         />
         <ResponseComponent
           error={apiResponse.error}

@@ -6,22 +6,15 @@ import type {
 import { fromBase64 } from '~/routes/dashboard/restful-client/utils';
 import { mockResponse } from '~/routes/dashboard/restful-client/constants';
 
-async function makeRequest(request: RequestType) {
-  const { method, encodedUrl, encodedData } = request.params;
-  const headers = new Headers(request.headers);
-  headers.append('Content-Type', request.content_type);
-
-  let options = {
-    method: method,
-    headers: headers,
-    mode: 'cors' as RequestMode,
-    cache: 'default' as RequestCache,
-  };
-
-  if (encodedData) {
-    options = Object.assign(options, { body: encodedData });
+async function fetchRequest(
+  encodedUrl: string,
+  options: {
+    cache: RequestCache;
+    headers: Headers;
+    method: string;
+    mode: RequestMode;
   }
-
+) {
   return await fetch(encodedUrl, options)
     .then(async (data) => {
       const copied = data.clone();
@@ -52,18 +45,25 @@ async function makeRequest(request: RequestType) {
     });
 }
 
-/*
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const method = url.searchParams.get('method') || '';
-  const encodedUrl = url.searchParams.get('encodedUrl') || '';
-  return await makeRequest({ method, encodedUrl }, params);
-}
-*/
+export function makeRequest(request: RequestType) {
+  const { method, encodedUrl, encodedData } = request.params;
+  const headers = new Headers(request.headers);
+  headers.append('Content-Type', request.content_type);
 
-export async function action({
-  request,
-}: ActionFunctionArgs): Promise<ReturnResponse> {
+  let options = {
+    method: method,
+    headers: headers,
+    mode: 'cors' as RequestMode,
+    cache: 'default' as RequestCache,
+  };
+
+  if (encodedData) {
+    options = Object.assign(options, { body: encodedData });
+  }
+  return { encodedUrl, options };
+}
+
+async function encodedToRequest(request: Request) {
   const formData = await request.formData();
   const parsed = JSON.parse(String(formData.get('data'))) as RequestType;
   const decodedRequest: RequestType = {
@@ -84,5 +84,19 @@ export async function action({
       : undefined,
     content_type: parsed.content_type,
   };
-  return await makeRequest(decodedRequest);
+  return decodedRequest;
 }
+
+export async function action({
+  request,
+}: ActionFunctionArgs): Promise<ReturnResponse> {
+  const decodedRequest = await encodedToRequest(request);
+  const { encodedUrl, options } = makeRequest(decodedRequest);
+  return await fetchRequest(encodedUrl, options);
+}
+
+/*
+funtion logger(data: Response){
+    const saveData ={}as  RequestLog ;
+    await addDoc(collection(db, "logs"), saveData);
+}*/

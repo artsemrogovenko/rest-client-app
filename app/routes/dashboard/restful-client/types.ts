@@ -18,6 +18,7 @@ export type ClientFormProps = {
   onSubmit: (data: TRestfulSchema) => void;
   isLoading: boolean;
   error: string | null;
+  isSubmiting?: boolean;
 };
 
 export type ResponseComponentProps = ReturnResponse & {

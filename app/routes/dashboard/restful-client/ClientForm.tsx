@@ -6,7 +6,6 @@ import {
 } from '~/routes/dashboard/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  languageCode,
   payloadTypes,
   queryMethods,
 } from '~/routes/dashboard/restful-client/constants';
@@ -34,7 +33,7 @@ import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
-import { Copy } from 'lucide-react';
+import CodeSnippet from '../snippet/CodeSnippet';
 
 export default function ClientForm(props: ClientFormProps) {
   const { validateFormWithVariables, variables } = useVariablesValidator();
@@ -114,7 +113,7 @@ export default function ClientForm(props: ClientFormProps) {
             </div>
             <Button
               type="submit"
-              className="uppercase"
+              className={`uppercase  ${props.isSubmiting && 'opacity-20 '}`}
               disabled={props.isLoading}
             >
               send
@@ -173,47 +172,7 @@ export default function ClientForm(props: ClientFormProps) {
             />
           </article>
 
-          <article className="flex flex-col gap-2 rounded-lg border p-5">
-            <div className="flex items-end justify-between gap-y-2">
-              <h3>Generated code</h3>
-
-              <FormField
-                control={form.control}
-                name="language"
-                defaultValue={languageCode[0]}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={field.name}>Select language</FormLabel>
-                    <FormControl>
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger id={field.name} className="w-[120px]">
-                          <SelectValue placeholder="Language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {languageCode.map((method) => (
-                            <SelectItem value={method} key={method}>
-                              {method}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex flex-col w-full gap-2 rounded-lg border p-2">
-              <span className="break-all">Code</span>
-              <Button>
-                <Copy />
-                Copy code
-              </Button>
-            </div>
-          </article>
+          <CodeSnippet form={form} variables={variables as LocalVariables} />
         </section>
       </form>
     </Form>

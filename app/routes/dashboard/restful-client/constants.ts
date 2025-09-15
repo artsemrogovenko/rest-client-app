@@ -8,7 +8,6 @@ export const queryMethods = [
   'OPTIONS',
   'HEAD',
 ];
-export const languageCode = ['cURL', 'Python', 'Java', 'Go'];
 export const LOCAL_STORAGE_KEY = 'variables';
 export const RESTFUL_CLIENT_PATH = '/client/';
 

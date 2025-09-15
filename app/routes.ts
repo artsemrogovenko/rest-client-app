@@ -23,6 +23,7 @@ export default [
       ),
       route('variables', 'routes/dashboard/variables/Variables.tsx'),
       route('api/request', 'server/request.ts'),
+      route('api/code', 'server/code-generator/generator.ts'),
       route('history', 'routes/dashboard/history/History.tsx'),
     ]),
 

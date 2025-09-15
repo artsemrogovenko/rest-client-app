@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { languageCode, payloadTypes, queryMethods } from './constants';
+import { payloadTypes, queryMethods } from './constants';
 
 export const listSchema = z
   .object({
@@ -21,8 +21,9 @@ export const clientSchema = z
     header: z.array(listSchema),
     variable: z.array(listSchema),
     type: z.enum(payloadTypes),
-    language: z.enum(languageCode),
+    language: z.string(),
     body: z.string(),
+    snippet: z.string().optional(),
   })
   .partial();
 
