@@ -60,7 +60,7 @@ export default function HistoryTable() {
             <React.Fragment key={log.id}>
               <tr className="hover:bg-gray-50">
                 <td className="px-4 py-2">
-                  {new Date(log.timestamp.seconds * 1000).toLocaleString()}
+                  {new Date(log.timestamp).toLocaleString()}
                 </td>
                 <td className="border px-4 py-2 font-semibold">{log.method}</td>
                 <td className="border px-4 py-2 text-sm break-all">{log.url}</td>
