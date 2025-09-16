@@ -69,7 +69,6 @@ export default function RestfulClient() {
           data: JSON.stringify({
             params: params,
             headers: Object.fromEntries(searchParams.entries()),
-            code: codeVariant.current,
             uuid: auth.currentUser?.uid,
           }),
         },

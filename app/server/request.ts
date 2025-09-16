@@ -49,7 +49,7 @@ async function fetchRequest(
         responseSize: new TextEncoder().encode(body || '').length,
         statusCode: copied.status,
         duration: Date.now() - startTask,
-        timestamp: new Date().toLocaleDateString(),
+        timestamp: new Date().toISOString(),
         error: null,
       };
       return {
@@ -63,7 +63,7 @@ async function fetchRequest(
           ...logData,
           statusCode: 0,
           duration: Date.now() - startTask,
-          timestamp: new Date().toLocaleDateString(),
+          timestamp: new Date().toISOString(),
           error: error.toString(),
         };
         return {
@@ -119,8 +119,8 @@ async function encodedToRequest(request: Request) {
         )
       : undefined,
     uuid: parsed.uuid,
-    code: parsed.code,
   };
+
   return decodedRequest;
 }
 

@@ -17,9 +17,19 @@ import { convertValues } from '~/routes/dashboard/restful-client/utils';
 import type { CodeSnippetProps } from '~/routes/dashboard/snippet/types';
 import { toast } from 'sonner';
 import { defaultLanguage } from '~/server/constants';
+import { useEffect } from 'react';
 
 export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
   const { snippet } = form.getValues();
+  const {
+    formState: { isSubmitting },
+  } = form;
+
+  useEffect(() => {
+    if (isSubmitting) {
+      generateSnippet();
+    }
+  }, [isSubmitting]);
 
   const generateSnippet = async () => {
     form.clearErrors();

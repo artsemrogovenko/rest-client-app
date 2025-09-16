@@ -44,6 +44,5 @@ export type RequestType = {
     encodedData: string | undefined;
   };
   headers: Record<string, string> | undefined;
-  code: string;
   uuid: string;
 };
