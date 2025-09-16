@@ -13,10 +13,10 @@ async function fetchRequest(
   encodedUrl: string,
   options: {
     cache: RequestCache;
-    headers: Headers;
+    headers?: Headers;
     method: string;
     mode: RequestMode;
-    body: null | string;
+    body?: string;
   },
   uuid: string
 ) {
@@ -24,12 +24,14 @@ async function fetchRequest(
     id: Date.now().toString(),
     endpoint: encodedUrl,
     method: options.method,
-    requestHeaders: Object.fromEntries(options.headers.entries()),
-    requestBody: options.body,
     requestSize: new TextEncoder().encode(options.body || '').length,
     duration: 0,
     timestamp: '',
   };
+  if (options.body) logData.requestBody = options.body;
+  if (options.headers)
+    logData.requestHeaders = Object.fromEntries(options.headers?.entries());
+
   const startTask = Date.now();
   return await fetch(encodedUrl, options)
     .then(async (data) => {
@@ -50,7 +52,6 @@ async function fetchRequest(
         statusCode: copied.status,
         duration: Date.now() - startTask,
         timestamp: new Date().toISOString(),
-        error: null,
       };
       return {
         response: result,
@@ -82,16 +83,16 @@ async function fetchRequest(
 
 export function makeRequest(request: RequestType) {
   const { method, encodedUrl, encodedData } = request.params;
-  const headers = new Headers(request.headers);
 
   let options = {
     method: method,
-    headers: headers,
     mode: 'cors' as RequestMode,
     cache: 'default' as RequestCache,
-    body: null,
   };
 
+  if (request.headers) {
+    options = Object.assign(options, { headers: new Headers(request.headers) });
+  }
   if (encodedData) {
     options = Object.assign(options, { body: encodedData });
   }
