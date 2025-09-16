@@ -66,7 +66,6 @@ export default function ClientForm() {
       >
         <section className="flex flex-col gap-2 rounded-lg border p-5">
           <div className="flex gap-2 w-full items-end">
-
             <FormField
               control={form.control}
               name="method"
@@ -125,33 +124,28 @@ export default function ClientForm() {
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="inline-flex items-end justify-between">
               <h3>Body</h3>
-              
-                <FormField
-                  control={form.control}
-                  name="type"
-                  defaultValue={payloadTypes[0]}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor={field.name}>Type payload</FormLabel>
-                      <FormControl>
-                        <Select value={field.value}>
-                          <SelectTrigger id={field.name} className="w-[100px]">
-                            <SelectValue placeholder="Payload" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value={payloadTypes[0]}>
-                              TEXT
-                            </SelectItem>
-                            <SelectItem value={payloadTypes[1]}>
-                              JSON
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              
+
+              <FormField
+                control={form.control}
+                name="type"
+                defaultValue={payloadTypes[0]}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor={field.name}>Type payload</FormLabel>
+                    <FormControl>
+                      <Select value={field.value}>
+                        <SelectTrigger id={field.name} className="w-[100px]">
+                          <SelectValue placeholder="Payload" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={payloadTypes[0]}>TEXT</SelectItem>
+                          <SelectItem value={payloadTypes[1]}>JSON</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
 
             <FormField
@@ -171,36 +165,34 @@ export default function ClientForm() {
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="flex items-end justify-between gap-y-2">
               <h3>Generated code</h3>
-              
-                <FormField
-                  control={form.control}
-                  name="language"
-                  defaultValue={languageCode[0]}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor={field.name}>
-                        Select language
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger id={field.name} className="w-[120px]">
-                            <SelectValue placeholder="Language" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {languageCode.map((method) => (
-                              <SelectItem value={method} key={method}>
-                                {method}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+
+              <FormField
+                control={form.control}
+                name="language"
+                defaultValue={languageCode[0]}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor={field.name}>Select language</FormLabel>
+                    <FormControl>
+                      <Select
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger id={field.name} className="w-[120px]">
+                          <SelectValue placeholder="Language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {languageCode.map((method) => (
+                            <SelectItem value={method} key={method}>
+                              {method}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div className="flex flex-col w-full gap-2 rounded-lg border p-2">

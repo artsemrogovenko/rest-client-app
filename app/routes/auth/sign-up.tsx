@@ -35,9 +35,6 @@ export default function SignUp() {
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
-      console.log(values);
-      navigate('/dashboard');
       navigate('/dashboard');
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -92,11 +89,6 @@ export default function SignUp() {
                     placeholder="confirm password"
                     {...field}
                   />
-                  <Input
-                    type="password"
-                    placeholder="confirm password"
-                    {...field}
-                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -110,7 +102,7 @@ export default function SignUp() {
       {error && <p className="text-red-500 mt-2">{error}</p>}
       <div className="text-muted-foreground flex justify-center gap-1 text-sm">
         <p>Already have an account?</p>
-        <Link to="/login" className="text-primary font-medium hover:underline">
+        <Link to="auth/login" className="text-primary font-medium hover:underline">
           Sign In
         </Link>
       </div>
