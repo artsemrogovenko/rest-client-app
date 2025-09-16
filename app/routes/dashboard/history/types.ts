@@ -1,6 +1,6 @@
 export type RequestLog = {
   id: string;
-  endpoint: string;
+  url: string;
   method: string;
   requestHeaders: Record<string, string>;
   requestBody?: string | null;
@@ -9,7 +9,7 @@ export type RequestLog = {
   responseBody?: string | null;
   responseSize: number;
   statusCode: number;
-  duration: number;
-  timestamp: string;
+  latency: number;
+  timestamp: {seconds: number};
   error?: string | null;
 };

@@ -35,7 +35,7 @@ export default function SignUp() {
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       if (error instanceof FirebaseError) {
         const msg = getErrorMessage(error.code);
@@ -88,12 +88,7 @@ export default function SignUp() {
                     type="password"
                     placeholder="confirm password"
                     {...field}
-                  />
-                  <Input
-                    type="password"
-                    placeholder="confirm password"
-                    {...field}
-                  />
+                  />                  
                 </FormControl>
                 <FormMessage />
               </FormItem>
