@@ -16,6 +16,7 @@ import LanguagesList from '~/routes/dashboard/snippet/LanguagesList';
 import { convertValues } from '~/routes/dashboard/restful-client/utils';
 import type { CodeSnippetProps } from '~/routes/dashboard/snippet/types';
 import { toast } from 'sonner';
+import { defaultLanguage } from '~/server/constants';
 
 export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
   const { snippet } = form.getValues();
@@ -31,15 +32,15 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
         method: 'POST',
         body: formData,
       });
-
       const result = await response.text();
+
       form.setValue('snippet', result);
     }
   };
 
   async function copyToClipboard() {
     await navigator.clipboard.writeText(String(form.getValues('snippet')));
-    toast('Text copied to clipboard successfully!');
+    toast.message('Snippet copied to clipboard');
   }
 
   return (
@@ -50,8 +51,8 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
         </Button>
         <FormField
           control={form.control}
+          defaultValue={defaultLanguage}
           name="language"
-          // defaultValue={defaultLanguage}
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name}>Select language</FormLabel>
@@ -61,11 +62,7 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
                   value={field.value}
                   name={'language-variants'}
                 >
-                  <SelectTrigger
-                    id={field.name}
-                    name={field.name}
-                    className="w-[240px]"
-                  >
+                  <SelectTrigger id={field.name} className="w-[240px]">
                     <SelectValue
                       placeholder={String(field.value).replace('&', ' ')}
                     />
@@ -81,7 +78,9 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
       </div>
       {snippet && (
         <div className="flex flex-col w-full gap-2 rounded-lg border p-2">
-          <span className="break-all">{snippet}</span>
+          <pre className="text-sm font-mono  ">
+            <code style={{ whiteSpace: 'pre-wrap' }}>{snippet}</code>
+          </pre>
           <Button type={'button'} onClick={copyToClipboard}>
             <Copy />
             Copy code

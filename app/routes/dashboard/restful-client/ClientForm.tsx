@@ -34,17 +34,16 @@ import { Button } from '~/components/ui/button';
 import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
 import CodeSnippet from '../snippet/CodeSnippet';
-import { defaultLanguage } from '~/server/constants';
 
 export default function ClientForm(props: ClientFormProps) {
   const { validateFormWithVariables, variables } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
-    defaultValues: {
+    defaultValues: props.newData || {
       endpoint: '',
       method: queryMethods[0],
       header: [],
-      language: defaultLanguage,
+      // language: defaultLanguage,
     },
   });
   const submitForm = (data: TRestfulSchema) => {
@@ -115,7 +114,7 @@ export default function ClientForm(props: ClientFormProps) {
             </div>
             <Button
               type="submit"
-              className={`uppercase  ${props.isSubmiting && 'opacity-20 '}`}
+              className={`uppercase  ${props.isSubmitting && 'opacity-20 '}`}
               disabled={props.isLoading}
             >
               send

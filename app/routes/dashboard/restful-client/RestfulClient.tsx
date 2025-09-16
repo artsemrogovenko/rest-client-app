@@ -27,6 +27,7 @@ export default function RestfulClient() {
   const fetcher = useFetcher();
   const codeVariant = useRef<string>('');
   const hasSendForm = useRef<boolean>(false);
+  const newFormData = useRef<TRestfulSchema | undefined>(undefined);
 
   useEffect(() => {
     if (params.method && params.encodedUrl && hasSendForm.current) {
@@ -100,7 +101,8 @@ export default function RestfulClient() {
           onSubmit={handleFormSubmit}
           isLoading={isLoading}
           error={error}
-          isSubmiting={fetcher.state === 'submitting'}
+          isSubmitting={fetcher.state === 'submitting'}
+          newData={newFormData.current}
         />
         <ResponseComponent
           error={apiResponse.error}
