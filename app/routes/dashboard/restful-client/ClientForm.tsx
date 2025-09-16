@@ -34,6 +34,7 @@ import { Button } from '~/components/ui/button';
 import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
 import CodeSnippet from '../snippet/CodeSnippet';
+import { defaultLanguage } from '~/server/constants';
 
 export default function ClientForm(props: ClientFormProps) {
   const { validateFormWithVariables, variables } = useVariablesValidator();
@@ -43,6 +44,7 @@ export default function ClientForm(props: ClientFormProps) {
       endpoint: '',
       method: queryMethods[0],
       header: [],
+      language: defaultLanguage,
     },
   });
   const submitForm = (data: TRestfulSchema) => {

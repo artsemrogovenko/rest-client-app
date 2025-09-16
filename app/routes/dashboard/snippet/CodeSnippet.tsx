@@ -15,12 +15,14 @@ import { Copy } from 'lucide-react';
 import LanguagesList from '~/routes/dashboard/snippet/LanguagesList';
 import { convertValues } from '~/routes/dashboard/restful-client/utils';
 import type { CodeSnippetProps } from '~/routes/dashboard/snippet/types';
+import { toast } from 'sonner';
 
 export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
   const { snippet } = form.getValues();
+
   const generateSnippet = async () => {
     form.clearErrors();
-    await form.trigger();
+    await form.trigger(['language', 'endpoint']);
     if (form.formState.isValid) {
       const unpackedVariables = convertValues(form.getValues(), variables);
       const formData = new FormData();
@@ -34,6 +36,11 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
       form.setValue('snippet', result);
     }
   };
+
+  async function copyToClipboard() {
+    await navigator.clipboard.writeText(String(form.getValues('snippet')));
+    toast('Text copied to clipboard successfully!');
+  }
 
   return (
     <article className="flex flex-col gap-2 rounded-lg border p-5">
@@ -51,11 +58,16 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
+                  value={field.value}
                   name={'language-variants'}
                 >
-                  <SelectTrigger id={field.name} className="w-[240px]">
+                  <SelectTrigger
+                    id={field.name}
+                    name={field.name}
+                    className="w-[240px]"
+                  >
                     <SelectValue
-                    // placeholder={String(field.value).replace('&', ' ')}
+                      placeholder={String(field.value).replace('&', ' ')}
                     />
                   </SelectTrigger>
                   <SelectContent>
@@ -70,7 +82,7 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
       {snippet && (
         <div className="flex flex-col w-full gap-2 rounded-lg border p-2">
           <span className="break-all">{snippet}</span>
-          <Button>
+          <Button type={'button'} onClick={copyToClipboard}>
             <Copy />
             Copy code
           </Button>

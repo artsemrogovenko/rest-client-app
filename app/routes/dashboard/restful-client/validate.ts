@@ -21,7 +21,7 @@ export const clientSchema = z
     header: z.array(listSchema),
     variable: z.array(listSchema),
     type: z.enum(payloadTypes),
-    language: z.string(),
+    language: z.string().refine((arg) => typeof arg !== 'undefined'),
     body: z.string(),
     snippet: z.string().optional(),
   })

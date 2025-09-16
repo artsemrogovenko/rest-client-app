@@ -63,5 +63,5 @@ export async function action({ request }: ActionFunctionArgs) {
     },
   };
   const snippet = createSnippet(rawRequest, language, variant);
-  return snippet;
+  return snippet ? snippet : '';
 }

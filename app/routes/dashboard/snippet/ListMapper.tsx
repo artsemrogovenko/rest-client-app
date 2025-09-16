@@ -6,7 +6,7 @@ export default function ListMapper(languages: Language[]) {
     language.variants.map((variant) => {
       return (
         <SelectItem
-          value={`${language.label}&${variant.key}`}
+          value={`${language.key}&${variant.key}`}
           key={`${language.label}-${variant.key}`}
         >
           {`${language.label} ${variant.key}`}

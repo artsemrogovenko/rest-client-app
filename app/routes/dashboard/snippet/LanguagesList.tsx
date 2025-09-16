@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Language } from '~/server/code-generator/types';
-import ListMapper from './ListMapper';
+import ListMapper from '~/routes/dashboard/snippet/ListMapper';
 
 export default function LanguagesList() {
   const [supported, setSupported] = useState<Language[]>([]);
@@ -17,7 +17,7 @@ export default function LanguagesList() {
 
   useEffect(() => {
     loadLanguages();
-  }, [loadLanguages]);
+  }, []);
 
   return ListMapper(supported);
 }

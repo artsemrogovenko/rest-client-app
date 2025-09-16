@@ -7,8 +7,8 @@ export type RequestLog = {
   requestSize: number;
   responseHeaders?: Record<string, string>;
   responseBody?: string | null;
-  responseSize: number;
-  statusCode: number;
+  responseSize?: number;
+  statusCode?: number;
   duration: number;
   timestamp: string;
   error?: string | null;

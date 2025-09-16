@@ -119,6 +119,10 @@ export default function convertFormToUrl(data: TRestfulSchema): string {
       return acc;
     }, '=?');
   }
+  if (data.body) {
+    headers += !data.header?.length ? '=?' : '&';
+    headers += `${toBase64('Content-Type')}=${toBase64(String(data.type))}`;
+  }
   return `${method}/${endpoint}${body}${headers}`;
 }
 

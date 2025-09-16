@@ -1,7 +1,7 @@
 'use server';
 
 import React, { useEffect, useState } from 'react';
-import { db } from '~/firebase/firebaseConfig';
+import { auth, db } from '~/firebase/firebaseConfig';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { type RequestLog } from './types';
 import { Button } from '~/components/ui/button';
@@ -9,10 +9,14 @@ import { Link } from 'react-router';
 
 export default function HistoryTable() {
   const [logs, setLogs] = useState<RequestLog[]>([]);
+  const userId = auth.currentUser?.uid || '';
 
   useEffect(() => {
     const fetchLogs = async () => {
-      const q = query(collection(db, 'logs'), orderBy('timestamp', 'desc'));
+      const q = query(
+        collection(db, 'users', userId, 'logs'),
+        orderBy('timestamp', 'desc')
+      );
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map(
         (doc) => ({ id: doc.id, ...doc.data() }) as RequestLog
@@ -63,7 +67,9 @@ export default function HistoryTable() {
                 <td className="px-4 py-2 text-sm break-all">{log.endpoint}</td>
                 <td
                   className={`px-4 py-2 font-semibold ${
-                    log.statusCode >= 200 && log.statusCode < 300
+                    log.statusCode &&
+                    log.statusCode >= 200 &&
+                    log.statusCode < 300
                       ? 'text-green-600'
                       : 'text-red-600'
                   }`}

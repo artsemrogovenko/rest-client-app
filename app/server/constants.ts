@@ -1,16 +1,9 @@
 export const initLanguage = [
   {
-    key: 'csharp',
-    label: 'C#',
-    syntax_mode: 'csharp',
-    variants: [
-      {
-        key: 'HttpClient',
-      },
-      {
-        key: 'RestSharp',
-      },
-    ],
+    key: 'curl',
+    label: 'cURL',
+    syntax_mode: 'powershell',
+    variants: [{ key: 'cURL' }],
   },
 ];
 
