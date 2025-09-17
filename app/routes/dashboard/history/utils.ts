@@ -11,7 +11,14 @@ export default function logToForm(requestLog: RequestLog): TRestfulSchema {
   };
   if (requestLog.requestBody) formData.body = requestLog.requestBody;
   if (requestLog.requestHeaders) {
-    const foundedType = Object.entries(requestLog.requestHeaders).filter(
+    const entries = Object.entries(requestLog.requestHeaders);
+    formData.header = entries.map(([key, value]) => {
+      return {
+        name: key,
+        value: value,
+      };
+    });
+    const foundedType = entries.filter(
       ([key]) => key.toLowerCase() === 'content-type'
     );
     if (foundedType) formData.type = String(foundedType[1]);
