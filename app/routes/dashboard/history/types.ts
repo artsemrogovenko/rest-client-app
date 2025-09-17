@@ -3,13 +3,13 @@ export type RequestLog = {
   endpoint: string;
   method: string;
   requestHeaders: Record<string, string>;
-  requestBody?: string | null;
+  requestBody?: string;
   requestSize: number;
   responseHeaders?: Record<string, string>;
-  responseBody?: string | null;
+  responseBody?: string;
   responseSize: number;
-  statusCode: number;
-  duration: number;
+  statusCode?: number;
+  duration?: number;
   timestamp: string;
-  error?: string | null;
+  error?: string;
 };

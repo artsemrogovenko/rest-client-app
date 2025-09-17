@@ -6,13 +6,18 @@ import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { type RequestLog } from './types';
 import { Button } from '~/components/ui/button';
 import { Link } from 'react-router';
+import { getAuth } from 'firebase/auth';
 
 export default function HistoryTable() {
   const [logs, setLogs] = useState<RequestLog[]>([]);
 
   useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if ((!user)) return;
     const fetchLogs = async () => {
-      const q = query(collection(db, 'logs'), orderBy('timestamp', 'desc'));
+      const q = query(collection(db, 'users', user.uid, "logs"), orderBy('timestamp', 'desc'));
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map(
         (doc) => ({ id: doc.id, ...doc.data() }) as RequestLog
@@ -40,11 +45,11 @@ export default function HistoryTable() {
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-100">
           <tr>
-            <th className="px-4 py-2 text-left">Timestamp</th>
-            <th className="px-4 py-2 text-left">Method</th>
-            <th className="px-4 py-2 text-left">Endpoint</th>
-            <th className="px-4 py-2 text-left">Status</th>
-            <th className="px-4 py-2 text-left">Latency (ms)</th>
+            <th className="border px-4 py-2 text-left">Timestamp</th>
+            <th className="border px-4 py-2 text-left">Method</th>
+            <th className="border px-4 py-2 text-left">Endpoint/URL</th>
+            <th className="border px-4 py-2 text-left">Status</th>
+            <th className="border px-4 py-2 text-left">Latency (ms)</th>
             <th className="border px-2 py-1">Req Size</th>
             <th className="border px-2 py-1">Res Size</th>
             <th className="border px-2 py-1">Error</th>
@@ -57,18 +62,20 @@ export default function HistoryTable() {
                 <td className="px-4 py-2">
                   {new Date(log.timestamp).toLocaleString()}
                 </td>
-                <td className="px-4 py-2 font-semibold">{log.method}</td>
-                <td className="px-4 py-2 text-sm break-all">{log.endpoint}</td>
+                <td className="border px-4 py-2 font-semibold">{log.method}</td>
+                <td className="border px-4 py-2 text-sm break-all">{log.endpoint}</td>
                 <td
-                  className={`px-4 py-2 font-semibold ${
-                    log.statusCode >= 200 && log.statusCode < 300
+                  className={`border  px-4 py-2 font-semibold ${
+                    typeof log.statusCode === 'number' &&
+                    log.statusCode >= 200 &&
+                    log.statusCode < 300
                       ? 'text-green-600'
                       : 'text-red-600'
                   }`}
                 >
                   {log.statusCode || 'ERR'}
                 </td>
-                <td className="px-4 py-2">{log.duration.toFixed(1)}</td>
+                <td className="border px-4 py-2">{log.duration?.toFixed(1)}</td>
                 <td className="border px-2 py-1">{log.requestSize}</td>
                 <td className="border px-2 py-1">{log.responseSize}</td>
                 <td className="border px-2 py-1 text-red-500">
