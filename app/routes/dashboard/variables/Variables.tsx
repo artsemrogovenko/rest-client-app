@@ -18,11 +18,13 @@ import type {
 } from '~/routes/dashboard/restful-client/types';
 import { LOCAL_STORAGE_KEY } from '~/routes/dashboard/restful-client/constants';
 import { deleteBrackets } from '~/routes/dashboard/restful-client/utils';
+import { auth } from '~/firebase/firebaseConfig';
 
 export default function Variables() {
   const { setStorageValue, getStorageValue } = useLocalStorage();
   const [isClient, setIsClient] = useState(false);
   const [initValues, setInitValues] = useState<PairFields[]>([]);
+  const userId = auth.currentUser?.uid || '';
 
   const form = useForm<TVariablesSchema>({
     defaultValues: { variable: initValues },
@@ -34,7 +36,7 @@ export default function Variables() {
     setIsClient(true);
     if (typeof window !== 'undefined') {
       const localVariables = JSON.parse(
-        getStorageValue(LOCAL_STORAGE_KEY) || '{}'
+        getStorageValue(LOCAL_STORAGE_KEY + userId) || '{}'
       ) as Record<string, string>;
       const values = Array.from(
         Object.entries(localVariables).map(([k, v]) => {
@@ -56,7 +58,7 @@ export default function Variables() {
       acc[`{{${line.name}}}`] = line.value;
       return acc;
     }, {} as LocalVariables);
-    setStorageValue(LOCAL_STORAGE_KEY, JSON.stringify(variables));
+    setStorageValue(LOCAL_STORAGE_KEY + userId, JSON.stringify(variables));
   };
 
   if (!isClient) return <Skeleton className="h-[86px] w-[354px]" />;
