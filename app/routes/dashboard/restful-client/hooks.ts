@@ -65,6 +65,7 @@ export function useVariablesValidator() {
     } else if (!validation.isValid && validation.notFoundVars.length > 0) {
       return `Missing variables: ${validation.notFoundVars.join(', ')}`;
     }
+    return '';
   }
 
   const validateFormWithVariables = (
@@ -101,7 +102,6 @@ export function useVariablesValidator() {
     });
 
     if (data.body) {
-      console.log(typeof data.body);
       if (data.method === 'GET' || data.method === 'HEAD') {
         errors.body = 'GET or HEAD request cannot have a body';
       } else {
@@ -117,7 +117,6 @@ export function useVariablesValidator() {
         if (data.type === payloadTypes[0]) {
           try {
             message += hasErrors(data.body, variables);
-            z.string().parse(data.body);
           } catch (error) {
             if (error instanceof z.ZodError) {
               message += ' body type is not text';
