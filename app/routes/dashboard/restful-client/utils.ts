@@ -174,3 +174,23 @@ export function convertUrlToForm(
   }
   return formData;
 }
+
+export function prepareJson(input: string) {
+  if (!input || typeof input !== 'string') {
+    throw new Error('String is empty');
+  }
+  let result = input;
+  try {
+    return JSON.parse(result);
+  } catch {
+    result = result
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .replace(/\\r/g, '\r')
+      .replace(/\\b/g, '\b')
+      .replace(/\\f/g, '\f')
+      .replace(/\\"/g, '"')
+      .replace(/\\\\/g, '\\');
+  }
+  return result;
+}

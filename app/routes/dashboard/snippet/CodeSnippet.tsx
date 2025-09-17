@@ -22,19 +22,27 @@ import { useEffect } from 'react';
 export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
   const { snippet } = form.getValues();
   const {
-    formState: { isSubmitting },
+    formState: { isValid, isSubmitSuccessful },
   } = form;
 
   useEffect(() => {
-    if (isSubmitting) {
+    if (isSubmitSuccessful && isValid) {
       generateSnippet();
     }
-  }, [isSubmitting]);
+  }, [isSubmitSuccessful]);
 
+  const handleGenerate = async () => {
+    const noErrors = await form.trigger([
+      'endpoint',
+      'header',
+      'type',
+      'body',
+      'language',
+    ]);
+    if (noErrors) generateSnippet();
+  };
   const generateSnippet = async () => {
-    form.clearErrors();
-    await form.trigger(['language', 'endpoint']);
-    if (form.formState.isValid) {
+    if (isValid) {
       const unpackedVariables = convertValues(form.getValues(), variables);
       const formData = new FormData();
       formData.append('data', JSON.stringify(unpackedVariables));
@@ -43,7 +51,6 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
         body: formData,
       });
       const result = await response.text();
-
       form.setValue('snippet', result);
     }
   };
@@ -56,7 +63,7 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
   return (
     <article className="flex flex-col gap-2 rounded-lg border p-5">
       <div className="flex items-end justify-between gap-y-2">
-        <Button onClick={generateSnippet} type="button">
+        <Button onClick={handleGenerate} type="button">
           Generate snippet
         </Button>
         <FormField

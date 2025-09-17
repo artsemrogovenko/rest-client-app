@@ -10,6 +10,6 @@ export type RequestLog = {
   responseSize?: number;
   statusCode?: number;
   duration: number;
-  timestamp: number;
+  timestamp: string;
   error?: string;
 };

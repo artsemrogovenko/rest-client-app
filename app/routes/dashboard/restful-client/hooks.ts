@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import type { LocalVariables } from './types';
-import { LOCAL_STORAGE_KEY } from './constants';
-import { isNotMissedVariables } from './utils';
+import { LOCAL_STORAGE_KEY, payloadTypes } from './constants';
+import { isNotMissedVariables, prepareJson } from './utils';
 import { type TRestfulSchema } from './validate';
 import z from 'zod';
+import AuthContext from '~/contexts/auth/AuthContext';
 
 export function useLocalStorage() {
   const getStorageValue = useCallback((key: string) => {
@@ -32,11 +33,12 @@ export function useLocalStorage() {
 export function useGetVariables(): LocalVariables | null {
   const { getStorageValue } = useLocalStorage();
   const [variables, setVariables] = useState<LocalVariables | null>(null);
+  const userId = useContext(AuthContext)?.user?.uid || '';
 
   useEffect(() => {
     const loadVariables = () => {
       try {
-        const stringData = getStorageValue(LOCAL_STORAGE_KEY);
+        const stringData = getStorageValue(LOCAL_STORAGE_KEY + userId);
         if (stringData) {
           setVariables(JSON.parse(stringData));
         } else {
@@ -99,30 +101,30 @@ export function useVariablesValidator() {
     });
 
     if (data.body) {
+      console.log(typeof data.body);
       if (data.method === 'GET' || data.method === 'HEAD') {
         errors.body = 'GET or HEAD request cannot have a body';
       } else {
-        const message = hasErrors(data.body, variables);
+        let message = '';
+        if (data.type === payloadTypes[1]) {
+          try {
+            const prepared = prepareJson(data.body);
+            if (typeof prepared !== 'object') throw Error();
+          } catch {
+            message += ' body type is not json';
+          }
+        }
+        if (data.type === payloadTypes[0]) {
+          try {
+            message += hasErrors(data.body, variables);
+            z.string().parse(data.body);
+          } catch (error) {
+            if (error instanceof z.ZodError) {
+              message += ' body type is not text';
+            }
+          }
+        }
         if (message) errors.body = message;
-      }
-
-      if (data.type === 'application/json') {
-        try {
-          z.json().parse(data.body);
-        } catch (error) {
-          if (error instanceof z.ZodError) {
-            errors.body += 'body type is not json';
-          }
-        }
-      }
-      if (data.type === 'text/plain; charset=utf-8') {
-        try {
-          z.string().parse(data.body);
-        } catch (error) {
-          if (error instanceof z.ZodError) {
-            errors.body += 'body type is not text';
-          }
-        }
       }
     }
 

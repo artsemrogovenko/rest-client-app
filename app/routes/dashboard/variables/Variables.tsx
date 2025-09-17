@@ -10,7 +10,7 @@ import {
 } from '~/routes/dashboard/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '~/routes/dashboard/restful-client/hooks';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Skeleton } from '~/components/ui/skeleton';
 import type {
   LocalVariables,
@@ -18,13 +18,13 @@ import type {
 } from '~/routes/dashboard/restful-client/types';
 import { LOCAL_STORAGE_KEY } from '~/routes/dashboard/restful-client/constants';
 import { deleteBrackets } from '~/routes/dashboard/restful-client/utils';
-import { auth } from '~/firebase/firebaseConfig';
+import AuthContext from '~/contexts/auth/AuthContext';
 
 export default function Variables() {
   const { setStorageValue, getStorageValue } = useLocalStorage();
   const [isClient, setIsClient] = useState(false);
   const [initValues, setInitValues] = useState<PairFields[]>([]);
-  const userId = auth.currentUser?.uid || '';
+  const userId = useContext(AuthContext)?.user?.uid || '';
 
   const form = useForm<TVariablesSchema>({
     defaultValues: { variable: initValues },
@@ -45,7 +45,7 @@ export default function Variables() {
       );
       setInitValues(values);
     }
-  }, [getStorageValue]);
+  }, [getStorageValue, userId]);
 
   useEffect(() => {
     if (initValues.length > 0) {

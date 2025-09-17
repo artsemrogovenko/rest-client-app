@@ -1,7 +1,7 @@
 'use client';
 import ClientForm from '~/routes/dashboard/restful-client/ClientForm';
 import ResponseComponent from '~/routes/dashboard/restful-client/response/Response';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import type { TRestfulSchema } from '~/routes/dashboard/restful-client/validate';
 import {
   type Params,
@@ -14,7 +14,7 @@ import convertFormToUrl, {
   convertUrlToForm,
 } from '~/routes/dashboard/restful-client/utils';
 import type { ReturnResponse } from '~/routes/dashboard/restful-client/types';
-import { auth } from '~/firebase/firebaseConfig';
+import AuthContext from '~/contexts/auth/AuthContext';
 
 export default function RestfulClient() {
   const params = useParams();
@@ -30,6 +30,7 @@ export default function RestfulClient() {
   const codeVariant = useRef<string>('');
   const hasSendForm = useRef<boolean>(false);
   const newFormData = useRef<TRestfulSchema | undefined>(undefined);
+  const userId = useContext(AuthContext)?.user?.uid || '';
 
   useEffect(() => {
     if (!hasSendForm.current) {
@@ -79,7 +80,7 @@ export default function RestfulClient() {
           data: JSON.stringify({
             params: params,
             headers: Object.fromEntries(searchParams.entries()),
-            uuid: auth.currentUser?.uid,
+            uuid: userId,
           }),
         },
         {
