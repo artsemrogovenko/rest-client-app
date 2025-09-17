@@ -63,17 +63,19 @@ export default function HistoryTable() {
                   {new Date(log.timestamp).toLocaleString()}
                 </td>
                 <td className="border px-4 py-2 font-semibold">{log.method}</td>
-                <td className="border px-4 py-2 text-sm break-all">{log.url}</td>
+                <td className="border px-4 py-2 text-sm break-all">{log.endpoint}</td>
                 <td
                   className={`border  px-4 py-2 font-semibold ${
-                    log.statusCode >= 200 && log.statusCode < 300
+                    typeof log.statusCode === 'number' &&
+                    log.statusCode >= 200 &&
+                    log.statusCode < 300
                       ? 'text-green-600'
                       : 'text-red-600'
                   }`}
                 >
                   {log.statusCode || 'ERR'}
                 </td>
-                <td className="border px-4 py-2">{log.latency.toFixed(1)}</td>
+                <td className="border px-4 py-2">{log.duration?.toFixed(1)}</td>
                 <td className="border px-2 py-1">{log.requestSize}</td>
                 <td className="border px-2 py-1">{log.responseSize}</td>
                 <td className="border px-2 py-1 text-red-500">

@@ -1,15 +1,15 @@
 export type RequestLog = {
   id: string;
-  url: string;
+  endpoint: string;
   method: string;
   requestHeaders: Record<string, string>;
-  requestBody?: string | null;
+  requestBody?: string;
   requestSize: number;
   responseHeaders?: Record<string, string>;
-  responseBody?: string | null;
+  responseBody?: string;
   responseSize: number;
-  statusCode: number;
-  latency: number;
+  statusCode?: number;
+  duration?: number;
   timestamp: string;
-  error?: string | null;
+  error?: string;
 };
