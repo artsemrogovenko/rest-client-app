@@ -67,11 +67,7 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
             <FormItem>
               <FormLabel htmlFor={field.name}>Select language</FormLabel>
               <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  name={'language-variants'}
-                >
+                <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger id={field.name} className="w-[240px]">
                     <SelectValue
                       placeholder={String(field.value).replace('&', ' ')}

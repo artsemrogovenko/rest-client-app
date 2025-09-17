@@ -10,7 +10,9 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router';
-import convertFormToUrl from '~/routes/dashboard/restful-client/utils';
+import convertFormToUrl, {
+  convertUrlToForm,
+} from '~/routes/dashboard/restful-client/utils';
 import type { ReturnResponse } from '~/routes/dashboard/restful-client/types';
 import { auth } from '~/firebase/firebaseConfig';
 
@@ -30,6 +32,14 @@ export default function RestfulClient() {
   const newFormData = useRef<TRestfulSchema | undefined>(undefined);
 
   useEffect(() => {
+    if (!hasSendForm.current) {
+      newFormData.current = convertUrlToForm(
+        params.method,
+        params.encodedUrl,
+        params.encodedData,
+        searchParams
+      );
+    }
     if (params.method && params.encodedUrl && hasSendForm.current) {
       sendRequest(params, searchParams);
     }
@@ -85,6 +95,7 @@ export default function RestfulClient() {
   };
 
   const handleFormSubmit = (data: TRestfulSchema) => {
+    setIsLoading(true);
     const newUrl = convertFormToUrl(data);
     hasSendForm.current = true;
     codeVariant.current = String(data.language);

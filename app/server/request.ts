@@ -26,7 +26,7 @@ async function fetchRequest(
     method: options.method,
     requestSize: new TextEncoder().encode(options.body || '').length,
     duration: 0,
-    timestamp: '',
+    timestamp: Date.now(),
   };
   if (options.body) logData.requestBody = options.body;
   if (options.headers)
@@ -51,7 +51,7 @@ async function fetchRequest(
         responseSize: new TextEncoder().encode(body || '').length,
         statusCode: copied.status,
         duration: Date.now() - startTask,
-        timestamp: new Date().toISOString(),
+        timestamp: Date.now(),
       };
       return {
         response: result,
@@ -64,7 +64,7 @@ async function fetchRequest(
           ...logData,
           statusCode: 0,
           duration: Date.now() - startTask,
-          timestamp: new Date().toISOString(),
+          timestamp: Date.now(),
           error: error.toString(),
         };
         return {

@@ -34,18 +34,25 @@ import { Button } from '~/components/ui/button';
 import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
 import CodeSnippet from '../snippet/CodeSnippet';
+import { useEffect } from 'react';
+import { defaultLanguage } from '~/server/constants';
 
 export default function ClientForm(props: ClientFormProps) {
   const { validateFormWithVariables, variables } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
-    defaultValues: props.newData || {
+    defaultValues: {
       endpoint: '',
       method: queryMethods[0],
       header: [],
-      // language: defaultLanguage,
+      language: defaultLanguage,
     },
   });
+  useEffect(() => {
+    form.clearErrors();
+    form.reset({ ...props.newData, language: form.getValues('language') });
+  }, [props.newData]);
+
   const submitForm = (data: TRestfulSchema) => {
     const variablesValidation = validateFormWithVariables(data);
 
@@ -78,10 +85,7 @@ export default function ClientForm(props: ClientFormProps) {
                 <FormItem>
                   <FormLabel htmlFor={field.name}>Query method</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger id={field.name} className="w-[100px]">
                         <SelectValue placeholder="Method" />
                       </SelectTrigger>

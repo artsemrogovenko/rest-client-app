@@ -1,6 +1,9 @@
 import { type TRestfulSchema } from './validate';
 import type { LocalVariables } from './types';
-import { RESTFUL_CLIENT_PATH } from '~/routes/dashboard/restful-client/constants';
+import {
+  payloadTypes,
+  RESTFUL_CLIENT_PATH,
+} from '~/routes/dashboard/restful-client/constants';
 
 export function deleteBrackets(value: string) {
   return value.replace(/\{\{|}}/g, '');
@@ -132,8 +135,42 @@ export function toBase64(str: string) {
 
 export function fromBase64(str: string) {
   try {
-    return atob(str.replace(/-/g, '+').replace(/_/g, '/'));
+    return atob(str.replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, ''));
   } catch {
     return '';
   }
+}
+
+export function convertUrlToForm(
+  method: string | undefined,
+  encodedUrl: string | undefined,
+  encodedData: string | undefined,
+  searchParams: URLSearchParams
+): TRestfulSchema {
+  const formData: TRestfulSchema = {
+    body: undefined,
+    endpoint: undefined,
+    header: undefined,
+    method: method,
+    type: payloadTypes[0],
+  };
+  if (encodedUrl) formData.endpoint = fromBase64(encodedUrl);
+  if (encodedData) formData.body = fromBase64(encodedData);
+  if (searchParams) {
+    let typeIndex: number | null = null;
+    let headers = Array.from(searchParams.entries()).map((header, index) => {
+      const key = fromBase64(header[0]);
+      const value = fromBase64(header[1]);
+      if (key.toLowerCase() === 'content-type') {
+        formData.type = value;
+        typeIndex = index;
+      }
+      return { name: key, value: value };
+    });
+    if (typeIndex) {
+      headers = headers.filter((_, index) => index !== typeIndex);
+    }
+    formData.header = headers;
+  }
+  return formData;
 }
