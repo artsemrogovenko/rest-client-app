@@ -11,6 +11,7 @@ import {
 } from '~/routes/dashboard/restful-client/constants';
 import {
   convertValues,
+  decodeKeysAndValues,
   inlineJson,
 } from '~/routes/dashboard/restful-client/utils';
 import type {
@@ -51,7 +52,6 @@ export default function ClientForm(props: ClientFormProps) {
       language: defaultLanguage,
     },
   });
-  const { type, body } = form.getValues();
   useEffect(() => {
     form.clearErrors();
     form.reset({ ...props.newData, language: form.getValues('language') });
@@ -66,8 +66,13 @@ export default function ClientForm(props: ClientFormProps) {
       });
       return;
     }
-    if (type === payloadTypes[1] && body) {
-      form.setValue('body', inlineJson(body));
+
+    if (data.type === payloadTypes[1] && data.body) {
+      const decodedJson = decodeKeysAndValues(
+        JSON.parse(data.body),
+        variables as LocalVariables
+      );
+      form.setValue('body', inlineJson(JSON.stringify(decodedJson)));
     }
 
     const newValues = convertValues(
@@ -76,7 +81,6 @@ export default function ClientForm(props: ClientFormProps) {
     );
     const updatedHeaders = newValues.header?.map((item) => ({ ...item })) || [];
     props.onSubmit({ ...newValues, header: updatedHeaders });
-    // form.reset({ ...newValues, header: updatedHeaders });
   };
 
   return (

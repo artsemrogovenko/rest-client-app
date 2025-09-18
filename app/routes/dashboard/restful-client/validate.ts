@@ -14,9 +14,9 @@ export const clientSchema = z
     method: z.enum(queryMethods),
     endpoint: z
       .string()
-      .min(1, 'Endpoint is required')
-      .refine((value) => value.includes(':'), {
-        message: "Must include ':'",
+      .min(5, 'Endpoint is required')
+      .refine((value) => value.length >= 5, {
+        message: 'Endpoint url too short',
       }),
     header: z.array(listSchema),
     variable: z.array(listSchema),

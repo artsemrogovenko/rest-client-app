@@ -105,7 +105,10 @@ export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
   if (cloned.body) cloned.body = ejectVariables(cloned.body, variables);
   if (cloned.header) {
     cloned.header = cloned.header.map((line) => {
-      return { name: line.name, value: ejectVariables(line.value, variables) };
+      return {
+        name: ejectVariables(line.name, variables),
+        value: ejectVariables(line.value, variables),
+      };
     });
   }
   return cloned;
@@ -162,7 +165,7 @@ export function convertUrlToForm(
     let headers = Array.from(searchParams.entries()).map((header, index) => {
       const key = fromBase64(header[0]);
       const value = fromBase64(header[1]);
-      if (key === HEADER_BODY_TYPE) {
+      if (key.toLowerCase() === HEADER_BODY_TYPE.toLowerCase()) {
         formData.type = value;
         typeIndex = index;
       }
@@ -180,6 +183,19 @@ export function inlineJson(input: string | undefined) {
   if (!input || typeof input !== 'string') {
     throw new Error('String is empty');
   }
-
   return JSON.stringify(JSON.parse(input));
+}
+
+export function decodeKeysAndValues(data: object, variables: LocalVariables) {
+  const parseEntries = (obj: object): object =>
+    Object.fromEntries(
+      Object.entries(obj).map((field) => {
+        const key = ejectVariables(field[0], variables);
+        if (typeof field[1] === 'object') {
+          return [key, parseEntries(field[1])];
+        }
+        return [key, ejectVariables(field[1], variables)];
+      })
+    );
+  return parseEntries(data);
 }
