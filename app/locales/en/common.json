@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome!",
-  "welcomeBack": "Welcome Back, {{name}}!",
+  "welcomeBack": "Welcome Back, ",
   "signIn": "Sign In",
   "signUp": "Sign Up",
   "signOut": "Sign Out",
@@ -14,5 +14,37 @@
   "artsemrogovenko": "Artsem Rahavenka",
   "vsv-noon": "Viacheslav Anisimov",
   "christopher-0118": "Kristina Karantsevich",
-  "en": "EN"
+  "en": "EN",
+  "loading": "Loading...",
+  "email": "E-mail",
+  "password": "Password",
+  "confirm-password": "Confirm Password",
+  "create-account": "Create Account",
+  "have-account": "Already have an account?",
+  "not-have-account": "Don't have an account?",
+  "rest-client-p": {
+    "query-method": "Query method",
+    "endpoint": "Endpoint",
+    "send": "Send",
+    "body": "Body",
+    "type-payload": "Type payload",
+    "text": "TEXT",
+    "json": "JSON",
+    "generated-code": "Generated code",
+    "select-language": "Select language",
+    "code": "Code",
+    "copy-code": "Copy code",
+    "add": "Add",
+    "response": "Response",
+    "status": "Status:",
+    "value": "value",
+    "name": "name",
+    "header": "Header"
+
+  },
+  "error": {
+    "auth/email-already-in-use": "This email is already in use.",
+    "auth/wrong-password-or-email": "Email or password is incorrect",
+    "default": "Something went wrong. Please try again."
+  }
 }

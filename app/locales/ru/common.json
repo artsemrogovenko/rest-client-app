@@ -1,6 +1,6 @@
 {
   "welcome": "Добро пожаловать!",
-  "welcomeBack": "С возвращением, {{name}}!",
+  "welcomeBack": "С возвращением, ",
   "signIn": "Войти",
   "signUp": "Зарегистрироваться",
   "signOut": "Выйти",
@@ -14,5 +14,36 @@
   "artsemrogovenko": "Артем Роговенко",
   "vsv-noon": "Вячеслав Анисимов",
   "christopher-0118": "Кристина Каранцевич",
-  "ru": "РУ"
+  "ru": "РУ",
+  "loading": "Загрузука...",
+  "email": "Элктронная почта",
+  "password": "Пароль",
+  "confirm-password": "Повторите пароль",
+  "create-account": "Создать аккаунт",
+  "have-account": "Уже есть аккаунт?",
+  "not-have-account": "Нет аккаунта?",
+  "rest-client-p": {
+    "query-method": "Метод",
+    "endpoint": "Конечная точка",
+    "send": "Отправить",
+    "body": "Тело запроса",
+    "type-payload": "Тип",
+    "text": "TEXT",
+    "json": "JSON",
+    "generated-code": "Сгенерированный код",
+    "select-language": "Выберите язык",
+    "code": "Код",
+    "copy-code": "Скопировать код",
+    "add": "Добавить",
+    "response": "Ответ",
+    "status": "Статус:",
+    "value": "значение",
+    "name": "имя",
+    "header": "Заголовок"
+  },
+  "error": {
+    "auth/email-already-in-use": "Почта уже используется",
+    "auth/wrong-password-or-email": "Email or password is incorrect",
+    "default": "Произошла ошибка. Попробуйте занова."
+  }
 }

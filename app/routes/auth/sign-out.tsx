@@ -14,15 +14,15 @@ export default function SignOut() {
   async function handleSignOut() {
     try {
       await signOut(auth);
-      navigate(link('/'));
+      navigate(link(''));
     } catch {
-      toast.error('Failed to sign out. Please try again');
+      toast.error(t("error.default"));
     }
   }
 
   return (
     <Button onClick={handleSignOut} className="cursor-pointer" size="sm">
-      {t("signOut")}
+      {t('signOut')}
     </Button>
   );
 }

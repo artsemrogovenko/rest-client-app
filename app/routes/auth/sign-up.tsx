@@ -17,7 +17,9 @@ import { auth } from '~/firebase/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { FirebaseError } from 'firebase/app';
-import getErrorMessage from '~/firebase/firebase-error-messages';
+import { useTranslation } from 'react-i18next';
+import useErrorMessage from '~/firebase/firebase-error-messages';
+import useLangNav from '~/hooks/langLink';
 
 export default function SignUp() {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
@@ -29,13 +31,16 @@ export default function SignUp() {
       confirmPassword: '',
     },
   });
+  const { t } = useTranslation();
+  const { link } = useLangNav();
+  const getErrorMessage = useErrorMessage();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
-      navigate('/dashboard');
+      navigate(link(''));
     } catch (error) {
       if (error instanceof FirebaseError) {
         const msg = getErrorMessage(error.code);
@@ -56,9 +61,9 @@ export default function SignUp() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="email" {...field} />
+                  <Input type="email" placeholder={t("email")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -69,9 +74,9 @@ export default function SignUp() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("password")}</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="password" {...field} />
+                  <Input type="password" placeholder={t("password")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -82,11 +87,11 @@ export default function SignUp() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
+                <FormLabel>{t("confirm-password")}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="confirm password"
+                    placeholder={t("confirm-password")}
                     {...field}
                   />
                 </FormControl>
@@ -95,15 +100,15 @@ export default function SignUp() {
             )}
           />
           <Button type="submit" className="w-full  cursor-pointer">
-            Create Account
+            {t("create-account")}
           </Button>
         </form>
       </Form>
       {error && <p className="text-red-500 mt-2">{error}</p>}
       <div className="text-muted-foreground flex justify-center gap-1 text-sm">
-        <p>Already have an account?</p>
-        <Link to="auth/login" className="text-primary font-medium hover:underline">
-          Sign In
+        <p>{t("have-account")}</p>
+        <Link to={link("auth/login")} className="text-primary font-medium hover:underline">
+          {t('signIn')}
         </Link>
       </div>
     </div>

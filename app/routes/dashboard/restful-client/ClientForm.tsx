@@ -32,9 +32,11 @@ import { Button } from '~/components/ui/button';
 import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
 import { Copy } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function ClientForm() {
   const { validateFormWithVariables, variables } = useVariablesValidator();
+  const { t } = useTranslation();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -72,14 +74,14 @@ export default function ClientForm() {
               defaultValue={queryMethods[0]}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor={field.name}>Query method</FormLabel>
+                  <FormLabel htmlFor={field.name}>{t('rest-client-p.query-method')}</FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <SelectTrigger id={field.name} className="w-[100px]">
-                        <SelectValue placeholder="Method" />
+                        <SelectValue placeholder={t('rest-client-p.query-method')} />
                       </SelectTrigger>
                       <SelectContent>
                         {queryMethods.map((method) => (
@@ -99,7 +101,7 @@ export default function ClientForm() {
                 name="endpoint"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor={field.name}>Endpoint</FormLabel>
+                    <FormLabel htmlFor={field.name}>{t('rest-client-p.endpoint')}</FormLabel>
                     <FormMessage />
                     <FormControl>
                       <Input id={field.name} {...field} />
@@ -109,7 +111,7 @@ export default function ClientForm() {
               />
             </div>
             <Button type="submit" className="uppercase">
-              send
+              {t('rest-client-p.send')}
             </Button>
           </div>
           <FormField
@@ -123,7 +125,7 @@ export default function ClientForm() {
           />
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="inline-flex items-end justify-between">
-              <h3>Body</h3>
+              <h3>{t('rest-client-p.body')}</h3>
 
               <FormField
                 control={form.control}
@@ -131,15 +133,15 @@ export default function ClientForm() {
                 defaultValue={payloadTypes[0]}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor={field.name}>Type payload</FormLabel>
+                    <FormLabel htmlFor={field.name}>{t('rest-client-p.type-payload')}</FormLabel>
                     <FormControl>
                       <Select value={field.value}>
                         <SelectTrigger id={field.name} className="w-[100px]">
-                          <SelectValue placeholder="Payload" />
+                          <SelectValue placeholder={t('rest-client-p.type-payload')} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={payloadTypes[0]}>TEXT</SelectItem>
-                          <SelectItem value={payloadTypes[1]}>JSON</SelectItem>
+                          <SelectItem value={payloadTypes[0]}>{t('rest-client-p.text')}</SelectItem>
+                          <SelectItem value={payloadTypes[1]}>{t('rest-client-p.json')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -164,7 +166,7 @@ export default function ClientForm() {
 
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="flex items-end justify-between gap-y-2">
-              <h3>Generated code</h3>
+              <h3>{t('rest-client-p.generated-code')}</h3>
 
               <FormField
                 control={form.control}
@@ -172,14 +174,14 @@ export default function ClientForm() {
                 defaultValue={languageCode[0]}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor={field.name}>Select language</FormLabel>
+                    <FormLabel htmlFor={field.name}>{t('rest-client-p.select-language')}</FormLabel>
                     <FormControl>
                       <Select
                         defaultValue={field.value}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger id={field.name} className="w-[120px]">
-                          <SelectValue placeholder="Language" />
+                          <SelectValue placeholder={t('rest-client-p.select-language')} />
                         </SelectTrigger>
                         <SelectContent>
                           {languageCode.map((method) => (
@@ -196,10 +198,10 @@ export default function ClientForm() {
             </div>
 
             <div className="flex flex-col w-full gap-2 rounded-lg border p-2">
-              <span className="break-all">Code</span>
+              <span className="break-all">{t('rest-client-p.code')}</span>
               <Button>
                 <Copy />
-                Copy code
+                {t('rest-client-p.copy-code')}
               </Button>
             </div>
           </article>

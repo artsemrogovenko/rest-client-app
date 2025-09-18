@@ -17,6 +17,9 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '~/firebase/firebaseConfig';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import useLangNav from '~/hooks/langLink';
+import { useTranslation } from 'react-i18next';
+import useErrorMessage from '~/firebase/firebase-error-messages';
 
 export default function SignIn() {
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -27,16 +30,19 @@ export default function SignIn() {
       password: '',
     },
   });
+  const { link } = useLangNav();
+  const { t } = useTranslation();
+  const getErrorMessage = useErrorMessage();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
-      navigate('/dashboard');
+      navigate(link(''));
     } catch {
-      setError('Email or password is incorrect');
-      toast.error('Email or password is incorrect');
+      setError(getErrorMessage("auth/wrong-password-or-email"));
+      toast.error(error);
     }
   }
 
@@ -52,9 +58,9 @@ export default function SignIn() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="email" {...field} />
+                  <Input type="email" placeholder={t("email")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -65,27 +71,27 @@ export default function SignIn() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("password")}</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="password" {...field} />
+                  <Input type="password" placeholder={t("password")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Button type="submit" className="w-full cursor-pointer">
-            Sign In
+            {t("signIn")}
           </Button>
         </form>
       </Form>
       {error && <p className="text-red-500 mt-2">{error}</p>}
       <div className="text-muted-foreground flex justify-center gap-1 text-sm">
-        <p>Don&apos;t have an account?</p>
+        <p>{t("not-have-account")}</p>
         <Link
-          to="/register"
+          to={link('auth/register')}
           className="text-primary font-medium hover:underline"
         >
-          Sign Up
+          {t("signUp")}
         </Link>
       </div>
     </div>
