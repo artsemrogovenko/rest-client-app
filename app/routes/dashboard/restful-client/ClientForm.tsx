@@ -125,29 +125,34 @@ export default function ClientForm() {
           />
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="inline-flex items-end justify-between">
-              <h3>{t('rest-client-p.body')}</h3>
-
-              <FormField
-                control={form.control}
-                name="type"
-                defaultValue={payloadTypes[0]}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={field.name}>{t('rest-client-p.type-payload')}</FormLabel>
-                    <FormControl>
-                      <Select value={field.value}>
-                        <SelectTrigger id={field.name} className="w-[100px]">
-                          <SelectValue placeholder={t('rest-client-p.type-payload')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={payloadTypes[0]}>{t('rest-client-p.text')}</SelectItem>
-                          <SelectItem value={payloadTypes[1]}>{t('rest-client-p.json')}</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <h3>{t("rest-client-p.body")}</h3>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="type"
+                  defaultValue={payloadTypes[0]}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor={field.name}>{t("rest-client-p.type-payload")}</FormLabel>
+                      <FormControl>
+                        <Select value={field.value}>
+                          <SelectTrigger id={field.name} className="w-[100px]">
+                            <SelectValue placeholder={t("rest-client-p.type-payload")} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={payloadTypes[0]}>
+                              TEXT
+                            </SelectItem>
+                            <SelectItem value={payloadTypes[1]}>
+                              JSON
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <FormField
@@ -166,35 +171,38 @@ export default function ClientForm() {
 
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="flex items-end justify-between gap-y-2">
-              <h3>{t('rest-client-p.generated-code')}</h3>
-
-              <FormField
-                control={form.control}
-                name="language"
-                defaultValue={languageCode[0]}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={field.name}>{t('rest-client-p.select-language')}</FormLabel>
-                    <FormControl>
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger id={field.name} className="w-[120px]">
-                          <SelectValue placeholder={t('rest-client-p.select-language')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {languageCode.map((method) => (
-                            <SelectItem value={method} key={method}>
-                              {method}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <h3>{("rest-client-p.generated-code")}</h3>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="language"
+                  defaultValue={languageCode[0]}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor={field.name}>
+                        {t("rest-client-p.select-language")}
+                      </FormLabel>
+                      <FormControl>
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger id={field.name} className="w-[120px]">
+                            <SelectValue placeholder={t("rest-client-p.select-language")} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {languageCode.map((method) => (
+                              <SelectItem value={method} key={method}>
+                                {method}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <div className="flex flex-col w-full gap-2 rounded-lg border p-2">

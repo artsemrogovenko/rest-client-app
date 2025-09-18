@@ -93,7 +93,7 @@ export default function SignUp() {
                     type="password"
                     placeholder={t("confirm-password")}
                     {...field}
-                  />
+                  />                  
                 </FormControl>
                 <FormMessage />
               </FormItem>

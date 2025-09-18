@@ -7,7 +7,7 @@ export default function ResponseComponent() {
       <h3>{t("rest-client-p.response")}</h3>
       <div className="flex flex-col gap-2 rounded-lg border p-2 h-full">
         <span className="rounded-lg border p-2">{t("rest-client-p.status")} </span>
-        <h4>{t("rest-client-p.body")}</h4>
+        <h4>{t("rest-client-p.body-response")}</h4>
         <p className="break-all"></p>
       </div>
     </aside>

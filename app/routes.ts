@@ -21,9 +21,10 @@ export default [
         route('dashboard', 'routes/dashboard/dashboard.tsx'),
         route('client', 'routes/dashboard/restful-client/RestfulClient.tsx'),
         route('variables', 'routes/dashboard/variables/Variables.tsx'),
+        route('history', 'routes/dashboard/history/History.tsx'),
       ]),
 
       route('*', 'routes/not-found.tsx'),
     ]),
-  ]),
+  ]) 
 ] satisfies RouteConfig;
