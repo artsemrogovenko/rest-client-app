@@ -31,6 +31,9 @@ export default function Variables() {
     mode: 'onChange',
     resolver: zodResolver(variablesSchema),
   });
+  const {
+    formState: { isDirty },
+  } = form;
 
   useEffect(() => {
     setIsClient(true);
@@ -59,6 +62,7 @@ export default function Variables() {
       return acc;
     }, {} as LocalVariables);
     setStorageValue(LOCAL_STORAGE_KEY + userId, JSON.stringify(variables));
+    form.reset({}, { keepValues: true });
   };
 
   if (!isClient) return <Skeleton className="h-[86px] w-[354px]" />;
@@ -79,13 +83,15 @@ export default function Variables() {
           )}
         />
 
-        <Button
-          type="submit"
-          className="uppercase"
-          disabled={!form.formState.isValid}
-        >
-          save
-        </Button>
+        {isDirty && (
+          <Button
+            type="submit"
+            className="uppercase"
+            disabled={!form.formState.isValid}
+          >
+            save
+          </Button>
+        )}
       </form>
     </Form>
   );
