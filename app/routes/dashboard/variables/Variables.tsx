@@ -18,8 +18,10 @@ import type {
 } from '~/routes/dashboard/restful-client/types';
 import { LOCAL_STORAGE_KEY } from '~/routes/dashboard/restful-client/constants';
 import { deleteBrackets } from '~/routes/dashboard/restful-client/utils';
+import { useTranslation } from 'react-i18next';
 
 export default function Variables() {
+  const { t } = useTranslation();
   const { setStorageValue, getStorageValue } = useLocalStorage();
   const [isClient, setIsClient] = useState(false);
   const [initValues, setInitValues] = useState<PairFields[]>([]);
@@ -77,12 +79,8 @@ export default function Variables() {
           )}
         />
 
-        <Button
-          type="submit"
-          className="uppercase"
-          disabled={!form.formState.isValid}
-        >
-          save
+        <Button type="submit" disabled={!form.formState.isValid}>
+          {t('save')}
         </Button>
       </form>
     </Form>

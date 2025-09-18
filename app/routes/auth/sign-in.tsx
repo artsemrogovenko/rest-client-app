@@ -41,7 +41,7 @@ export default function SignIn() {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       navigate(link(''));
     } catch {
-      setError(getErrorMessage("auth/wrong-password-or-email"));
+      setError(getErrorMessage('auth/wrong-password-or-email'));
       toast.error(error);
     }
   }
@@ -58,9 +58,9 @@ export default function SignIn() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("email")}</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder={t("email")} {...field} />
+                  <Input type="email" placeholder={t('email')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -71,27 +71,31 @@ export default function SignIn() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("password")}</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder={t("password")} {...field} />
+                  <Input
+                    type="password"
+                    placeholder={t('password')}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Button type="submit" className="w-full cursor-pointer">
-            {t("signIn")}
+            {t('signIn')}
           </Button>
         </form>
       </Form>
       {error && <p className="text-red-500 mt-2">{error}</p>}
       <div className="text-muted-foreground flex justify-center gap-1 text-sm">
-        <p>{t("not-have-account")}</p>
+        <p>{t('not-have-account')}</p>
         <Link
           to={link('auth/register')}
           className="text-primary font-medium hover:underline"
         >
-          {t("signUp")}
+          {t('signUp')}
         </Link>
       </div>
     </div>

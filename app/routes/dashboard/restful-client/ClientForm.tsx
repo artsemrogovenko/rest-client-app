@@ -74,14 +74,16 @@ export default function ClientForm() {
               defaultValue={queryMethods[0]}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor={field.name}>{t('rest-client-p.query-method')}</FormLabel>
+                  <FormLabel htmlFor={field.name}>
+                    {t('query-method')}
+                  </FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <SelectTrigger id={field.name} className="w-[100px]">
-                        <SelectValue placeholder={t('rest-client-p.query-method')} />
+                        <SelectValue placeholder={t('query-method')} />
                       </SelectTrigger>
                       <SelectContent>
                         {queryMethods.map((method) => (
@@ -101,7 +103,7 @@ export default function ClientForm() {
                 name="endpoint"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor={field.name}>{t('rest-client-p.endpoint')}</FormLabel>
+                    <FormLabel htmlFor={field.name}>{t('endpoint')}</FormLabel>
                     <FormMessage />
                     <FormControl>
                       <Input id={field.name} {...field} />
@@ -110,9 +112,7 @@ export default function ClientForm() {
                 )}
               />
             </div>
-            <Button type="submit" className="uppercase">
-              {t('rest-client-p.send')}
-            </Button>
+            <Button type="submit">{t('send')}</Button>
           </div>
           <FormField
             control={form.control}
@@ -125,7 +125,7 @@ export default function ClientForm() {
           />
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="inline-flex items-end justify-between">
-              <h3>{t("rest-client-p.body")}</h3>
+              <h3>{t('body')}</h3>
               <div>
                 <FormField
                   control={form.control}
@@ -133,11 +133,13 @@ export default function ClientForm() {
                   defaultValue={payloadTypes[0]}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor={field.name}>{t("rest-client-p.type-payload")}</FormLabel>
+                      <FormLabel htmlFor={field.name}>
+                        {t('type-payload')}
+                      </FormLabel>
                       <FormControl>
                         <Select value={field.value}>
                           <SelectTrigger id={field.name} className="w-[100px]">
-                            <SelectValue placeholder={t("rest-client-p.type-payload")} />
+                            <SelectValue placeholder={t('type-payload')} />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value={payloadTypes[0]}>
@@ -171,7 +173,7 @@ export default function ClientForm() {
 
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="flex items-end justify-between gap-y-2">
-              <h3>{("rest-client-p.generated-code")}</h3>
+              <h3>{t('generated-code')}</h3>
               <div>
                 <FormField
                   control={form.control}
@@ -180,7 +182,7 @@ export default function ClientForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel htmlFor={field.name}>
-                        {t("rest-client-p.select-language")}
+                        {t('select-language')}
                       </FormLabel>
                       <FormControl>
                         <Select
@@ -188,7 +190,7 @@ export default function ClientForm() {
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger id={field.name} className="w-[120px]">
-                            <SelectValue placeholder={t("rest-client-p.select-language")} />
+                            <SelectValue placeholder={t('select-language')} />
                           </SelectTrigger>
                           <SelectContent>
                             {languageCode.map((method) => (
@@ -206,10 +208,10 @@ export default function ClientForm() {
             </div>
 
             <div className="flex flex-col w-full gap-2 rounded-lg border p-2">
-              <span className="break-all">{t('rest-client-p.code')}</span>
+              <span className="break-all">{t('code')}</span>
               <Button>
                 <Copy />
-                {t('rest-client-p.copy-code')}
+                {t('copy-code')}
               </Button>
             </div>
           </article>

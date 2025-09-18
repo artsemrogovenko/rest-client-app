@@ -20,14 +20,14 @@ export default function DynamicList({ role, control }: DynamicListProps) {
       minLength: 1,
     },
   });
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   return (
     <article className="flex flex-col gap-2 rounded-lg border md:-mx-1 p-5">
       <div className="flex items-center gap-2 justify-between">
-        <h4 className="capitalize">{t(`rest-client-p.${role}`)}</h4>
+        <h4 className="capitalize">{t(`${role}`)}</h4>
         <Button onClick={() => append({ name: '', value: '' })} type={'button'}>
-          {t("rest-client-p.add")} {t(`rest-client-p.${role}`)}
+          {t('add')}
         </Button>
       </div>
 
@@ -43,7 +43,7 @@ export default function DynamicList({ role, control }: DynamicListProps) {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder={t("rest-client-p.name")}
+                      placeholder={t('name')}
                       id={`${role}-${index}-name`}
                       className=" w-full"
                     />
@@ -60,7 +60,7 @@ export default function DynamicList({ role, control }: DynamicListProps) {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder={t("rest-client-p.value")}
+                      placeholder={t('value')}
                       id={`${role}-${index}-value`}
                       className=" w-full"
                     />

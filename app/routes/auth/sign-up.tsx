@@ -61,9 +61,9 @@ export default function SignUp() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("email")}</FormLabel>
+                <FormLabel>{t('email')}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder={t("email")} {...field} />
+                  <Input type="email" placeholder={t('email')} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -74,9 +74,13 @@ export default function SignUp() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("password")}</FormLabel>
+                <FormLabel>{t('password')}</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder={t("password")} {...field} />
+                  <Input
+                    type="password"
+                    placeholder={t('password')}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -87,27 +91,30 @@ export default function SignUp() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("confirm-password")}</FormLabel>
+                <FormLabel>{t('confirm-password')}</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder={t("confirm-password")}
+                    placeholder={t('confirm-password')}
                     {...field}
-                  />                  
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Button type="submit" className="w-full  cursor-pointer">
-            {t("create-account")}
+            {t('create-account')}
           </Button>
         </form>
       </Form>
       {error && <p className="text-red-500 mt-2">{error}</p>}
       <div className="text-muted-foreground flex justify-center gap-1 text-sm">
-        <p>{t("have-account")}</p>
-        <Link to={link("auth/login")} className="text-primary font-medium hover:underline">
+        <p>{t('have-account')}</p>
+        <Link
+          to={link('auth/login')}
+          className="text-primary font-medium hover:underline"
+        >
           {t('signIn')}
         </Link>
       </div>

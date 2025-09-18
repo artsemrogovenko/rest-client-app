@@ -16,7 +16,7 @@ export default function SignOut() {
       await signOut(auth);
       navigate(link(''));
     } catch {
-      toast.error(t("error.default"));
+      toast.error(t('error.default'));
     }
   }
 

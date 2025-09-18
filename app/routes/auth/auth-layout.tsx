@@ -10,7 +10,7 @@ export default function AuthLayout() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigate(link(""));
+        navigate(link(''));
       }
     });
 

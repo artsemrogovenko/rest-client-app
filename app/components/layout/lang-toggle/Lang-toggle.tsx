@@ -12,6 +12,6 @@ const LanguageToggle = () => {
       {t(currentLang)}
     </Button>
   );
-}
+};
 
 export default LanguageToggle;

@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const useErrorMessage = () => {
   const { t } = useTranslation();
@@ -6,7 +6,7 @@ const useErrorMessage = () => {
     const key = `error.${code}`;
     const message = t(`error.${key}`);
     return message !== key ? message : t(`error.default`);
-  }
+  };
 };
 
 export default useErrorMessage;
