@@ -1,5 +1,5 @@
 import { type TRestfulSchema } from './validate';
-import type { LocalVariables } from './types';
+import type { LocalVariables, PairFields } from './types';
 import {
   HEADER_BODY_TYPE,
   payloadTypes,
@@ -161,18 +161,25 @@ export function convertUrlToForm(
   if (encodedUrl) formData.endpoint = fromBase64(encodedUrl);
   if (encodedData) formData.body = fromBase64(encodedData);
   if (searchParams) {
-    let typeIndex: number | null = null;
-    let headers = Array.from(searchParams.entries()).map((header, index) => {
+    const bodyTypes: Array<PairFields> = [];
+    let headers = Array.from(searchParams.entries()).map((header) => {
       const key = fromBase64(header[0]);
       const value = fromBase64(header[1]);
+      const result = { name: key, value: value };
       if (key.toLowerCase() === HEADER_BODY_TYPE.toLowerCase()) {
-        formData.type = value;
-        typeIndex = index;
+        if (typeof value !== 'undefined') {
+          formData.type = value;
+        }
+        bodyTypes.push(result);
       }
-      return { name: key, value: value };
+      return result;
     });
-    if (typeIndex) {
-      headers = headers.filter((_, index) => index !== typeIndex);
+    if (bodyTypes.length) {
+      bodyTypes.forEach((type) => {
+        headers = headers.filter(
+          (header) => JSON.stringify(header) !== JSON.stringify(type)
+        );
+      });
     }
     formData.header = headers;
   }

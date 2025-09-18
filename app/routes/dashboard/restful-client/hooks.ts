@@ -3,7 +3,6 @@ import type { LocalVariables } from './types';
 import { LOCAL_STORAGE_KEY, payloadTypes } from './constants';
 import { isNotMissedVariables, inlineJson } from './utils';
 import { type TRestfulSchema } from './validate';
-import z from 'zod';
 import AuthContext from '~/contexts/auth/AuthContext';
 
 export function useLocalStorage() {
@@ -115,15 +114,15 @@ export function useVariablesValidator() {
             message += 'body type is not json';
           }
         }
-        if (data.type === payloadTypes[0]) {
-          try {
-            message += hasErrors(data.body, variables);
-          } catch (error) {
-            if (error instanceof z.ZodError) {
-              message += ' body type is not text';
-            }
-          }
-        }
+        // if (data.type === payloadTypes[0]) {
+        //   try {
+        //     message += hasErrors(data.body, variables);
+        //   } catch (error) {
+        //     if (error instanceof z.ZodError) {
+        //       message += ' body type is not text';
+        //     }
+        //   }
+        // }
         if (message) errors.body = message;
       }
     }

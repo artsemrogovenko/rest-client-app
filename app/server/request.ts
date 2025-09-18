@@ -102,7 +102,6 @@ export function makeRequest(request: RequestType) {
 async function encodedToRequest(request: Request) {
   const formData = await request.formData();
   const parsed = JSON.parse(String(formData.get('data'))) as RequestType;
-  console.log(parsed);
   const decodedRequest: RequestType = {
     params: {
       method: parsed.params.method,

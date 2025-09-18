@@ -14,7 +14,7 @@ export const clientSchema = z
     method: z.enum(queryMethods),
     endpoint: z
       .string()
-      .min(5, 'Endpoint is required')
+      .min(1, 'Endpoint is required')
       .refine((value) => value.length >= 5, {
         message: 'Endpoint url too short',
       }),
@@ -22,7 +22,15 @@ export const clientSchema = z
     variable: z.array(listSchema),
     type: z.enum(payloadTypes),
     language: z.string().refine((arg) => typeof arg !== 'undefined'),
-    body: z.string(),
+    body: z.string().refine(
+      (value) => {
+        if (value) {
+          return value.trim() !== '';
+        }
+        return true;
+      },
+      { message: 'Body must contain characters' }
+    ),
     snippet: z.string().optional(),
   })
   .partial();

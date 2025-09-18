@@ -17,13 +17,14 @@ export default function logToForm(requestLog: RequestLog): TRestfulSchema {
   if (requestLog.requestHeaders) {
     const entries = Object.entries(requestLog.requestHeaders);
     formData.header = entries.map(([key, value]) => {
+      if (key.toLowerCase() === HEADER_BODY_TYPE.toLowerCase()) {
+        formData.type = value;
+      }
       return {
         name: key,
         value: value,
       };
     });
-    const foundedType = entries.filter(([key]) => key === HEADER_BODY_TYPE);
-    if (foundedType) formData.type = String(foundedType[1]);
   }
   return formData;
 }
