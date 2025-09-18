@@ -9,7 +9,10 @@ import {
   payloadTypes,
   queryMethods,
 } from '~/routes/dashboard/restful-client/constants';
-import { convertValues } from '~/routes/dashboard/restful-client/utils';
+import {
+  convertValues,
+  inlineJson,
+} from '~/routes/dashboard/restful-client/utils';
 import type {
   ClientFormProps,
   LocalVariables,
@@ -48,6 +51,7 @@ export default function ClientForm(props: ClientFormProps) {
       language: defaultLanguage,
     },
   });
+  const { type, body } = form.getValues();
   useEffect(() => {
     form.clearErrors();
     form.reset({ ...props.newData, language: form.getValues('language') });
@@ -62,8 +66,14 @@ export default function ClientForm(props: ClientFormProps) {
       });
       return;
     }
+    if (type === payloadTypes[1] && body) {
+      form.setValue('body', inlineJson(body));
+    }
 
-    const newValues = convertValues(data, variables as LocalVariables);
+    const newValues = convertValues(
+      form.getValues(),
+      variables as LocalVariables
+    );
     const updatedHeaders = newValues.header?.map((item) => ({ ...item })) || [];
     props.onSubmit({ ...newValues, header: updatedHeaders });
     // form.reset({ ...newValues, header: updatedHeaders });

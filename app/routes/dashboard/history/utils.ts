@@ -1,5 +1,9 @@
 import type { TRestfulSchema } from '~/routes/dashboard/restful-client/validate';
 import type { RequestLog } from '~/routes/dashboard/history/types';
+import {
+  HEADER_BODY_TYPE,
+  payloadTypes,
+} from '~/routes/dashboard/restful-client/constants';
 
 export default function logToForm(requestLog: RequestLog): TRestfulSchema {
   const formData: TRestfulSchema = {
@@ -7,7 +11,7 @@ export default function logToForm(requestLog: RequestLog): TRestfulSchema {
     endpoint: requestLog.endpoint,
     header: undefined,
     method: requestLog.method,
-    type: undefined,
+    type: payloadTypes[0],
   };
   if (requestLog.requestBody) formData.body = requestLog.requestBody;
   if (requestLog.requestHeaders) {
@@ -18,9 +22,7 @@ export default function logToForm(requestLog: RequestLog): TRestfulSchema {
         value: value,
       };
     });
-    const foundedType = entries.filter(
-      ([key]) => key.toLowerCase() === 'content-type'
-    );
+    const foundedType = entries.filter(([key]) => key === HEADER_BODY_TYPE);
     if (foundedType) formData.type = String(foundedType[1]);
   }
   return formData;

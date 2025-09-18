@@ -1,4 +1,5 @@
 export const payloadTypes = ['text/plain; charset=utf-8', 'application/json'];
+export const HEADER_BODY_TYPE = 'Content-Type';
 export const queryMethods = [
   'GET',
   'POST',

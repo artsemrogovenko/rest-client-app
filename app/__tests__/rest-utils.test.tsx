@@ -8,6 +8,7 @@ import {
   fromBase64,
   isNotMissedVariables,
   isValidBrackets,
+  inlineJson,
   toBase64,
 } from '~/routes/dashboard/restful-client/utils';
 
@@ -190,5 +191,30 @@ describe('Tests decode & encode base64', () => {
     const encoded = toBase64(testString);
     expect(encoded).not.toBe(testString);
     expect(fromBase64(encoded)).toBe(testString);
+  });
+});
+
+describe('body json prepare test', () => {
+  test('inline json', () => {
+    const input =
+      '{\n  "browsers": {\n    "firefox": {\n      "name": "Firefox",\n      "pref_url": "about:config",\n      "releases": {\n        "1": {\n          "release_date": "2004-11-09",\n          "status": "retired",\n          "engine": "Gecko",\n          "engine_version": "1.7"\n        }\n      }\n    }\n  }\n}';
+    const output =
+      '{"browsers":{"firefox":{"name":"Firefox","pref_url":"about:config","releases":{"1":{"release_date":"2004-11-09","status":"retired","engine":"Gecko","engine_version":"1.7"}}}}}';
+    expect(inlineJson(input)).toBe(output);
+  });
+
+  test('no delete format in values', () => {
+    const input =
+      '{        "release_date": "2004-11-09 \\t beta",\n        "status": "required, \\n new line"      }';
+    const output =
+      '{"release_date":"2004-11-09 \\t beta","status":"required, \\n new line"}';
+    expect(inlineJson(input)).toBe(output);
+  });
+
+  test('throw error if empty or not string', () => {
+    const input1 = '';
+    const input2 = undefined;
+    expect(() => inlineJson(input1)).toThrowError('String is empty');
+    expect(() => inlineJson(input2)).toThrowError('String is empty');
   });
 });

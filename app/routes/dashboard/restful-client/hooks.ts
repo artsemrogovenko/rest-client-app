@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import type { LocalVariables } from './types';
 import { LOCAL_STORAGE_KEY, payloadTypes } from './constants';
-import { isNotMissedVariables, prepareJson } from './utils';
+import { isNotMissedVariables, inlineJson } from './utils';
 import { type TRestfulSchema } from './validate';
 import z from 'zod';
 import AuthContext from '~/contexts/auth/AuthContext';
@@ -108,10 +108,11 @@ export function useVariablesValidator() {
         let message = '';
         if (data.type === payloadTypes[1]) {
           try {
-            const prepared = prepareJson(data.body);
-            if (typeof prepared !== 'object') throw Error();
+            const prepared = inlineJson(data.body);
+            const parsed = JSON.parse(prepared);
+            if (typeof parsed !== 'object') throw Error();
           } catch {
-            message += ' body type is not json';
+            message += 'body type is not json';
           }
         }
         if (data.type === payloadTypes[0]) {

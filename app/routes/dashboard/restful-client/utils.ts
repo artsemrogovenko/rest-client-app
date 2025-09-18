@@ -1,6 +1,7 @@
 import { type TRestfulSchema } from './validate';
 import type { LocalVariables } from './types';
 import {
+  HEADER_BODY_TYPE,
   payloadTypes,
   RESTFUL_CLIENT_PATH,
 } from '~/routes/dashboard/restful-client/constants';
@@ -124,7 +125,7 @@ export default function convertFormToUrl(data: TRestfulSchema): string {
   }
   if (data.body) {
     headers += !data.header?.length ? '=?' : '&';
-    headers += `${toBase64('Content-Type')}=${toBase64(String(data.type))}`;
+    headers += `${toBase64(HEADER_BODY_TYPE)}=${toBase64(String(data.type))}`;
   }
   return `${method}/${endpoint}${body}${headers}`;
 }
@@ -161,7 +162,7 @@ export function convertUrlToForm(
     let headers = Array.from(searchParams.entries()).map((header, index) => {
       const key = fromBase64(header[0]);
       const value = fromBase64(header[1]);
-      if (key.toLowerCase() === 'content-type') {
+      if (key === HEADER_BODY_TYPE) {
         formData.type = value;
         typeIndex = index;
       }
@@ -175,22 +176,10 @@ export function convertUrlToForm(
   return formData;
 }
 
-export function prepareJson(input: string) {
+export function inlineJson(input: string | undefined) {
   if (!input || typeof input !== 'string') {
     throw new Error('String is empty');
   }
-  let result = input;
-  try {
-    return JSON.parse(result);
-  } catch {
-    result = result
-      .replace(/\\n/g, '\n')
-      .replace(/\\t/g, '\t')
-      .replace(/\\r/g, '\r')
-      .replace(/\\b/g, '\b')
-      .replace(/\\f/g, '\f')
-      .replace(/\\"/g, '"')
-      .replace(/\\\\/g, '\\');
-  }
-  return result;
+
+  return JSON.stringify(JSON.parse(input));
 }
