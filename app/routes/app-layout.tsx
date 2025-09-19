@@ -5,7 +5,6 @@ import AuthProvider from '~/contexts/auth/authProvider';
 import { Toaster } from '~/components/ui/sonner';
 
 const AppLayout = () => {
-
   return (
     <div className="wrapper">
       <AuthProvider>

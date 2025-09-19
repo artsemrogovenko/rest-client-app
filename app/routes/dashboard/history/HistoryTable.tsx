@@ -1,23 +1,29 @@
-"use server"
+'use server';
 
 import React, { useEffect, useState } from 'react';
 import { db } from '~/firebase/firebaseConfig';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { type RequestLog } from './types';
 import { Button } from '~/components/ui/button';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import logToForm from '~/routes/dashboard/history/utils';
+import convertFormToUrl from '~/routes/dashboard/restful-client/utils';
 import { getAuth } from 'firebase/auth';
 
 export default function HistoryTable() {
   const [logs, setLogs] = useState<RequestLog[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    if ((!user)) return;
+    if (!user) return;
     const fetchLogs = async () => {
-      const q = query(collection(db, 'users', user.uid, "logs"), orderBy('timestamp', 'desc'));
+      const q = query(
+        collection(db, 'users', user.uid, 'logs'),
+        orderBy('timestamp', 'desc')
+      );
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map(
         (doc) => ({ id: doc.id, ...doc.data() }) as RequestLog
@@ -28,14 +34,22 @@ export default function HistoryTable() {
     fetchLogs();
   }, []);
 
+  const toClientForm = (log: RequestLog) => {
+    const formFields = logToForm(log);
+    const url = convertFormToUrl(formFields);
+    navigate(url);
+  };
+
   if (logs.length === 0) {
     return (
-      <div className='flex flex-col justify-center items-center'>
-      <p className="text-gray-600">
-        You haven&apos;t executed any requests yet
-      </p>
-      <p className="text-gray-600 mb-10">It&apos;s empty here. Try: </p>
-      <Button asChild variant="outline"><Link to="/client">REST Client</Link></Button>
+      <div className="flex flex-col justify-center items-center">
+        <p className="text-gray-600">
+          You haven&apos;t executed any requests yet
+        </p>
+        <p className="text-gray-600 mb-10">It&apos;s empty here. Try: </p>
+        <Button asChild variant="outline">
+          <Link to="/client">REST Client</Link>
+        </Button>
       </div>
     );
   }
@@ -58,12 +72,17 @@ export default function HistoryTable() {
         <tbody className="divide-y divide-gray-200">
           {logs.map((log) => (
             <React.Fragment key={log.id}>
-              <tr className="hover:bg-gray-50">
+              <tr
+                className="hover:bg-gray-50"
+                onClick={() => toClientForm(log)}
+              >
                 <td className="px-4 py-2">
                   {new Date(log.timestamp).toLocaleString()}
                 </td>
                 <td className="border px-4 py-2 font-semibold">{log.method}</td>
-                <td className="border px-4 py-2 text-sm break-all">{log.endpoint}</td>
+                <td className="border px-4 py-2 text-sm break-all">
+                  {log.endpoint}
+                </td>
                 <td
                   className={`border  px-4 py-2 font-semibold ${
                     typeof log.statusCode === 'number' &&

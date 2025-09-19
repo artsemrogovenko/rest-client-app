@@ -1,7 +1,6 @@
 const Footer = () => {
   return (
     <footer className="footer">
-
       <div className="flex items-center justify-center gap-3">
         <p className="font-bold">Developed by:</p>
         <a

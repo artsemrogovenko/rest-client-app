@@ -1,8 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import type { LocalVariables } from './types';
-import { LOCAL_STORAGE_KEY } from './constants';
-import { isNotMissedVariables } from './utils';
+import { LOCAL_STORAGE_KEY, payloadTypes } from './constants';
+import {
+  isNotMissedVariables,
+  inlineJson,
+  decodeKeysAndValues,
+  convertValues,
+} from './utils';
 import { type TRestfulSchema } from './validate';
+import AuthContext from '~/contexts/auth/AuthContext';
+import type { UseFormReturn } from 'react-hook-form';
 
 export function useLocalStorage() {
   const getStorageValue = useCallback((key: string) => {
@@ -31,11 +38,12 @@ export function useLocalStorage() {
 export function useGetVariables(): LocalVariables | null {
   const { getStorageValue } = useLocalStorage();
   const [variables, setVariables] = useState<LocalVariables | null>(null);
+  const userId = useContext(AuthContext)?.user?.uid || '';
 
   useEffect(() => {
     const loadVariables = () => {
       try {
-        const stringData = getStorageValue(LOCAL_STORAGE_KEY);
+        const stringData = getStorageValue(LOCAL_STORAGE_KEY + userId);
         if (stringData) {
           setVariables(JSON.parse(stringData));
         } else {
@@ -62,6 +70,7 @@ export function useVariablesValidator() {
     } else if (!validation.isValid && validation.notFoundVars.length > 0) {
       return `Missing variables: ${validation.notFoundVars.join(', ')}`;
     }
+    return '';
   }
 
   const validateFormWithVariables = (
@@ -98,8 +107,22 @@ export function useVariablesValidator() {
     });
 
     if (data.body) {
-      const message = hasErrors(data.body, variables);
-      if (message) errors.body = message;
+      if (data.method === 'GET' || data.method === 'HEAD') {
+        errors.body = 'GET or HEAD request cannot have a body';
+      } else {
+        let message = '';
+        if (data.type === payloadTypes[1]) {
+          try {
+            const prepared = inlineJson(data.body);
+            const parsed = JSON.parse(prepared);
+            if (typeof parsed !== 'object') throw Error();
+          } catch {
+            message += 'body type is not json';
+          }
+        }
+
+        if (message) errors.body = message;
+      }
     }
 
     return {
@@ -108,5 +131,31 @@ export function useVariablesValidator() {
     };
   };
 
-  return { validateFormWithVariables, variables };
+  function validateValues(form: UseFormReturn<TRestfulSchema>) {
+    const data = form.getValues();
+    const variablesValidation = validateFormWithVariables(data);
+
+    if (!variablesValidation.isValid) {
+      Object.entries(variablesValidation.errors).forEach(([path, message]) => {
+        form.setError(path as keyof TRestfulSchema, { message });
+      });
+      return;
+    }
+
+    if (data.type === payloadTypes[1] && data.body) {
+      const decodedJson = decodeKeysAndValues(
+        JSON.parse(data.body),
+        variables as LocalVariables
+      );
+      form.setValue('body', inlineJson(JSON.stringify(decodedJson)));
+    }
+
+    const newValues = convertValues(
+      form.getValues(),
+      variables as LocalVariables
+    );
+    return newValues;
+  }
+
+  return { validateFormWithVariables, variables, validateValues };
 }

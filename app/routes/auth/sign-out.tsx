@@ -4,7 +4,6 @@ import { auth } from '~/firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
 import { toast } from 'sonner';
 
-
 export default function SignOut() {
   const navigate = useNavigate();
 

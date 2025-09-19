@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import useAuth from '~/contexts/auth/useAuth';
 import SignOut from '~/routes/auth/sign-out';
 import { useEffect, useState } from 'react';
-import { SCROLL_THRESHOLD, EVENT_SCROLL } from './constant';
+import { EVENT_SCROLL, SCROLL_THRESHOLD } from './constant';
 
 const Header = () => {
   const { user } = useAuth();
@@ -17,7 +17,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`header ${scrolled ? "scrolled" : ""}`}>
+    <header className={`header ${scrolled ? 'scrolled' : ''}`}>
       <div className="h-10 w-10 bg-black bg-col flex items-center justify-center rounded-sm">
         <Link to="/" className="font-semibold text-white">
           H&H
