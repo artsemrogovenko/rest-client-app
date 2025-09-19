@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { languageCode, payloadTypes, queryMethods } from './constants';
+import { payloadTypes, queryMethods } from './constants';
 
 export const listSchema = z
   .object({
@@ -15,14 +15,23 @@ export const clientSchema = z
     endpoint: z
       .string()
       .min(1, 'Endpoint is required')
-      .refine((value) => value.includes(':'), {
-        message: "Must include ':'",
+      .refine((value) => value.length >= 5, {
+        message: 'Endpoint url too short',
       }),
     header: z.array(listSchema),
     variable: z.array(listSchema),
     type: z.enum(payloadTypes),
-    language: z.enum(languageCode),
-    body: z.string(),
+    language: z.string().refine((arg) => typeof arg !== 'undefined'),
+    body: z.string().refine(
+      (value) => {
+        if (value) {
+          return value.trim() !== '';
+        }
+        return true;
+      },
+      { message: 'Body must contain characters' }
+    ),
+    snippet: z.string().optional(),
   })
   .partial();
 

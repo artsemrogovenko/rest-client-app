@@ -40,7 +40,7 @@ const MainPage = () => {
               <Link to={link('history')}>{t('history')}</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link to={link('variables')}>{t('variables')}</Link>
+              <Link to={link('variables')}>{t('variable')}</Link>
             </Button>
           </div>
         </>

@@ -10,7 +10,7 @@ import {
 } from '~/routes/dashboard/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalStorage } from '~/routes/dashboard/restful-client/hooks';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Skeleton } from '~/components/ui/skeleton';
 import type {
   LocalVariables,
@@ -19,24 +19,29 @@ import type {
 import { LOCAL_STORAGE_KEY } from '~/routes/dashboard/restful-client/constants';
 import { deleteBrackets } from '~/routes/dashboard/restful-client/utils';
 import { useTranslation } from 'react-i18next';
+import AuthContext from '~/contexts/auth/AuthContext';
 
 export default function Variables() {
   const { t } = useTranslation();
   const { setStorageValue, getStorageValue } = useLocalStorage();
   const [isClient, setIsClient] = useState(false);
   const [initValues, setInitValues] = useState<PairFields[]>([]);
+  const userId = useContext(AuthContext)?.user?.uid || '';
 
   const form = useForm<TVariablesSchema>({
     defaultValues: { variable: initValues },
     mode: 'onChange',
     resolver: zodResolver(variablesSchema),
   });
+  const {
+    formState: { isDirty },
+  } = form;
 
   useEffect(() => {
     setIsClient(true);
     if (typeof window !== 'undefined') {
       const localVariables = JSON.parse(
-        getStorageValue(LOCAL_STORAGE_KEY) || '{}'
+        getStorageValue(LOCAL_STORAGE_KEY + userId) || '{}'
       ) as Record<string, string>;
       const values = Array.from(
         Object.entries(localVariables).map(([k, v]) => {
@@ -45,7 +50,7 @@ export default function Variables() {
       );
       setInitValues(values);
     }
-  }, [getStorageValue]);
+  }, [getStorageValue, userId]);
 
   useEffect(() => {
     if (initValues.length > 0) {
@@ -58,7 +63,8 @@ export default function Variables() {
       acc[`{{${line.name}}}`] = line.value;
       return acc;
     }, {} as LocalVariables);
-    setStorageValue(LOCAL_STORAGE_KEY, JSON.stringify(variables));
+    setStorageValue(LOCAL_STORAGE_KEY + userId, JSON.stringify(variables));
+    form.reset({}, { keepValues: true });
   };
 
   if (!isClient) return <Skeleton className="h-[86px] w-[354px]" />;
@@ -79,9 +85,11 @@ export default function Variables() {
           )}
         />
 
-        <Button type="submit" disabled={!form.formState.isValid}>
-          {t('save')}
-        </Button>
+        {isDirty && (
+          <Button type="submit" disabled={!form.formState.isValid}>
+            {t('save')}
+          </Button>
+        )}
       </form>
     </Form>
   );

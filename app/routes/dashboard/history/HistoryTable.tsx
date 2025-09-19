@@ -5,7 +5,9 @@ import { db } from '~/firebase/firebaseConfig';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { type RequestLog } from './types';
 import { Button } from '~/components/ui/button';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import logToForm from '~/routes/dashboard/history/utils';
+import convertFormToUrl from '~/routes/dashboard/restful-client/utils';
 import { getAuth } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
 import useLangNav from '~/hooks/langLink';
@@ -14,6 +16,7 @@ export default function HistoryTable() {
   const { t } = useTranslation();
   const { link } = useLangNav();
   const [logs, setLogs] = useState<RequestLog[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getAuth();
@@ -34,6 +37,13 @@ export default function HistoryTable() {
 
     fetchLogs();
   }, []);
+
+  const toClientForm = (log: RequestLog) => {
+    const formFields = logToForm(log);
+    const url = convertFormToUrl(formFields).slice(1);
+    console.log(url);
+    navigate(link(url));
+  };
 
   if (logs.length === 0) {
     return (
@@ -65,7 +75,10 @@ export default function HistoryTable() {
         <tbody className="divide-y divide-gray-200">
           {logs.map((log) => (
             <React.Fragment key={log.id}>
-              <tr className="hover:bg-gray-50">
+              <tr
+                className="hover:bg-gray-50"
+                onClick={() => toClientForm(log)}
+              >
                 <td className="px-4 py-2">
                   {new Date(log.timestamp).toLocaleString()}
                 </td>

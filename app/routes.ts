@@ -1,10 +1,11 @@
 import {
-  type RouteConfig,
-  route,
   index,
   layout,
   prefix,
+  route,
+  type RouteConfig,
 } from '@react-router/dev/routes';
+import { RESTFUL_CLIENT_PATH } from './routes/dashboard/restful-client/constants';
 
 export default [
   route('', './routes/root-redirect.tsx'),
@@ -19,8 +20,13 @@ export default [
 
       layout('./routes/dashboard/dashboard-layout.tsx', [
         route('dashboard', 'routes/dashboard/dashboard.tsx'),
-        route('client', 'routes/dashboard/restful-client/RestfulClient.tsx'),
-        route('variables', 'routes/dashboard/variables/Variables.tsx'),
+        route(
+          `${RESTFUL_CLIENT_PATH}:method?/:encodedUrl?/:encodedData?`,
+          'routes/dashboard/restful-client/RestfulClient.tsx'
+        ),
+        route('/variables', 'routes/dashboard/variables/Variables.tsx'),
+        route('api/request', 'server/request.ts'),
+        route('api/code', 'server/code-generator/generator.ts'),
         route('history', 'routes/dashboard/history/History.tsx'),
       ]),
 
