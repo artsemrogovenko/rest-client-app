@@ -16,7 +16,7 @@ import LanguagesList from '~/routes/dashboard/snippet/LanguagesList';
 import { convertValues } from '~/routes/dashboard/restful-client/utils';
 import type { CodeSnippetProps } from '~/routes/dashboard/snippet/types';
 import { toast } from 'sonner';
-import { defaultLanguage } from '~/server/constants';
+import { defaultLanguage } from '../restful-client/constants';
 import { useEffect } from 'react';
 import { useVariablesValidator } from '~/routes/dashboard/restful-client/hooks';
 import type { LocalVariables } from '../restful-client/types';

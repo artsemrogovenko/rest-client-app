@@ -4,7 +4,10 @@ import type {
   ReturnResponse,
 } from '~/routes/dashboard/restful-client/types';
 import { fromBase64 } from '~/routes/dashboard/restful-client/utils';
-import { mockResponse } from '~/routes/dashboard/restful-client/constants';
+import {
+  HEADER_BODY_TYPE,
+  mockResponse,
+} from '~/routes/dashboard/restful-client/constants';
 import type { RequestLog } from '~/routes/dashboard/history/types';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '~/firebase/firebaseConfig';
@@ -36,7 +39,7 @@ async function fetchRequest(
   return await fetch(encodedUrl, options)
     .then(async (data) => {
       const copied = data.clone();
-      const body = await copied.json();
+      const body = await ejectBody(copied);
 
       const result = {
         status: copied.status,
@@ -47,11 +50,10 @@ async function fetchRequest(
       logData = {
         ...logData,
         responseHeaders: Object.fromEntries(copied.headers.entries()),
-        responseBody: body,
+        responseBody: body.toString(),
         responseSize: new TextEncoder().encode(body || '').length,
         statusCode: copied.status,
         duration: Date.now() - startTask,
-        timestamp: new Date().toISOString(),
       };
       return {
         response: result,
@@ -59,17 +61,17 @@ async function fetchRequest(
       };
     })
     .catch((error) => {
-      if (error instanceof Error) {
-        logData = {
-          ...logData,
-          statusCode: 0,
-          duration: Date.now() - startTask,
-          timestamp: new Date().toISOString(),
-          error: error.toString(),
-        };
+      console.log('line 63', error);
+      logData = {
+        ...logData,
+        statusCode: 0,
+        duration: Date.now() - startTask,
+        error: error.toString(),
+      };
+      if (error instanceof Error || error instanceof TypeError) {
         return {
           response: {
-            status: 500,
+            status: 0,
             statusText: error.message,
             body: `${error.cause} : ${encodedUrl} ${JSON.stringify(options)}`,
           },
@@ -135,3 +137,15 @@ export async function action({
 export const saveLog = async (logData: RequestLog, uuid: string) => {
   await addDoc(collection(db, 'users', uuid, 'logs'), logData);
 };
+
+export async function ejectBody(response: Response): Promise<string> {
+  const contentType = response.headers.get(HEADER_BODY_TYPE);
+
+  if (contentType?.includes('application/json')) {
+    return await response.json();
+  } else if (contentType?.includes('text/')) {
+    return await response.text();
+  } else {
+    return String(await response.arrayBuffer());
+  }
+}

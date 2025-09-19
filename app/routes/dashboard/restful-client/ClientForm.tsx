@@ -9,6 +9,7 @@ import {
   payloadTypes,
   queryMethods,
 } from '~/routes/dashboard/restful-client/constants';
+import { defaultLanguage } from '../restful-client/constants';
 
 import type { ClientFormProps } from '~/routes/dashboard/restful-client/types';
 import {
@@ -32,7 +33,6 @@ import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
 import CodeSnippet from '../snippet/CodeSnippet';
 import { useEffect } from 'react';
-import { defaultLanguage } from '~/server/constants';
 
 export default function ClientForm(props: ClientFormProps) {
   const { validateValues } = useVariablesValidator();

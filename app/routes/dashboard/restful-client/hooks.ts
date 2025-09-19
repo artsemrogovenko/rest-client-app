@@ -120,15 +120,7 @@ export function useVariablesValidator() {
             message += 'body type is not json';
           }
         }
-        // if (data.type === payloadTypes[0]) {
-        //   try {
-        //     message += hasErrors(data.body, variables);
-        //   } catch (error) {
-        //     if (error instanceof z.ZodError) {
-        //       message += ' body type is not text';
-        //     }
-        //   }
-        // }
+
         if (message) errors.body = message;
       }
     }
