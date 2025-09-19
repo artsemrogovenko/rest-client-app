@@ -18,12 +18,17 @@ import type { CodeSnippetProps } from '~/routes/dashboard/snippet/types';
 import { toast } from 'sonner';
 import { defaultLanguage } from '~/server/constants';
 import { useEffect } from 'react';
+import { useVariablesValidator } from '~/routes/dashboard/restful-client/hooks';
+import type { LocalVariables } from '../restful-client/types';
 
-export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
-  const { snippet } = form.getValues();
+export default function CodeSnippet({ form }: CodeSnippetProps) {
+  const { validateValues, variables } = useVariablesValidator();
+
   const {
+    getValues,
     formState: { isValid, isSubmitSuccessful },
   } = form;
+  const snippet = getValues('snippet');
 
   useEffect(() => {
     if (isSubmitSuccessful && isValid) {
@@ -39,11 +44,15 @@ export default function CodeSnippet({ form, variables }: CodeSnippetProps) {
       'body',
       'language',
     ]);
+    validateValues(form);
     if (noErrors) generateSnippet();
   };
   const generateSnippet = async () => {
     if (isValid) {
-      const unpackedVariables = convertValues(form.getValues(), variables);
+      const unpackedVariables = convertValues(
+        getValues(),
+        variables as LocalVariables
+      );
       const formData = new FormData();
       formData.append('data', JSON.stringify(unpackedVariables));
       const response = await fetch('/api/code', {

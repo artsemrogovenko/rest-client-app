@@ -10,6 +10,7 @@ import {
   isValidBrackets,
   inlineJson,
   toBase64,
+  decodeKeysAndValues,
 } from '~/routes/dashboard/restful-client/utils';
 
 const storageList = {
@@ -216,5 +217,58 @@ describe('body json prepare test', () => {
     const input2 = undefined;
     expect(() => inlineJson(input1)).toThrowError('String is empty');
     expect(() => inlineJson(input2)).toThrowError('String is empty');
+  });
+});
+
+describe('replace local environments in object', () => {
+  const variables = {
+    '{{ggg}}': '12',
+    '{{45646}}': 'name',
+    '{{u}}': 'uku',
+  };
+
+  test('replace on inner array', () => {
+    const input = {
+      '{{45646}}': 'Molecule Man',
+      age: '{{ggg}}',
+      powers: [
+        'Radiation{{ggg}} resist{{u}}ance',
+        ['Turning', ['{{ggg}}']],
+        'Radiation blast',
+      ],
+    };
+    const output = {
+      age: '12',
+      name: 'Molecule Man',
+      powers: [
+        'Radiation12 resistukuance',
+        ['Turning', ['12']],
+        'Radiation blast',
+      ],
+    };
+    expect(decodeKeysAndValues(input, variables)).toStrictEqual(output);
+  });
+  test('replace on inner object', () => {
+    const input = {
+      '{{45646}}': 'Molecule Man',
+      age: '{{ggg}}',
+      powers: {
+        'Radiation{{ggg}}': 'resist{{u}}ance',
+        Turning: 'tiny',
+        Radiation: { '{{ggg}}': 'abc' },
+      },
+    };
+    const output = {
+      age: '12',
+      name: 'Molecule Man',
+      powers: {
+        Radiation12: 'resistukuance',
+        Turning: 'tiny',
+        Radiation: {
+          '12': 'abc',
+        },
+      },
+    };
+    expect(decodeKeysAndValues(input, variables)).toStrictEqual(output);
   });
 });

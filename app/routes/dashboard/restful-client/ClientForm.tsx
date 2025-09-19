@@ -9,15 +9,8 @@ import {
   payloadTypes,
   queryMethods,
 } from '~/routes/dashboard/restful-client/constants';
-import {
-  convertValues,
-  decodeKeysAndValues,
-  inlineJson,
-} from '~/routes/dashboard/restful-client/utils';
-import type {
-  ClientFormProps,
-  LocalVariables,
-} from '~/routes/dashboard/restful-client/types';
+
+import type { ClientFormProps } from '~/routes/dashboard/restful-client/types';
 import {
   Form,
   FormControl,
@@ -42,7 +35,7 @@ import { useEffect } from 'react';
 import { defaultLanguage } from '~/server/constants';
 
 export default function ClientForm(props: ClientFormProps) {
-  const { validateFormWithVariables, variables } = useVariablesValidator();
+  const { validateValues } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -57,28 +50,9 @@ export default function ClientForm(props: ClientFormProps) {
     form.reset({ ...props.newData, language: form.getValues('language') });
   }, [props.newData]);
 
-  const submitForm = (data: TRestfulSchema) => {
-    const variablesValidation = validateFormWithVariables(data);
-
-    if (!variablesValidation.isValid) {
-      Object.entries(variablesValidation.errors).forEach(([path, message]) => {
-        form.setError(path as keyof TRestfulSchema, { message });
-      });
-      return;
-    }
-
-    if (data.type === payloadTypes[1] && data.body) {
-      const decodedJson = decodeKeysAndValues(
-        JSON.parse(data.body),
-        variables as LocalVariables
-      );
-      form.setValue('body', inlineJson(JSON.stringify(decodedJson)));
-    }
-
-    const newValues = convertValues(
-      form.getValues(),
-      variables as LocalVariables
-    );
+  const submitForm = () => {
+    const newValues = validateValues(form);
+    if (!newValues) return;
     const updatedHeaders = newValues.header?.map((item) => ({ ...item })) || [];
     props.onSubmit({ ...newValues, header: updatedHeaders });
   };
@@ -191,7 +165,7 @@ export default function ClientForm(props: ClientFormProps) {
             />
           </article>
 
-          <CodeSnippet form={form} variables={variables as LocalVariables} />
+          <CodeSnippet form={form} />
         </section>
       </form>
     </Form>

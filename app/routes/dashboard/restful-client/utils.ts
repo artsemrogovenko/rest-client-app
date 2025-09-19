@@ -193,16 +193,25 @@ export function inlineJson(input: string | undefined) {
   return JSON.stringify(JSON.parse(input));
 }
 
-export function decodeKeysAndValues(data: object, variables: LocalVariables) {
-  const parseEntries = (obj: object): object =>
-    Object.fromEntries(
-      Object.entries(obj).map((field) => {
-        const key = ejectVariables(field[0], variables);
-        if (typeof field[1] === 'object') {
-          return [key, parseEntries(field[1])];
-        }
-        return [key, ejectVariables(field[1], variables)];
-      })
-    );
+export function decodeKeysAndValues(
+  data: object,
+  variables: Record<string, string>
+) {
+  const parseEntries = (value: object | string): object | string => {
+    if (typeof value === 'string') {
+      return ejectVariables(value, variables);
+    } else if (Array.isArray(value)) {
+      return value.map(parseEntries);
+    } else if (typeof value === 'object' && value !== null) {
+      return Object.fromEntries(
+        Object.entries(value).map(([k, v]) => [
+          ejectVariables(k, variables),
+          parseEntries(v),
+        ])
+      );
+    }
+    return value;
+  };
+
   return parseEntries(data);
 }
