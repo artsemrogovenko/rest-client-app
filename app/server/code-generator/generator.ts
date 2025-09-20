@@ -54,13 +54,13 @@ export async function action({ request }: ActionFunctionArgs) {
   const [language, variant] = parsed.language?.split('&') || ['', ''];
 
   const rawRequest: RequestType = {
-    content_type: parsed.type as string,
     headers: undefined,
     params: {
       method: parsed.method as string,
       encodedUrl: parsed.endpoint as string,
       encodedData: parsed.body,
     },
+    uuid: '',
   };
   const snippet = createSnippet(rawRequest, language, variant);
   return snippet ? snippet : '';

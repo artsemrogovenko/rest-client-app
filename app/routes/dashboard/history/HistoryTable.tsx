@@ -41,7 +41,6 @@ export default function HistoryTable() {
   const toClientForm = (log: RequestLog) => {
     const formFields = logToForm(log);
     const url = convertFormToUrl(formFields).slice(1);
-    console.log(url);
     navigate(link(url));
   };
 
