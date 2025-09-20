@@ -3,13 +3,19 @@ import { Button } from '../ui/button';
 import useAuth from '~/contexts/auth/useAuth';
 import SignOut from '~/routes/auth/sign-out';
 import { useEffect, useState } from 'react';
-import { EVENT_SCROLL, SCROLL_THRESHOLD } from './constant';
+import { SCROLL_THRESHOLD, EVENT_SCROLL } from './constant';
+import LanguageToggle from './lang-toggle/Lang-toggle';
+import { useTranslation } from 'react-i18next';
+import useLangNav from '~/hooks/langLink';
 
 const Header = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
+  const { link } = useLangNav();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    if (!window) return;
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
 
     window.addEventListener(EVENT_SCROLL, onScroll);
@@ -19,29 +25,26 @@ const Header = () => {
   return (
     <header className={`header ${scrolled ? 'scrolled' : ''}`}>
       <div className="h-10 w-10 bg-black bg-col flex items-center justify-center rounded-sm">
-        <Link to="/" className="font-semibold text-white">
+        <Link to={link('')} className="font-semibold text-white">
           H&H
         </Link>
       </div>
-
       <div className="flex items-center gap-2">
-        <Button variant="outline" className="cursor-pointer" size="sm">
-          EN/RU
-        </Button>
+        <LanguageToggle />
         {!user && (
           <>
-            <Button size="sm">
-              <Link to="/login">Sign In</Link>
+            <Button asChild>
+              <Link to={link('auth/login')}>{t('signIn')}</Link>
             </Button>
-            <Button size="sm">
-              <Link to="/register">Sign Up</Link>
+            <Button asChild>
+              <Link to={link('auth/register')}>{t('signUp')}</Link>
             </Button>
           </>
         )}
         {user && (
           <>
             <Button size="sm">
-              <Link to="/">Main Page</Link>
+              <Link to={link('')}>{t('main-page')}</Link>
             </Button>
             <SignOut />
           </>

@@ -9,8 +9,12 @@ import { Link, useNavigate } from 'react-router';
 import logToForm from '~/routes/dashboard/history/utils';
 import convertFormToUrl from '~/routes/dashboard/restful-client/utils';
 import { getAuth } from 'firebase/auth';
+import { useTranslation } from 'react-i18next';
+import useLangNav from '~/hooks/langLink';
 
 export default function HistoryTable() {
+  const { t } = useTranslation();
+  const { link } = useLangNav();
   const [logs, setLogs] = useState<RequestLog[]>([]);
   const navigate = useNavigate();
 
@@ -36,19 +40,18 @@ export default function HistoryTable() {
 
   const toClientForm = (log: RequestLog) => {
     const formFields = logToForm(log);
-    const url = convertFormToUrl(formFields);
-    navigate(url);
+    const url = convertFormToUrl(formFields).slice(1);
+    console.log(url);
+    navigate(link(url));
   };
 
   if (logs.length === 0) {
     return (
       <div className="flex flex-col justify-center items-center">
-        <p className="text-gray-600">
-          You haven&apos;t executed any requests yet
-        </p>
-        <p className="text-gray-600 mb-10">It&apos;s empty here. Try: </p>
+        <p className="text-gray-600">{t('no-history')}</p>
+        <p className="text-gray-600 mb-10">{t('empty-here')}</p>
         <Button asChild variant="outline">
-          <Link to="/client">REST Client</Link>
+          <Link to={link('client')}>{t('restClient')}</Link>
         </Button>
       </div>
     );
@@ -59,14 +62,14 @@ export default function HistoryTable() {
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-100">
           <tr>
-            <th className="border px-4 py-2 text-left">Timestamp</th>
-            <th className="border px-4 py-2 text-left">Method</th>
-            <th className="border px-4 py-2 text-left">Endpoint/URL</th>
-            <th className="border px-4 py-2 text-left">Status</th>
-            <th className="border px-4 py-2 text-left">Latency (ms)</th>
-            <th className="border px-2 py-1">Req Size</th>
-            <th className="border px-2 py-1">Res Size</th>
-            <th className="border px-2 py-1">Error</th>
+            <th className="border px-4 py-2 text-left">{t('timestamp')}</th>
+            <th className="border px-4 py-2 text-left">{t('method')}</th>
+            <th className="border px-4 py-2 text-left">{t('endpoint')}</th>
+            <th className="border px-4 py-2 text-left">{t('status')}</th>
+            <th className="border px-4 py-2 text-left">{t('latency')}</th>
+            <th className="border px-2 py-1">{t('req-size')}</th>
+            <th className="border px-2 py-1">{t('res-size')}</th>
+            <th className="border px-2 py-1">{t('tab-error')}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200">

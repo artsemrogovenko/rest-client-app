@@ -20,8 +20,12 @@ import { defaultLanguage } from '../restful-client/constants';
 import { useEffect } from 'react';
 import { useVariablesValidator } from '~/routes/dashboard/restful-client/hooks';
 import type { LocalVariables } from '../restful-client/types';
+import useLangNav from '~/hooks/langLink';
+import { useTranslation } from 'react-i18next';
 
 export default function CodeSnippet({ form }: CodeSnippetProps) {
+  const { link } = useLangNav();
+  const { t } = useTranslation();
   const { validateValues, variables } = useVariablesValidator();
 
   const {
@@ -55,7 +59,7 @@ export default function CodeSnippet({ form }: CodeSnippetProps) {
       );
       const formData = new FormData();
       formData.append('data', JSON.stringify(unpackedVariables));
-      const response = await fetch('/api/code', {
+      const response = await fetch(link('api/code'), {
         method: 'POST',
         body: formData,
       });
@@ -66,14 +70,14 @@ export default function CodeSnippet({ form }: CodeSnippetProps) {
 
   async function copyToClipboard() {
     await navigator.clipboard.writeText(String(form.getValues('snippet')));
-    toast.message('Snippet copied to clipboard');
+    toast.message(t('copied'));
   }
 
   return (
     <article className="flex flex-col gap-2 rounded-lg border p-5">
       <div className="flex items-end justify-between gap-y-2">
         <Button onClick={handleGenerate} type="button">
-          Generate snippet
+          {t('generate-code')}
         </Button>
         <FormField
           control={form.control}
@@ -81,7 +85,7 @@ export default function CodeSnippet({ form }: CodeSnippetProps) {
           name="language"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor={field.name}>Select language</FormLabel>
+              <FormLabel htmlFor={field.name}>{t('select-language')}</FormLabel>
               <FormControl>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger id={field.name} className="w-[240px]">
@@ -105,7 +109,7 @@ export default function CodeSnippet({ form }: CodeSnippetProps) {
           </pre>
           <Button type={'button'} onClick={copyToClipboard}>
             <Copy />
-            Copy code
+            {t('copy-code')}
           </Button>
         </div>
       )}

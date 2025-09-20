@@ -1,4 +1,5 @@
 'use client';
+import { useTranslation } from 'react-i18next';
 import ClientForm from '~/routes/dashboard/restful-client/ClientForm';
 import ResponseComponent from '~/routes/dashboard/restful-client/response/Response';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -15,8 +16,11 @@ import convertFormToUrl, {
 } from '~/routes/dashboard/restful-client/utils';
 import type { ReturnResponse } from '~/routes/dashboard/restful-client/types';
 import AuthContext from '~/contexts/auth/AuthContext';
+import useLangNav from '~/hooks/langLink';
 
 export default function RestfulClient() {
+  const { t } = useTranslation();
+  const { link } = useLangNav();
   const params = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -85,7 +89,7 @@ export default function RestfulClient() {
         },
         {
           method: 'post',
-          action: '/api/request',
+          action: link('api/request'),
         }
       );
     } catch {
@@ -100,12 +104,12 @@ export default function RestfulClient() {
     const newUrl = convertFormToUrl(data);
     hasSendForm.current = true;
     codeVariant.current = String(data.language);
-    navigate(newUrl, { replace: true });
+    navigate(link(newUrl.slice(1)), { replace: true });
   };
 
   return (
     <section className="flex flex-col size-full overflow-y-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <h2>Restful Client</h2>
+      <h2>{t('restClient')}</h2>
       <div className="flex align-center size-full gap-5 items-stretch content-start justify-center">
         <ClientForm
           initialData={{} as TRestfulSchema}

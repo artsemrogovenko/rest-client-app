@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import type { ReturnResponse } from '~/routes/dashboard/restful-client/types';
 
 export function StatusIndicator(props: ReturnResponse) {
+  const { t } = useTranslation();
   const { response } = props;
   const status = response?.status;
   const text = response?.statusText;
@@ -23,7 +25,7 @@ export function StatusIndicator(props: ReturnResponse) {
 
   return (
     <pre className="rounded-lg border p-2">
-      Status: {status ? status : 'N/a'}{' '}
+      {t('status')} {status ? status : 'N/a'}{' '}
       {text && <span className={getStatusColor()}>{response?.statusText}</span>}
     </pre>
   );

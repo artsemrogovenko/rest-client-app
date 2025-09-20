@@ -1,12 +1,14 @@
 import type { ResponseComponentProps } from '~/routes/dashboard/restful-client/types';
 import { StatusIndicator } from '~/routes/dashboard/restful-client/response/ResponseIndicator';
 import ResponseSkeleton from '~/routes/dashboard/restful-client/response/ResponseSkeleton';
+import { useTranslation } from 'react-i18next';
 
 export default function ResponseComponent({
   isLoading,
   response,
   error,
 }: ResponseComponentProps) {
+  const { t } = useTranslation();
   const isDocument = () => {
     if (!response || !response.body) return null;
 
@@ -19,7 +21,6 @@ export default function ResponseComponent({
             srcDoc={body}
             title="response document"
             className="w-full h-[70vh]"
-            // sandbox="allow-scripts allow-forms allow-popups allow-modals"
           />
         );
       }
@@ -51,7 +52,7 @@ export default function ResponseComponent({
 
   return (
     <aside className="flex flex-col gap-2 rounded-lg border min-w-[450px] w-1/2 flex-1 p-5 h-fit">
-      <h3>Response</h3>
+      <h3>{t('response')}</h3>
       <div className="flex flex-col gap-2 rounded-lg border p-2">
         <StatusIndicator response={response} error={error} />
         {isLoading ? <ResponseSkeleton /> : resultContainer()}

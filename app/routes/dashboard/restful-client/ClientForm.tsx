@@ -31,10 +31,12 @@ import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
+import { useTranslation } from 'react-i18next';
 import CodeSnippet from '../snippet/CodeSnippet';
 import { useEffect } from 'react';
 
 export default function ClientForm(props: ClientFormProps) {
+  const { t } = useTranslation();
   const { validateValues } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
@@ -71,11 +73,13 @@ export default function ClientForm(props: ClientFormProps) {
               defaultValue={queryMethods[0]}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor={field.name}>Query method</FormLabel>
+                  <FormLabel htmlFor={field.name}>
+                    {t('query-method')}
+                  </FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger id={field.name} className="w-[100px]">
-                        <SelectValue placeholder="Method" />
+                        <SelectValue placeholder={t('query-method')} />
                       </SelectTrigger>
                       <SelectContent>
                         {queryMethods.map((method) => (
@@ -95,7 +99,7 @@ export default function ClientForm(props: ClientFormProps) {
                 name="endpoint"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor={field.name}>Endpoint</FormLabel>
+                    <FormLabel htmlFor={field.name}>{t('endpoint')}</FormLabel>
                     <FormMessage />
                     <FormControl>
                       <Input id={field.name} {...field} />
@@ -106,10 +110,10 @@ export default function ClientForm(props: ClientFormProps) {
             </div>
             <Button
               type="submit"
-              className={`uppercase  ${props.isSubmitting && 'opacity-20 '}`}
+              className={`${props.isSubmitting && 'opacity-20 '}`}
               disabled={props.isLoading}
             >
-              send
+              {t('send')}
             </Button>
           </div>
           <FormField
@@ -123,32 +127,36 @@ export default function ClientForm(props: ClientFormProps) {
           />
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="inline-flex items-end justify-between">
-              <h3>Body</h3>
-
-              <FormField
-                control={form.control}
-                name="type"
-                defaultValue={payloadTypes[0]}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={field.name}>Type payload</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger id={field.name} className="w-[100px]">
-                          <SelectValue placeholder="Payload" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={payloadTypes[0]}>TEXT</SelectItem>
-                          <SelectItem value={payloadTypes[1]}>JSON</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <h3>{t('body')}</h3>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="type"
+                  defaultValue={payloadTypes[0]}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor={field.name}>
+                        {t('type-payload')}
+                      </FormLabel>
+                      <FormControl>
+                        <Select value={field.value}>
+                          <SelectTrigger id={field.name} className="w-[100px]">
+                            <SelectValue placeholder={t('type-payload')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={payloadTypes[0]}>
+                              TEXT
+                            </SelectItem>
+                            <SelectItem value={payloadTypes[1]}>
+                              JSON
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <FormField
