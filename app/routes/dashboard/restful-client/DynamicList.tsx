@@ -10,6 +10,7 @@ import {
   FormItem,
   FormMessage,
 } from '~/components/ui/form';
+import { useTranslation } from 'react-i18next';
 
 export default function DynamicList({ role, control }: DynamicListProps) {
   const { fields, append, remove } = useFieldArray({
@@ -19,19 +20,20 @@ export default function DynamicList({ role, control }: DynamicListProps) {
       minLength: 1,
     },
   });
+  const { t } = useTranslation();
 
   return (
     <article className="flex flex-col gap-2 rounded-lg border md:-mx-1 p-5">
       <div className="flex items-center gap-2 justify-between">
-        <h4 className="capitalize">{`${role}s`}</h4>
+        <h4 className="capitalize">{t(`${role}`)}</h4>
         <Button onClick={() => append({ name: '', value: '' })} type={'button'}>
-          Add {role}
+          {t('add')}
         </Button>
       </div>
 
       <ul className="flex flex-col gap-2">
         {fields.map((line, index) => (
-          <li className="flex gap-2 items-end " key={line.id}>
+          <li className="flex gap-2 items-end" key={line.id}>
             <FormField
               name={`${role}.${index}.name`}
               control={control}
@@ -41,7 +43,7 @@ export default function DynamicList({ role, control }: DynamicListProps) {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="name"
+                      placeholder={t('name')}
                       id={`${role}-${index}-name`}
                       className=" w-full"
                     />
@@ -58,7 +60,7 @@ export default function DynamicList({ role, control }: DynamicListProps) {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="value"
+                      placeholder={t('value')}
                       id={`${role}-${index}-value`}
                       className=" w-full"
                     />

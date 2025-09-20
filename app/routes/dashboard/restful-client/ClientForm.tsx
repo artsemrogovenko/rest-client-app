@@ -6,12 +6,12 @@ import {
 } from '~/routes/dashboard/restful-client/validate';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  languageCode,
   payloadTypes,
   queryMethods,
 } from '~/routes/dashboard/restful-client/constants';
-import { convertValues } from '~/routes/dashboard/restful-client/utils';
-import type { LocalVariables } from '~/routes/dashboard/restful-client/types';
+import { defaultLanguage } from '../restful-client/constants';
+
+import type { ClientFormProps } from '~/routes/dashboard/restful-client/types';
 import {
   Form,
   FormControl,
@@ -31,31 +31,32 @@ import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import DynamicList from '~/routes/dashboard/restful-client/DynamicList';
 import { Textarea } from '~/components/ui/textarea';
-import { Copy } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import CodeSnippet from '../snippet/CodeSnippet';
+import { useEffect } from 'react';
 
-export default function ClientForm() {
-  const { validateFormWithVariables, variables } = useVariablesValidator();
+export default function ClientForm(props: ClientFormProps) {
+  const { t } = useTranslation();
+  const { validateValues } = useVariablesValidator();
   const form = useForm<TRestfulSchema>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
       endpoint: '',
       method: queryMethods[0],
       header: [],
+      language: defaultLanguage,
     },
   });
-  const submitForm = (data: TRestfulSchema) => {
-    const variablesValidation = validateFormWithVariables(data);
+  useEffect(() => {
+    form.clearErrors();
+    form.reset({ ...props.newData, language: form.getValues('language') });
+  }, [props.newData]);
 
-    if (!variablesValidation.isValid) {
-      Object.entries(variablesValidation.errors).forEach(([path, message]) => {
-        form.setError(path as keyof TRestfulSchema, { message });
-      });
-      return;
-    }
-
-    const newValues = convertValues(data, variables as LocalVariables);
+  const submitForm = () => {
+    const newValues = validateValues(form);
+    if (!newValues) return;
     const updatedHeaders = newValues.header?.map((item) => ({ ...item })) || [];
-    form.reset({ ...newValues, header: updatedHeaders });
+    props.onSubmit({ ...newValues, header: updatedHeaders });
   };
 
   return (
@@ -66,21 +67,19 @@ export default function ClientForm() {
       >
         <section className="flex flex-col gap-2 rounded-lg border p-5">
           <div className="flex gap-2 w-full items-end">
-
             <FormField
               control={form.control}
               name="method"
               defaultValue={queryMethods[0]}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor={field.name}>Query method</FormLabel>
+                  <FormLabel htmlFor={field.name}>
+                    {t('query-method')}
+                  </FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger id={field.name} className="w-[100px]">
-                        <SelectValue placeholder="Method" />
+                        <SelectValue placeholder={t('query-method')} />
                       </SelectTrigger>
                       <SelectContent>
                         {queryMethods.map((method) => (
@@ -100,7 +99,7 @@ export default function ClientForm() {
                 name="endpoint"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel htmlFor={field.name}>Endpoint</FormLabel>
+                    <FormLabel htmlFor={field.name}>{t('endpoint')}</FormLabel>
                     <FormMessage />
                     <FormControl>
                       <Input id={field.name} {...field} />
@@ -109,8 +108,12 @@ export default function ClientForm() {
                 )}
               />
             </div>
-            <Button type="submit" className="uppercase">
-              send
+            <Button
+              type="submit"
+              className={`${props.isSubmitting && 'opacity-20 '}`}
+              disabled={props.isLoading}
+            >
+              {t('send')}
             </Button>
           </div>
           <FormField
@@ -124,19 +127,21 @@ export default function ClientForm() {
           />
           <article className="flex flex-col gap-2 rounded-lg border p-5">
             <div className="inline-flex items-end justify-between">
-              <h3>Body</h3>
-              
+              <h3>{t('body')}</h3>
+              <div>
                 <FormField
                   control={form.control}
                   name="type"
                   defaultValue={payloadTypes[0]}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor={field.name}>Type payload</FormLabel>
+                      <FormLabel htmlFor={field.name}>
+                        {t('type-payload')}
+                      </FormLabel>
                       <FormControl>
                         <Select value={field.value}>
                           <SelectTrigger id={field.name} className="w-[100px]">
-                            <SelectValue placeholder="Payload" />
+                            <SelectValue placeholder={t('type-payload')} />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value={payloadTypes[0]}>
@@ -151,7 +156,7 @@ export default function ClientForm() {
                     </FormItem>
                   )}
                 />
-              
+              </div>
             </div>
 
             <FormField
@@ -168,49 +173,7 @@ export default function ClientForm() {
             />
           </article>
 
-          <article className="flex flex-col gap-2 rounded-lg border p-5">
-            <div className="flex items-end justify-between gap-y-2">
-              <h3>Generated code</h3>
-              
-                <FormField
-                  control={form.control}
-                  name="language"
-                  defaultValue={languageCode[0]}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor={field.name}>
-                        Select language
-                      </FormLabel>
-                      <FormControl>
-                        <Select
-                          defaultValue={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger id={field.name} className="w-[120px]">
-                            <SelectValue placeholder="Language" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {languageCode.map((method) => (
-                              <SelectItem value={method} key={method}>
-                                {method}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-            </div>
-
-            <div className="flex flex-col w-full gap-2 rounded-lg border p-2">
-              <span className="break-all">Code</span>
-              <Button>
-                <Copy />
-                Copy code
-              </Button>
-            </div>
-          </article>
+          <CodeSnippet form={form} />
         </section>
       </form>
     </Form>

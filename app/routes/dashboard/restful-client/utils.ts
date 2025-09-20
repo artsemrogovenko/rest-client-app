@@ -1,5 +1,10 @@
 import { type TRestfulSchema } from './validate';
-import type { LocalVariables } from './types';
+import type { LocalVariables, PairFields } from './types';
+import {
+  HEADER_BODY_TYPE,
+  payloadTypes,
+  RESTFUL_CLIENT_PATH,
+} from '~/routes/dashboard/restful-client/constants';
 
 export function deleteBrackets(value: string) {
   return value.replace(/\{\{|}}/g, '');
@@ -100,8 +105,113 @@ export function convertValues(data: TRestfulSchema, variables: LocalVariables) {
   if (cloned.body) cloned.body = ejectVariables(cloned.body, variables);
   if (cloned.header) {
     cloned.header = cloned.header.map((line) => {
-      return { name: line.name, value: ejectVariables(line.value, variables) };
+      return {
+        name: ejectVariables(line.name, variables),
+        value: ejectVariables(line.value, variables),
+      };
     });
   }
   return cloned;
+}
+
+export default function convertFormToUrl(data: TRestfulSchema): string {
+  const method = RESTFUL_CLIENT_PATH + data.method;
+  const endpoint = toBase64(String(data.endpoint));
+  const body = data.body ? `/${toBase64(data.body)}` : '';
+  let headers = '';
+  if (data.header?.length) {
+    headers = data.header?.reduce((acc, value, index, array) => {
+      acc += `${toBase64(value.name)}=${toBase64(value.value)}`;
+      if (index !== array.length - 1) acc += '&';
+      return acc;
+    }, '=?');
+  }
+  if (data.body) {
+    headers += !data.header?.length ? '=?' : '&';
+    headers += `${toBase64(HEADER_BODY_TYPE)}=${toBase64(String(data.type))}`;
+  }
+  return `${method}/${endpoint}${body}${headers}`;
+}
+
+export function toBase64(str: string) {
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+export function fromBase64(str: string) {
+  try {
+    return atob(str.replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, ''));
+  } catch {
+    return '';
+  }
+}
+
+export function convertUrlToForm(
+  method: string | undefined,
+  encodedUrl: string | undefined,
+  encodedData: string | undefined,
+  searchParams: URLSearchParams
+): TRestfulSchema {
+  const formData: TRestfulSchema = {
+    body: undefined,
+    endpoint: undefined,
+    header: undefined,
+    method: method,
+    type: payloadTypes[0],
+  };
+  if (encodedUrl) formData.endpoint = fromBase64(encodedUrl);
+  if (encodedData) formData.body = fromBase64(encodedData);
+  if (searchParams) {
+    const bodyTypes: Array<PairFields> = [];
+    let headers = Array.from(searchParams.entries()).map((header) => {
+      const key = fromBase64(header[0]);
+      const value = fromBase64(header[1]);
+      const result = { name: key, value: value };
+      if (key.toLowerCase() === HEADER_BODY_TYPE.toLowerCase()) {
+        if (typeof value !== 'undefined') {
+          formData.type = value;
+        }
+        bodyTypes.push(result);
+      }
+      return result;
+    });
+    if (bodyTypes.length) {
+      bodyTypes.forEach((type) => {
+        headers = headers.filter(
+          (header) => JSON.stringify(header) !== JSON.stringify(type)
+        );
+      });
+    }
+    formData.header = headers;
+  }
+  return formData;
+}
+
+export function inlineJson(input: string | undefined) {
+  if (!input || typeof input !== 'string') {
+    throw new Error('String is empty');
+  }
+  return JSON.stringify(JSON.parse(input));
+}
+
+export function decodeKeysAndValues(
+  data: object,
+  variables: Record<string, string>
+) {
+  const parseEntries = (value: object | string): object | string => {
+    if (typeof value === 'string') {
+      return ejectVariables(value, variables);
+    } else if (Array.isArray(value)) {
+      return value.map(parseEntries);
+    } else if (typeof value === 'object' && value !== null) {
+      return Object.fromEntries(
+        Object.entries(value).map(([k, v]) => [
+          ejectVariables(k, variables),
+          parseEntries(v),
+        ])
+      );
+    }
+    return value;
+  };
+
+  return parseEntries(data);
 }

@@ -1,16 +1,18 @@
+import { useTranslation } from 'react-i18next';
+
 const Footer = () => {
+  const { t } = useTranslation();
   return (
     <footer className="footer">
-
       <div className="flex items-center justify-center gap-3">
-        <p className="font-bold">Developed by:</p>
+        <p className="font-bold">{t('developed')}</p>
         <a
           href="https://github.com/artsemrogovenko"
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-gray-300"
         >
-          Artsem Rahavenka
+          {t('artsemrogovenko')}
         </a>
         <a
           href="https://github.com/vsv-noon"
@@ -18,7 +20,7 @@ const Footer = () => {
           rel="noopener noreferrer"
           className="hover:text-gray-300"
         >
-          Viacheslav Anisimov
+          {t('vsv-noon')}
         </a>
         <a
           href="https://github.com/christopher-0118"
@@ -26,7 +28,7 @@ const Footer = () => {
           rel="noopener noreferrer"
           className="hover:text-gray-300"
         >
-          Kristina Karantsevich
+          {t('christopher-0118')}
         </a>
       </div>
       <p>2025</p>

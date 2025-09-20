@@ -1,11 +1,5 @@
-import HistoryTable from './HistoryTable'
-
+import HistoryTable from './HistoryTable';
 
 export default function History() {
-  
-  return (
-    <>
-    <HistoryTable />
-    </>
-  )
+  return <HistoryTable />;
 }
