@@ -18,7 +18,7 @@ describe('SignIn Component', () => {
 
   it('renders form inputs and button', () => {
     renderWithRouter();
-    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/e-mail/i)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/confirm password/i)
     ).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe('SignIn Component', () => {
     renderWithRouter();
     expect(screen.getByRole('link', { name: /sign in/i })).toHaveAttribute(
       'href',
-      '/login'
+      '/en/auth/login'
     );
   });
 });

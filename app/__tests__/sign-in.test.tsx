@@ -18,7 +18,7 @@ describe('SignIn Component', () => {
 
   it('renders form inputs and button', () => {
     renderWithRouter();
-    expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/e-mail/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /sign in/i })
@@ -29,7 +29,7 @@ describe('SignIn Component', () => {
     renderWithRouter();
     expect(screen.getByRole('link', { name: /sign up/i })).toHaveAttribute(
       'href',
-      '/register'
+      '/en/auth/register'
     );
   });
 });

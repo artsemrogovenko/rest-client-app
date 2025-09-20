@@ -56,7 +56,7 @@ describe('SignOut Component', () => {
 
     await waitFor(() => {
       expect(signOut).toHaveBeenCalledWith({});
-      expect(mockNavigate).toHaveBeenCalledWith('/');
+      expect(mockNavigate).toHaveBeenCalledWith('/en/');
     });
   });
 });
