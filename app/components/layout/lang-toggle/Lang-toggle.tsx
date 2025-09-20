@@ -8,7 +8,12 @@ const LanguageToggle = () => {
   const nextLang = currentLang === 'en' ? 'ru' : 'en';
 
   return (
-    <Button variant="outline" size="sm" onClick={() => switchLang(nextLang)}>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => switchLang(nextLang)}
+      className="cursor-pointer"
+    >
       {t(currentLang)}
     </Button>
   );
