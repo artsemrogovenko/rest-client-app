@@ -34,7 +34,7 @@ async function fetchRequest(
   if (options.body) logData.requestBody = options.body;
   if (options.headers)
     logData.requestHeaders = Object.fromEntries(options.headers?.entries());
-  console.log(typeof window);
+
   const startTask = Date.now();
   return await fetch(encodedUrl, options)
     .then(async (data) => {
@@ -61,7 +61,6 @@ async function fetchRequest(
       };
     })
     .catch((error) => {
-      console.log('line 63', error);
       logData = {
         ...logData,
         statusCode: 0,
