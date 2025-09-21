@@ -12,12 +12,12 @@ interface ValidationResult {
 describe('validateCommitMessage', (): void => {
   describe('Valid commit messages', (): void => {
     const validCases = [
-      'feat(KAN123): add new feature',
+      'feat(KAN123): add new feature Footer',
       'fix(KAN42): resolve login issue',
       'refactor(KAN7): improve code structure',
       'docs(KAN15): update documentation',
-      'style(KAN99): format code',
-      'chore(KAN3): update dependencies',
+      'style(KAN99): format code in Header',
+      "chore(KAN3): update 'dependencies':/. ",
       'test(KAN67): add unit tests',
       'test(KAN-107): add hooks',
     ];
