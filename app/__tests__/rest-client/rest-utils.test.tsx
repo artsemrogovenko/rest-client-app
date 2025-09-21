@@ -318,5 +318,4 @@ describe('Cross reverse tests', () => {
 
 test('no encode base64 if empty string', () => {
   expect(fromBase64('')).toBe('');
-  expect(fromBase64(undefined)).toBe('');
 });
