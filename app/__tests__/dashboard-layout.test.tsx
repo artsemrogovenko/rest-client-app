@@ -1,12 +1,11 @@
 import '@testing-library/jest-dom';
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
-import { BrowserRouter } from "react-router";
-import DashboardLayout from "~/routes/dashboard/dashboard-layout";
-import type { User } from "firebase/auth";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, cleanup } from '@testing-library/react';
+import { BrowserRouter } from 'react-router';
+import DashboardLayout from '~/routes/dashboard/dashboard-layout';
 
 const mockNavigate = vi.fn();
-vi.mock("react-router", async (importOriginal) => {
+vi.mock('react-router', async (importOriginal) => {
   const actual: Record<string, unknown> = await importOriginal();
   return {
     ...actual,
@@ -15,7 +14,7 @@ vi.mock("react-router", async (importOriginal) => {
   };
 });
 
-describe("DashboardLayout", () => {
+describe('DashboardLayout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     cleanup();
@@ -28,8 +27,8 @@ describe("DashboardLayout", () => {
       </BrowserRouter>
     );
 
-  it("renders Outlet content", () => {
+  it('renders Outlet content', () => {
     renderWithRouter();
-    expect(screen.getByTestId("outlet")).toBeInTheDocument();
-  });  
+    expect(screen.getByTestId('outlet')).toBeInTheDocument();
+  });
 });

@@ -25,8 +25,20 @@ import type { Mock } from 'vitest';
 let onAuthStateChanged: Mock;
 let unsubscribeMock: Mock;
 
+type FirebaseConfigMock = {
+  auth: {
+    onAuthStateChanged: Mock;
+  };
+  __mock: {
+    onAuthStateChanged: Mock;
+    unsubscribeMock: Mock;
+  };
+};
+
 beforeAll(async () => {
-  const mod = await vi.importMock<any>('~/firebase/firebaseConfig');
+  const mod = await vi.importMock<FirebaseConfigMock>(
+    '~/firebase/firebaseConfig'
+  );
   onAuthStateChanged = mod.__mock.onAuthStateChanged;
   unsubscribeMock = mod.__mock.unsubscribeMock;
 });
