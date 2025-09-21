@@ -7,9 +7,13 @@ export type RequestLog = {
   requestSize: number;
   responseHeaders?: Record<string, string>;
   responseBody?: string;
-  responseSize: number;
+  responseSize?: number;
   statusCode?: number;
   duration?: number;
   timestamp: string;
   error?: string;
+};
+
+export type HistoryTableProps = {
+  logs: RequestLog[];
 };

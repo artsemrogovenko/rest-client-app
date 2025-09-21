@@ -14,8 +14,7 @@ const commitSchema = z.object({
   subject: z
     .string()
     .min(1)
-    .refine((val) => !val.endsWith('.'))
-    .refine((val) => val === val.toLowerCase()),
+    .refine((val) => !val.endsWith('.')),
 });
 
 export function validateCommitMessage(message) {

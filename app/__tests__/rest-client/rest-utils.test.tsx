@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import {
+import convertFormToUrl, {
   collectVariables,
   collectVariablesNames,
   convertValues,
@@ -11,7 +11,9 @@ import {
   inlineJson,
   toBase64,
   decodeKeysAndValues,
+  convertUrlToForm,
 } from '~/routes/dashboard/restful-client/utils';
+import { HEADER_BODY_TYPE } from '~/routes/dashboard/restful-client/constants';
 
 const storageList = {
   '{{pseudo2}}': '1',
@@ -271,4 +273,50 @@ describe('replace local environments in object', () => {
     };
     expect(decodeKeysAndValues(input, variables)).toStrictEqual(output);
   });
+});
+
+describe('Cross reverse tests', () => {
+  const formObject = {
+    body: 'hello world',
+    endpoint: 'https://memi.klev.club/uploads/',
+    header: [
+      {
+        name: 'sample',
+        value: 'value',
+      },
+      {
+        name: 'header2',
+        value: 'value2',
+      },
+    ],
+    method: 'POST',
+    type: 'text/plain; charset=utf-8',
+  };
+  const searchParams = new URLSearchParams();
+  beforeAll(() => {
+    formObject.header.forEach((header) =>
+      searchParams.set(toBase64(header.name), toBase64(header.value))
+    );
+    searchParams.set(toBase64(HEADER_BODY_TYPE), toBase64(formObject.type));
+  });
+
+  test('Cross transform form-> url-> form', () => {
+    const encodedUrl = convertFormToUrl(formObject);
+
+    const decodedObject = convertUrlToForm(
+      formObject.method,
+      toBase64(formObject.endpoint),
+      toBase64(formObject.body),
+      searchParams
+    );
+
+    expect(encodedUrl).toBeTypeOf('string');
+    expect(decodedObject).toBeTypeOf('object');
+    expect(decodedObject).toEqual(formObject);
+  });
+});
+
+test('no encode base64 if empty string', () => {
+  expect(fromBase64('')).toBe('');
+  expect(fromBase64(undefined)).toBe('');
 });

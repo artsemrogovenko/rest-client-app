@@ -11,17 +11,26 @@ export default function AuthProvider({
 }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
-      setUser(
-        user
-          ? {
-              displayName: user.displayName,
-              email: user.email,
-              uid: user.uid,
-            }
-          : null
-      );
-    });
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      async (fbUser: User | null) => {
+        if (fbUser) {
+          const token = await fbUser.getIdToken();
+          document.cookie = `token=${token}; path=/`;
+        } else {
+          document.cookie = 'token=; Max-Age=0';
+        }
+        setUser(
+          fbUser
+            ? {
+                displayName: fbUser.displayName,
+                email: fbUser.email,
+                uid: fbUser.uid,
+              }
+            : null
+        );
+      }
+    );
     return () => unsubscribe();
   }, []);
 
