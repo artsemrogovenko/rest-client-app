@@ -1,8 +1,4 @@
-import {
-  cleanup,
-  screen,
-  render,
-} from '@testing-library/react';
+import { cleanup, screen, render } from '@testing-library/react';
 import Variables from '~/routes/dashboard/variables/Variables';
 import AuthProvider from '~/contexts/auth/authProvider';
 import type { AuthUser } from '~/contexts/auth/types';

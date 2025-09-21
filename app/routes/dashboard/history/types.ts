@@ -13,3 +13,7 @@ export type RequestLog = {
   timestamp: string;
   error?: string;
 };
+
+export type HistoryTableProps = {
+  logs: RequestLog[];
+};
