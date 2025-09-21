@@ -49,23 +49,22 @@ export default function CodeSnippet({ form }: CodeSnippetProps) {
       'language',
     ]);
     validateValues(form);
-    if (noErrors) generateSnippet();
+    if (!noErrors) return;
+    generateSnippet();
   };
   const generateSnippet = async () => {
-    if (isValid) {
-      const unpackedVariables = convertValues(
-        getValues(),
-        variables as LocalVariables
-      );
-      const formData = new FormData();
-      formData.append('data', JSON.stringify(unpackedVariables));
-      const response = await fetch(link('api/code'), {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await response.text();
-      form.setValue('snippet', result);
-    }
+    const unpackedVariables = convertValues(
+      getValues(),
+      variables as LocalVariables
+    );
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(unpackedVariables));
+    const response = await fetch(link('api/code'), {
+      method: 'POST',
+      body: formData,
+    });
+    const result = await response.text();
+    form.setValue('snippet', result);
   };
 
   async function copyToClipboard() {

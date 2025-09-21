@@ -45,6 +45,8 @@ export default defineConfig({
         'app/**/*.d.ts',
         'app/components/ui',
         '**/*.browser.test.{js,jsx,ts,tsx}',
+        'app/root.tsx',
+        'app/routes.ts',
       ],
       thresholds: {
         statements: 80,
