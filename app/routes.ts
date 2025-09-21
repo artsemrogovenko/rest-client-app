@@ -22,9 +22,9 @@ export default [
         route('dashboard', 'routes/dashboard/dashboard.tsx'),
         route(
           `${RESTFUL_CLIENT_PATH}:method?/:encodedUrl?/:encodedData?`,
-          'routes/dashboard/restful-client/RestfulClient.tsx'
+          'routes/dashboard/restful-client/RestfulClientLazy.tsx'
         ),
-        route('/variables', 'routes/dashboard/variables/Variables.tsx'),
+        route('/variables', 'routes/dashboard/variables/VariablesLazy.tsx'),
         route('api/request', 'server/request.ts'),
         route('api/code', 'server/code-generator/generator.ts'),
         route('history', 'routes/dashboard/history/history.tsx'),
