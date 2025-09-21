@@ -4,8 +4,6 @@ import type { RequestType } from '~/routes/dashboard/restful-client/types';
 import { type ActionFunctionArgs } from 'react-router';
 import type { TRestfulSchema } from '~/routes/dashboard/restful-client/validate';
 
-const { Request } = sdk;
-
 const indentType: 'Space' | 'Tab' = 'Space';
 
 export function createSnippet(
@@ -20,13 +18,12 @@ export function createSnippet(
     followRedirect: true,
   };
   const headers = request.headers
-    ? Object.entries(request.headers).map(([key, value]) => ({
-        key,
-        value,
-      }))
+    ? Object.entries(request.headers).map(([key, value]) => {
+        return new sdk.Header({ key: key, value: value });
+      })
     : [];
 
-  const req = new Request({
+  const req = new sdk.Request({
     url: request.params.encodedUrl,
     method: request.params.method || 'GET',
     header: headers,
@@ -54,14 +51,22 @@ export async function action({ request }: ActionFunctionArgs) {
   const [language, variant] = parsed.language?.split('&') || ['', ''];
 
   const rawRequest: RequestType = {
-    content_type: parsed.type as string,
     headers: undefined,
     params: {
       method: parsed.method as string,
       encodedUrl: parsed.endpoint as string,
       encodedData: parsed.body,
     },
+    uuid: '',
   };
+  rawRequest.headers = parsed.header
+    ? Object.fromEntries(
+        Object.values(parsed.header).map((header) => [
+          header.name,
+          header.value,
+        ])
+      )
+    : undefined;
   const snippet = createSnippet(rawRequest, language, variant);
   return snippet ? snippet : '';
 }

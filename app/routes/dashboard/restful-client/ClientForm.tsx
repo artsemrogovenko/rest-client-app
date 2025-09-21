@@ -139,7 +139,10 @@ export default function ClientForm(props: ClientFormProps) {
                         {t('type-payload')}
                       </FormLabel>
                       <FormControl>
-                        <Select value={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
                           <SelectTrigger id={field.name} className="w-[100px]">
                             <SelectValue placeholder={t('type-payload')} />
                           </SelectTrigger>

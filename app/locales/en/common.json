@@ -1,6 +1,7 @@
 {
   "welcome": "Welcome!",
   "welcomeBack": "Welcome Back, ",
+  "greeting": "This project was created as part of the RS School React Course. Here you can try out a simple REST Client — make requests, test APIs, and explore how web applications interact with servers. Our team worked together to design and implement the app, practicing real-world development workflow with Git, React Router 7, Firebase, and modern tools. Check the footer for links to the developers’ GitHub profiles and the official course page.",
   "signIn": "Sign In",
   "signUp": "Sign Up",
   "signOut": "Sign Out",

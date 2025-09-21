@@ -5,10 +5,16 @@ import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import autoprefixer from 'autoprefixer';
 import path from 'path';
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(),process.env.VITEST ? [] : reactRouter(), tsconfigPaths()],
+  plugins: [
+    tailwindcss(),
+    process.env.VITEST ? [] : reactRouter(),
+    tsconfigPaths(),
+    viteCommonjs(),
+  ],
   server: {
     open: '/',
     hmr: true,
@@ -23,10 +29,12 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['@react-router/dev', 'app/routes/home.tsx', 'app/components/ui'],
+    exclude: ['@react-router/dev', 'app/components/ui'],
+    include: ['postman-collection'],
   },
   test: {
     exclude: ['node_modules'],
+    setupFiles: './app/__tests__/setupTests.ts',
     coverage: {
       provider: 'v8',
       include: ['app/**/*.{js,jsx,ts,tsx}'],
@@ -36,6 +44,7 @@ export default defineConfig({
         'app/setupTests.{js,ts}',
         'app/**/*.d.ts',
         'app/components/ui',
+        '**/*.browser.test.{js,jsx,ts,tsx}',
       ],
       thresholds: {
         statements: 80,
