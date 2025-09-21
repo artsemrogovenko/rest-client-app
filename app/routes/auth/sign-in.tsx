@@ -16,10 +16,8 @@ import { signInFormSchema } from './validationSchema';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '~/firebase/firebaseConfig';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import useLangNav from '~/hooks/langLink';
 import { useTranslation } from 'react-i18next';
-import useErrorMessage from '~/firebase/firebase-error-messages';
 
 export default function SignIn() {
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -32,7 +30,6 @@ export default function SignIn() {
   });
   const { link } = useLangNav();
   const { t } = useTranslation();
-  const getErrorMessage = useErrorMessage();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
@@ -41,8 +38,7 @@ export default function SignIn() {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       navigate(link(''));
     } catch {
-      setError(getErrorMessage('auth/wrong-password-or-email'));
-      toast.error(error);
+      setError(t('error.auth/wrong-password-or-email'));
     }
   }
 

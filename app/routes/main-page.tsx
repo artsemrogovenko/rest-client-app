@@ -45,6 +45,8 @@ const MainPage = () => {
           </div>
         </>
       )}
+
+      <p>{t('greeting')}</p>
     </div>
   );
 };
