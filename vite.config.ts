@@ -8,7 +8,11 @@ import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(),process.env.VITEST ? [] : reactRouter(), tsconfigPaths()],
+  plugins: [
+    tailwindcss(),
+    process.env.VITEST ? [] : reactRouter(),
+    tsconfigPaths(),
+  ],
   server: {
     open: '/',
     hmr: true,
