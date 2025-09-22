@@ -2,6 +2,7 @@ import ResponseComponent from '~/routes/dashboard/restful-client/response/Respon
 import { beforeEach, describe, vi, test } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import type { ResponseResult } from '~/routes/dashboard/restful-client/types';
 
 const mockUseAuth = vi.fn();
 vi.mock('~/contexts/auth/useAuth.ts', () => ({
@@ -97,7 +98,7 @@ describe('ResponseComponent', () => {
   test('should handle undefined response body', () => {
     const response = {
       status: 200,
-      body: undefined,
+      body: '',
       statusText: 'OK',
     };
 
