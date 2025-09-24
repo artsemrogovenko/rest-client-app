@@ -16,10 +16,11 @@ i18n
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     detection: {
-      order: ['path', 'localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage'],
+      order: ['htmlTag'],
+      caches: ['localStorage', 'cookie'],
       lookupFromPathIndex: 1,
     },
+    debug: true,
     react: { useSuspense: true },
   });
 

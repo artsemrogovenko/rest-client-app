@@ -6,9 +6,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'react-router';
-
+import { useEffect } from 'react';
 import type { Route } from './+types/root';
 import './app.css';
+import { useTranslation } from 'react-i18next';
+import useLangNav from '~/hooks/langLink';
+import { DEFAULT_LOCALE } from '~/i18n/config';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -24,8 +27,17 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { i18n } = useTranslation();
+  const { currentLang } = useLangNav();
+
+  useEffect(() => {
+    if (i18n.language !== currentLang) {
+      i18n.changeLanguage(currentLang);
+    }
+  }, [currentLang, i18n]);
+
   return (
-    <html lang="en">
+    <html lang={currentLang || DEFAULT_LOCALE}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

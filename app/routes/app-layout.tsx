@@ -5,16 +5,18 @@ import Footer from '~/components/layout/Footer';
 import AuthProvider from '~/contexts/auth/authProvider';
 import { Toaster } from '~/components/ui/sonner';
 import { Suspense, useEffect } from 'react';
-import { DEFAULT_LOCALE, isLocale } from '~/i18n/config';
-import i18n from '~/i18n';
+import { useTranslation } from 'react-i18next';
 
 const AppLayout = () => {
   const { lang } = useParams();
-  const locale = isLocale(lang) ? lang : DEFAULT_LOCALE;
+  const { i18n } = useTranslation();
+  const locale = ['en', 'ru'].includes(lang || '') ? lang : 'en';
 
   useEffect(() => {
-    if (i18n.language !== locale) i18n.changeLanguage(locale);
-  }, [locale]);
+    if (i18n.language !== locale) {
+      i18n.changeLanguage(locale);
+    }
+  }, [locale, i18n]);
 
   return (
     <div className="wrapper">
