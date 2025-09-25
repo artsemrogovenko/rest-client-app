@@ -20,7 +20,6 @@ i18n
       caches: ['localStorage', 'cookie'],
       lookupFromPathIndex: 1,
     },
-    debug: true,
     react: { useSuspense: true },
   });
 

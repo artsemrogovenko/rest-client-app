@@ -45,10 +45,15 @@ export default function RestfulClient() {
         searchParams
       );
     }
-    if (params.method && params.encodedUrl && hasSendForm.current) {
+    if ((params.method && params.encodedUrl) || hasSendForm.current) {
       sendRequest(params, searchParams);
     }
-  }, [params.method, params.encodedUrl, params.encodedData]);
+  }, [
+    params.method,
+    params.encodedUrl,
+    params.encodedData,
+    hasSendForm.current,
+  ]);
 
   useEffect(() => {
     if (fetcher.state === 'submitting') {
@@ -69,7 +74,7 @@ export default function RestfulClient() {
         }
       }
     }
-  }, [fetcher.data, fetcher.state]);
+  }, [fetcher]);
 
   const sendRequest = async (
     params: Readonly<Params<string>>,
@@ -96,6 +101,7 @@ export default function RestfulClient() {
       setError('error');
     } finally {
       setIsLoading(false);
+      hasSendForm.current = false;
     }
   };
 

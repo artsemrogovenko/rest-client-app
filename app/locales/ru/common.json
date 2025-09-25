@@ -41,7 +41,6 @@
   "name": "имя",
   "header": "Заголовок",
   "save": "Сохранить",
-
   "no-history": "Вы ещё не выполнили ни одного запроса.",
   "empty-here": "Пока тут пусто. Попробуй: ",
   "timestamp": "Дата",
@@ -50,7 +49,6 @@
   "req-size": "Размер запроса",
   "res-size": "Размер ответа",
   "tab-error": "Ошибка",
-
   "error": {
     "auth/email-already-in-use": "Почта уже используется",
     "auth/wrong-password-or-email": "Email or password is incorrect",
